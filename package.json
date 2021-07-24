@@ -61,7 +61,7 @@
     "openblock-blocks": "0.1.0-prerelease.20210723163141",
     "openblock-l10n": "^3.10.20210714115626",
     "openblock-save-svg-as-png": "^1.4.18",
-    "openblock-vm": "^0.2.0-prerelease.20210723063135",
+    "openblock-vm": "^0.2.0-prerelease.20210724043016",
     "papaparse": "5.3.0",
     "postcss-import": "^12.0.0",
     "postcss-loader": "^3.0.0",

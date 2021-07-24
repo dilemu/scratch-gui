@@ -279,7 +279,7 @@ const deviceData = [
         disabled: false,
         bluetoothRequired: false,
         serialportRequired: true,
-        defaultBaudRate: '115200',
+        defaultBaudRate: '76800',
         internetConnectionRequired: false,
         launchPeripheralConnectionFlow: true,
         useAutoScan: false,
