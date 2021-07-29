@@ -752,7 +752,9 @@ class MenuBar extends React.Component {
                     )}
                 </div>
                 <div className={styles.tailMenu}>
-                    <div
+                    <AccountNav username={'迪乐姆用户'} thumbnailUrl={'//img.bosszhipin.com/beijin/upload/com/logo/20210313/12d99943db50e8442ab1d961bedd39e55ab191b08e90ec5e781892bc63ef60ed.jpg?x-oss-process=image/resize,w_120,limit_0'} isStudent />
+                    {/* 截图 */}
+                    {/* <div
                         className={classNames(styles.menuBarItem, styles.hoverable)}
                         onMouseUp={this.handleScreenshot}
                     >
@@ -762,7 +764,7 @@ class MenuBar extends React.Component {
                             draggable={false}
                             src={screenshotIcon}
                         />
-                    </div>
+                    </div> */}
                     {/* <Divider className={classNames(styles.divider)} />
                     <div
                         className={classNames(styles.menuBarItem, this.props.isRealtimeMode &&
@@ -794,7 +796,8 @@ class MenuBar extends React.Component {
                         />
                         <FormattedMessage {...ariaMessages.tutorials} />
                     </div> */}
-                    <Divider className={classNames(styles.divider)} />
+                    {/* 实时模式 */}
+                    {/* <Divider className={classNames(styles.divider)} />
                     <div className={classNames(styles.menuBarItem, styles.programModeGroup)}>
                         <Switch
                             className={styles.programModeSwitch}
@@ -826,7 +829,7 @@ class MenuBar extends React.Component {
                                 </div>
                             }
                         />
-                    </div>
+                    </div> */}
                     {isScratchDesktop() ? (
                         <div
                             className={classNames(styles.menuBarItem, styles.hoverable, {
