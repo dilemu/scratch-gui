@@ -19,6 +19,8 @@ import translateInsetIconURL from './translate/translate-small.png';
 import makeymakeyIconURL from './makeymakey/makeymakey.png';
 import makeymakeyInsetIconURL from './makeymakey/makeymakey-small.svg';
 
+import helloworldImage from './hello_world/ppsm_log_head_tiny.png'
+
 // import ev3IconURL from './ev3/ev3.png';
 // import ev3InsetIconURL from './ev3/ev3-small.svg';
 // import ev3ConnectionIconURL from './ev3/ev3-hub-illustration.svg';
@@ -163,6 +165,27 @@ export default [
                 defaultMessage="Make anything into a key."
                 description="Description for the 'Makey Makey' extension"
                 id="gui.extension.makeymakey.description"
+            />
+        ),
+        featured: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="Hello World"
+                description="Name for the Hello World extension"
+                id="gui.extension.helloWorld.name"
+            />
+        ),
+        extensionId: 'helloWorld',
+        collaborator: 'PPSS',
+        iconURL: helloworldImage,
+        insetIconURL: helloworldImage,
+        description: (
+            <FormattedMessage
+                defaultMessage="Make anything into a key."
+                description="Description for the 'Hello World' extension"
+                id="gui.extension.helloWorld.description"
             />
         ),
         featured: true
