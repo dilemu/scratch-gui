@@ -18,7 +18,7 @@ import unFullScreenIcon from './icon--unfullscreen.svg';
 
 import signalIcon from './icon--signal.svg';
 
-import scratchLogo from '../menu-bar/scratch-logo.svg';
+import scratchLogo from '../menu-bar/scratch-logo.png';
 import styles from './stage-header.css';
 
 const messages = defineMessages({

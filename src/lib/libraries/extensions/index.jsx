@@ -172,12 +172,12 @@ export default [
     {
         name: (
             <FormattedMessage
-                defaultMessage="Hello World"
+                defaultMessage="speech2text"
                 description="Name for the Hello World extension"
                 id="gui.extension.helloWorld.name"
             />
         ),
-        extensionId: 'helloWorld',
+        extensionId: 'speech2text',
         collaborator: 'PPSS',
         iconURL: helloworldImage,
         insetIconURL: helloworldImage,
@@ -186,6 +186,27 @@ export default [
                 defaultMessage="Make anything into a key."
                 description="Description for the 'Hello World' extension"
                 id="gui.extension.helloWorld.description"
+            />
+        ),
+        featured: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="图像识别"
+                description="Image recognition name"
+                id="gui.extension.image_recognition.name"
+            />
+        ),
+        extensionId: 'imageRecognition',
+        collaborator: 'PPSS',
+        iconURL: helloworldImage,
+        insetIconURL: helloworldImage,
+        description: (
+            <FormattedMessage
+                defaultMessage="图像识别模块，可识别物体、动物、植物、果蔬、货币、地标等"
+                description="Image recognition description"
+                id="gui.extension.image_recognition.description"
             />
         ),
         featured: true
