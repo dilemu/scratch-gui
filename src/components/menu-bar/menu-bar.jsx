@@ -97,7 +97,7 @@ import languageIcon from "../language-selector/language-icon.svg";
 import aboutIcon from "./icon--about.svg";
 import linkSocketIcon from "./icon--link-socket.svg"; // eslint-disable-line no-unused-vars
 
-import scratchLogo from "./scratch-logo.svg";
+import scratchLogo from "./scratch-logo.png";
 
 import sharedMessages from "../../lib/shared-messages";
 
