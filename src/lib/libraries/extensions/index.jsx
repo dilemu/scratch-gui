@@ -20,6 +20,8 @@ import makeymakeyIconURL from './makeymakey/makeymakey.png';
 import makeymakeyInsetIconURL from './makeymakey/makeymakey-small.svg';
 
 import helloworldImage from './hello_world/ppsm_log_head_tiny.png'
+import imageRecognition from './imageRecognition/imageRecognition.png'
+import imageRecognitionInsert from './imageRecognition/imageRecognitionInsert.png'
 
 // import ev3IconURL from './ev3/ev3.png';
 // import ev3InsetIconURL from './ev3/ev3-small.svg';
@@ -200,17 +202,151 @@ export default [
         ),
         extensionId: 'imageRecognition',
         collaborator: 'PPSS',
-        iconURL: helloworldImage,
-        insetIconURL: helloworldImage,
+        iconURL: imageRecognition,
+        insetIconURL: imageRecognitionInsert,
         description: (
             <FormattedMessage
-                defaultMessage="图像识别模块，可识别物体、动物、植物、果蔬、货币、地标等"
+                defaultMessage="精准识别超过十万种物体和场景。"
                 description="Image recognition description"
                 id="gui.extension.image_recognition.description"
             />
         ),
-        featured: true
-    }
+        featured: true,
+        internetConnectionRequired: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="语音交互"
+                description="Voice recognition name"
+                id="gui.extension.di_voice.name"
+            />
+        ),
+        extensionId: 'diVoice',
+        collaborator: 'PPSS',
+        iconURL: imageRecognition,
+        insetIconURL: imageRecognitionInsert,
+        description: (
+            <FormattedMessage
+                defaultMessage="实现语音识别、语音合成等功能。"
+                description="Voice recognition description"
+                id="gui.extension.di_voice.description"
+            />
+        ),
+        featured: true,
+        internetConnectionRequired: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="机器学习"
+                description="Voice recognition name"
+                id="gui.extension.diMachineLeaning.name"
+            />
+        ),
+        extensionId: 'diMachineLeaning',
+        collaborator: 'PPSS',
+        iconURL: imageRecognition,
+        insetIconURL: imageRecognitionInsert,
+        description: (
+            <FormattedMessage
+                defaultMessage="通过可视化界面方式，进行图像机器学习的训练。"
+                description="Voice recognition description"
+                id="gui.extension.diMachineLeaning.description"
+            />
+        ),
+        featured: true,
+        internetConnectionRequired: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="图像处理"
+                description="Image Processing name"
+                id="gui.extension.diImageProcessing.name"
+            />
+        ),
+        extensionId: 'diImageProcessing',
+        collaborator: 'PPSS',
+        iconURL: imageRecognition,
+        insetIconURL: imageRecognitionInsert,
+        description: (
+            <FormattedMessage
+                defaultMessage="实现图像风格转换、人像动漫化、背景分割等功能。"
+                description="Image Processing description"
+                id="gui.extension.diImageProcessing.description"
+            />
+        ),
+        featured: true,
+        internetConnectionRequired: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="人体识别"
+                description="Body Recognition name"
+                id="gui.extension.diBodyRecognition.name"
+            />
+        ),
+        extensionId: 'diBodyRecognition',
+        collaborator: 'PPSS',
+        iconURL: imageRecognition,
+        insetIconURL: imageRecognitionInsert,
+        description: (
+            <FormattedMessage
+                defaultMessage="准确识别图像中的人体相关信息，实现人流量统计、属性识别、手势识别等功能。"
+                description="Body Recognition description"
+                id="gui.extension.diBodyRecognition.description"
+            />
+        ),
+        featured: true,
+        internetConnectionRequired: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="自然语言处理"
+                description="Intelligent Word Processing name"
+                id="gui.extension.diWordProcessing.name"
+            />
+        ),
+        extensionId: 'diWordProcessing',
+        collaborator: 'PPSS',
+        iconURL: imageRecognition,
+        insetIconURL: imageRecognitionInsert,
+        description: (
+            <FormattedMessage
+                defaultMessage="实现文本纠错、情感倾向分析、评论观点抽取、地址识别等功能。"
+                description="Intelligent Word Processing description"
+                id="gui.extension.diWordProcessing.description"
+            />
+        ),
+        featured: true,
+        internetConnectionRequired: true
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="智能天气"
+                description="Intelligent data name"
+                id="gui.extension.diIntelligentData.name"
+            />
+        ),
+        extensionId: 'diIntelligentData',
+        collaborator: 'PPSS',
+        iconURL: imageRecognition,
+        insetIconURL: imageRecognitionInsert,
+        description: (
+            <FormattedMessage
+                defaultMessage="获取某个城市的温度、湿度等天气信息。"
+                description="Intelligent data description"
+                id="gui.extension.diIntelligentData.description"
+            />
+        ),
+        featured: true,
+        internetConnectionRequired: true,
+        tags: ['arduino'],
+    },
     // {
     //     name: 'LEGO MINDSTORMS EV3',
     //     extensionId: 'ev3',
