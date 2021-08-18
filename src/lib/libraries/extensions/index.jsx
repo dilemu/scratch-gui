@@ -347,6 +347,28 @@ export default [
         internetConnectionRequired: true,
         tags: ['arduino'],
     },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="文本识别"
+                description="Text recognition name"
+                id="gui.extension.diTextRecognition.name"
+            />
+        ),
+        extensionId: 'diTextRecognition',
+        collaborator: 'PPSS',
+        iconURL: imageRecognition,
+        insetIconURL: imageRecognitionInsert,
+        description: (
+            <FormattedMessage
+                defaultMessage="实现图片文字、二维码、条形码、车牌等信息识别提取。"
+                description="Text recognition description"
+                id="gui.extension.diTextRecognition.description"
+            />
+        ),
+        featured: true,
+        internetConnectionRequired: true,
+    },
     // {
     //     name: 'LEGO MINDSTORMS EV3',
     //     extensionId: 'ev3',
