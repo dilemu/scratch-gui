@@ -23,6 +23,10 @@ import helloworldImage from './hello_world/ppsm_log_head_tiny.png'
 import imageRecognition from './imageRecognition/imageRecognition.png'
 import imageRecognitionInsert from './imageRecognition/imageRecognitionInsert.png'
 
+import diVoiceInsert from './diVoice/diVoiceInsert.png'
+
+import diMachineLeaningInsert from './diMachineLeaning/diMachineLeaningInsert.png'
+
 // import ev3IconURL from './ev3/ev3.png';
 // import ev3InsetIconURL from './ev3/ev3-small.svg';
 // import ev3ConnectionIconURL from './ev3/ev3-hub-illustration.svg';
@@ -225,7 +229,7 @@ export default [
         extensionId: 'diVoice',
         collaborator: 'PPSS',
         iconURL: imageRecognition,
-        insetIconURL: imageRecognitionInsert,
+        insetIconURL: diVoiceInsert,
         description: (
             <FormattedMessage
                 defaultMessage="实现语音识别、语音合成等功能。"
@@ -247,7 +251,7 @@ export default [
         extensionId: 'diMachineLeaning',
         collaborator: 'PPSS',
         iconURL: imageRecognition,
-        insetIconURL: imageRecognitionInsert,
+        insetIconURL: diMachineLeaningInsert,
         description: (
             <FormattedMessage
                 defaultMessage="通过可视化界面方式，进行图像机器学习的训练。"
