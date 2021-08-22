@@ -27,7 +27,8 @@
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: $menu-bar-standard-font-size;
     font-weight: bold;
-    background-color: $motion-primary;
+    /* background-color: $motion-primary; */
+    background: linear-gradient(180deg, #69B8FB 0%, #3679E6 100%);
     color: $ui-white;
 }
 

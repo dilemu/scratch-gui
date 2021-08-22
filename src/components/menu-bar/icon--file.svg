@@ -1,43 +1,34 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve">  <image id="image0" width="20" height="20" x="0" y="0"
-    href="data:image/png;base64,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
-AERvdCBHYWluIDE1JeymfsoAAAAASUVORK5CYII=" />
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon-nav-文件-24</title>
+    <defs>
+        <path d="M15.3657755,14.0629608 L5.54080913,14.0629608 C4.87657883,14.0629608 4.33929602,13.5243957 4.33929602,12.8614477 C4.33929602,12.1972174 4.87786113,11.6599346 5.54080913,11.6599346 L15.3657755,11.6599346 C16.0300058,11.6599346 16.5672886,12.1984997 16.5672886,12.8614477 C16.5672886,13.5243957 16.0287235,14.0629608 15.3657755,14.0629608 Z" id="path-1"></path>
+        <filter x="-16.4%" y="-83.2%" width="132.7%" height="266.5%" filterUnits="objectBoundingBox" id="filter-2">
+            <feGaussianBlur stdDeviation="1.5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="0" dy="1" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.294117647   0 0 0 0 0.588235294   0 0 0 0 0.97254902  0 0 0 1 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="主页-大布局-角色" transform="translate(-243.000000, -61.000000)">
+            <g id="nav-bar-登录" transform="translate(0.000000, 36.000000)">
+                <g id="编组-305" transform="translate(17.000000, 22.000000)">
+                    <g id="编组-304" transform="translate(226.000000, 1.000000)">
+                        <g id="icon-nav-文件-24" transform="translate(0.000000, 2.000000)">
+                            <rect id="矩形" x="0" y="0" width="24" height="24"></rect>
+                            <g id="icon-nav-文件-21*20" transform="translate(1.000000, 2.000000)" fill-rule="nonzero">
+                                <path d="M11.6894275,3.09674937 C9.1235494,1.66057575 9.53260242,0 7.82329935,0 L4.83939219,0 C2.16708341,0 0.00128229788,2.16580112 0.00128229788,4.83810989 L0.00128229788,10.7571969 L11.6894275,10.7571969 L11.6894275,3.09674937 Z" id="路径" fill="#FFFFFF"></path>
+                                <path d="M15.962044,20 L5.05866513,20 C2.26453805,20 0,17.7354619 0,14.9413349 L0,8.1554145 C0,5.36128743 2.26453805,3.09674937 5.05866513,3.09674937 L15.9607617,3.09674937 C18.7548888,3.09674937 21.0194268,5.36128743 21.0194268,8.1554145 L21.0194268,14.9413349 C21.0194268,17.7341796 18.7548888,20 15.962044,20 Z" id="路径" fill-opacity="0.407824109" fill="#C0E0FF"></path>
+                                <g id="路径">
+                                    <use fill="#FFFFFF" xlink:href="#path-1"></use>
+                                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
 </svg>

@@ -70,6 +70,28 @@ export default [
     {
         name: (
             <FormattedMessage
+                defaultMessage="speech2text"
+                description="Name for the Text to Speech extension"
+                id="gui.extension.speech2text.name"
+            />
+        ),
+        extensionId: 'speech2text',
+        collaborator: 'Amazon Web Services',
+        iconURL: text2speechIconURL,
+        insetIconURL: text2speechInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Make your projects talk."
+                description="Description for the Text to speech extension"
+                id="gui.extension.speech2text.description"
+            />
+        ),
+        featured: true,
+        internetConnectionRequired: true
+    },
+    {
+        name: (
+            <FormattedMessage
                 defaultMessage="图像识别"
                 description="Image recognition name"
                 id="gui.extension.image_recognition.name"
