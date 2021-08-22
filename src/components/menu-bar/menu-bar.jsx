@@ -12,7 +12,7 @@ import bindAll from "lodash.bindall";
 import bowser from "bowser";
 import React from "react";
 
-import VM from "openblock-vm";
+import VM from "delightmom-scratch-vm";
 
 import Box from "../box/box.jsx";
 import Button from "../button/button.jsx";

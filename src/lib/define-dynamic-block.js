@@ -1,7 +1,7 @@
 // TODO: access `BlockType` and `ArgumentType` without reaching into VM
 // Should we move these into a new extension support module or something?
-import ArgumentType from 'openblock-vm/src/extension-support/argument-type';
-import BlockType from 'openblock-vm/src/extension-support/block-type';
+import ArgumentType from 'delightmom-scratch-vm/src/extension-support/argument-type';
+import BlockType from 'delightmom-scratch-vm/src/extension-support/block-type';
 
 /**
  * Define a block using extension info which has the ability to dynamically determine (and update) its layout.
@@ -24,9 +24,9 @@ const defineDynamicBlock = (ScratchBlocks, categoryInfo, staticBlockInfo, extend
             colourSecondary: categoryInfo.color2,
             colourTertiary: categoryInfo.color3
         };
-        // There is a openblock-blocks / Blockly extension called "scratch_extension" which adjusts the styling of
+        // There is a delightmom-scratch-blocks / Blockly extension called "scratch_extension" which adjusts the styling of
         // blocks to allow for an icon, a feature of Scratch extension blocks. However, Scratch "core" extension
-        // blocks don't have icons and so they should not use 'scratch_extension'. Adding a openblock-blocks / Blockly
+        // blocks don't have icons and so they should not use 'scratch_extension'. Adding a delightmom-scratch-blocks / Blockly
         // extension after `jsonInit` isn't fully supported (?), so we decide now whether there will be an icon.
         if (staticBlockInfo.blockIconURI || categoryInfo.blockIconURI) {
             blockJson.extensions = ['scratch_extension'];

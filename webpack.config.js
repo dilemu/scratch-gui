@@ -177,7 +177,7 @@ module.exports = [
                 to: 'static'
             }]),
             new CopyWebpackPlugin([{
-                from: 'node_modules/openblock-blocks/media',
+                from: 'node_modules/delightmom-scratch-blocks/media',
                 to: 'static/blocks-media'
             }]),
             new CopyWebpackPlugin([{
@@ -187,7 +187,7 @@ module.exports = [
             }]),
             new CopyWebpackPlugin([{
                 from: 'extension-worker.{js,js.map}',
-                context: 'node_modules/openblock-vm/dist/web'
+                context: 'node_modules/delightmom-scratch-vm/dist/web'
             }])
         ])
     })
@@ -197,7 +197,7 @@ module.exports = [
         defaultsDeep({}, base, {
             target: 'web',
             entry: {
-                'openblock-gui': './src/index.js'
+                'delightmom-scratch-gui': './src/index.js'
             },
             output: {
                 libraryTarget: 'umd',
@@ -222,12 +222,12 @@ module.exports = [
             },
             plugins: base.plugins.concat([
                 new CopyWebpackPlugin([{
-                    from: 'node_modules/openblock-blocks/media',
+                    from: 'node_modules/delightmom-scratch-blocks/media',
                     to: 'static/blocks-media'
                 }]),
                 new CopyWebpackPlugin([{
                     from: 'extension-worker.{js,js.map}',
-                    context: 'node_modules/openblock-vm/dist/web'
+                    context: 'node_modules/delightmom-scratch-vm/dist/web'
                 }]),
                 // Include library JSON files for scratch-desktop to use for downloading
                 new CopyWebpackPlugin([{
