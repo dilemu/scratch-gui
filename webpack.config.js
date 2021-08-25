@@ -15,6 +15,7 @@ var postcssImport = require('postcss-import');
 
 const STATIC_PATH = process.env.STATIC_PATH || '/static';
 const MONACO_DIR = path.resolve(__dirname, './node_modules/monaco-editor');
+const ANTD_DIR = path.resolve(__dirname, './node_modules/@ant-design');
 
 const base = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
@@ -40,7 +41,8 @@ const base = {
                 path.resolve(__dirname, 'src'),
                 /node_modules[\\/]scratch-[^\\/]+[\\/]src/,
                 /node_modules[\\/]pify/,
-                /node_modules[\\/]@vernier[\\/]godirect/
+                /node_modules[\\/]@vernier[\\/]godirect/,
+                /node_modules[\\/]@ant-design/
             ],
             options: {
                 // Explicitly disable babelrc so we don't catch various config
@@ -58,7 +60,7 @@ const base = {
         },
         {
             test: /\.css$/,
-            exclude: MONACO_DIR,
+            exclude: [MONACO_DIR, /antd.css/],
             use: [{
                 loader: 'style-loader'
             }, {
@@ -85,7 +87,7 @@ const base = {
         },
         {
             test: /\.css$/,
-            include: MONACO_DIR,
+            include: [MONACO_DIR, /antd.css/],
             use: ['style-loader', 'css-loader']
         }]
     },

@@ -488,6 +488,44 @@ class MenuBar extends React.Component {
             this.props.onRequestCloseAbout();
         };
     }
+
+    handleRenderLogin () {//登录操作
+        return (
+            <Login
+                onLogIn={(formData, restoreStateInLoginComponent) => {
+                    new Promise((resolve, reject) => {
+                        requestLogin(resolve, reject,formData);
+                    }).then(
+                        body => {
+                            if (body.status=="OK"){
+                                this.props.onSetSession(body);
+                                this.props.onRequestCloseAccount()//关闭登录后弹出账号菜单
+
+                            } else {
+                                alert(body.status);//提示用户登录不成功的原因
+                                restoreStateInLoginComponent()
+                            }
+                        }, 
+                        err => {
+                            restoreStateInLoginComponent()
+                        }
+                    );
+                }}
+            />
+        );
+    }
+    handleLogout () { //退出账号登录状态
+        new Promise((resolve, reject) => {
+            requestLogout(resolve, reject,`id=${this.props.userid}`);
+        }).then(
+            body => {
+                this.props.onSetSession(initializedSession);
+                //this.props.onRequestCloseAccount()//关闭登录菜单
+            }, 
+            err => {}
+        );        
+    }
+
     render() {
         const saveNowMessage = (
             <FormattedMessage
@@ -969,7 +1007,7 @@ class MenuBar extends React.Component {
                         </div>
                     ) : null} */}
                 </div>
-                {/* {this.props.username ? (
+                {this.props.username ? (
                     // ************ user is logged in ************
                     <React.Fragment>
                         <div
@@ -1024,7 +1062,7 @@ class MenuBar extends React.Component {
                             />
                         </div>
                     </React.Fragment>
-                )} */}
+                )}
                 {aboutButton}
             </Box>
         );

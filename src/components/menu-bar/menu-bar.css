@@ -306,3 +306,7 @@
   padding-left: 2rem;
   white-space: nowrap;
 }
+
+.login {
+    background-color: #FFF;
+}

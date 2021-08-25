@@ -5,6 +5,7 @@ import Box from '../box/box.jsx';
 import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-intl';
 
 import styles from './browser-modal.css';
+import 'antd/dist/antd.css';
 import unhappyBrowser from './unsupported-browser.svg';
 
 const messages = defineMessages({
