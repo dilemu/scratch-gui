@@ -1069,6 +1069,7 @@ class MenuBar extends React.Component {
                     {this.props.loginState ? (
                         <React.Fragment>
                             <MenuBarItemTooltip
+                                enable
                                 id="account-nav"
                                 place={this.props.isRtl ? "right" : "left"}
                             >
@@ -1081,19 +1082,36 @@ class MenuBar extends React.Component {
                                 >
                                     <img
                                         className={styles.profileIcon}
-                                        src={profileIcon}
+                                        src={this.props.userData.login}
                                     />
-                                    <span>{"小白wwj"}</span>
-                                    <img
-                                        className={styles.dropdownCaretIcon}
-                                        src={dropdownCaret}
+                                    <span>{this.props.userData.login}</span>
+                                    <AccountNav
+                                        className={classNames(
+                                            styles.menuBarItem,
+                                            styles.hoverable,
+                                            {
+                                                [styles.active]:
+                                                    this.props.accountMenuOpen,
+                                            }
+                                        )}
+                                        isOpen={this.props.accountMenuOpen}
+                                        isRtl={this.props.isRtl}
+                                        menuBarMenuClassName={classNames(
+                                            styles.menuBarMenu
+                                        )}
+                                        onClick={this.props.onClickAccount}
+                                        onClose={this.props.onRequestCloseAccount}
+                                        onLogOut={this.props.onLogOut}
                                     />
                                 </div>
                             </MenuBarItemTooltip>
                         </React.Fragment>
                     ) : (
                         <Button
-                        onClick={this.props.onClickLoginPopup}
+                            className={classNames(
+                                styles.hoverable,
+                            )}
+                            onClick={this.props.onClickLoginPopup}
                         >
                             登录
                         </Button>
