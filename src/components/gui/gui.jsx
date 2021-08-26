@@ -136,6 +136,7 @@ const GUIComponent = props => {
         isRealtimeMode,
         loginState,
         showLogin,
+        userData,
         ...componentProps
     } = omit(props, 'dispatch');
     if (children) {
@@ -275,6 +276,7 @@ const GUIComponent = props => {
                     onClickClearCache={onClickClearCache}
                     onClickInstallDriver={onClickInstallDriver}
                     loginState={loginState}
+                    userData={userData}
                 />
                 <Box className={styles.bodyWrapper}>
                     <Box className={styles.flexWrapper}>

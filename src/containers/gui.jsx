@@ -159,7 +159,8 @@ const mapStateToProps = state => {
         vm: state.scratchGui.vm,
         isRealtimeMode: state.scratchGui.programMode.isRealtimeMode,
         loginState: getLoginState(loginState),
-        showLogin: state.scratchGui.modals.loginPopup
+        showLogin: state.scratchGui.modals.loginPopup,
+        userData: state.scratchGui.userState.userData
     };
 };
 
