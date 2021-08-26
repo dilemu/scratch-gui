@@ -39,6 +39,7 @@ import cloudManagerHOC from '../lib/cloud-manager-hoc.jsx';
 
 import GUIComponent from '../components/gui/gui.jsx';
 import {setIsScratchDesktop} from '../lib/isScratchDesktop.js';
+import {getLoginState} from '../reducers/user-state'
 
 class GUI extends React.Component {
     componentDidMount () {
@@ -114,7 +115,8 @@ GUI.propTypes = {
     projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     telemetryModalVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired,
-    isRealtimeMode: PropTypes.bool
+    isRealtimeMode: PropTypes.bool,
+    loginState: PropTypes.bool,
 };
 
 GUI.defaultProps = {
@@ -127,6 +129,7 @@ GUI.defaultProps = {
 
 const mapStateToProps = state => {
     const loadingState = state.scratchGui.projectState.loadingState;
+    const loginState = state.scratchGui.userState.loginState;
     return {
         activeTabIndex: state.scratchGui.editorTab.activeTabIndex,
         alertsVisible: state.scratchGui.alerts.visible,
@@ -154,7 +157,9 @@ const mapStateToProps = state => {
         telemetryModalVisible: state.scratchGui.modals.telemetryModal,
         tipsLibraryVisible: state.scratchGui.modals.tipsLibrary,
         vm: state.scratchGui.vm,
-        isRealtimeMode: state.scratchGui.programMode.isRealtimeMode
+        isRealtimeMode: state.scratchGui.programMode.isRealtimeMode,
+        loginState: getLoginState(loginState),
+        showLogin: state.scratchGui.modals.loginPopup
     };
 };
 
