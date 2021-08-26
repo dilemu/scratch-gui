@@ -41,6 +41,7 @@ import {
     openUpdateModal,
     openConnectionModal,
     openDeviceLibrary,
+    openLoginModal
 } from "../../reducers/modals";
 import { setPlayer } from "../../reducers/mode";
 import {
@@ -489,41 +490,42 @@ class MenuBar extends React.Component {
         };
     }
 
-    handleRenderLogin () {//登录操作
+    handleRenderLogin() {
+        //登录操作
         return (
             <Login
                 onLogIn={(formData, restoreStateInLoginComponent) => {
                     new Promise((resolve, reject) => {
-                        requestLogin(resolve, reject,formData);
+                        requestLogin(resolve, reject, formData);
                     }).then(
-                        body => {
-                            if (body.status=="OK"){
+                        (body) => {
+                            if (body.status == "OK") {
                                 this.props.onSetSession(body);
-                                this.props.onRequestCloseAccount()//关闭登录后弹出账号菜单
-
+                                this.props.onRequestCloseAccount(); //关闭登录后弹出账号菜单
                             } else {
-                                alert(body.status);//提示用户登录不成功的原因
-                                restoreStateInLoginComponent()
+                                alert(body.status); //提示用户登录不成功的原因
+                                restoreStateInLoginComponent();
                             }
-                        }, 
-                        err => {
-                            restoreStateInLoginComponent()
+                        },
+                        (err) => {
+                            restoreStateInLoginComponent();
                         }
                     );
                 }}
             />
         );
     }
-    handleLogout () { //退出账号登录状态
+    handleLogout() {
+        //退出账号登录状态
         new Promise((resolve, reject) => {
-            requestLogout(resolve, reject,`id=${this.props.userid}`);
+            requestLogout(resolve, reject, `id=${this.props.userid}`);
         }).then(
-            body => {
+            (body) => {
                 this.props.onSetSession(initializedSession);
                 //this.props.onRequestCloseAccount()//关闭登录菜单
-            }, 
-            err => {}
-        );        
+            },
+            (err) => {}
+        );
     }
 
     render() {
@@ -796,30 +798,30 @@ class MenuBar extends React.Component {
                         
                     </div> */}
                     {this.props.canEditTitle ? (
-                            <div
-                                className={classNames(
-                                    styles.menuBarItem,
-                                    styles.growable
-                                )}
-                            >
-                                <MenuBarItemTooltip enable id="title-field">
-                                    <ProjectTitleInput
-                                        className={classNames(
-                                            styles.titleFieldGrowable
-                                        )}
-                                    />
-                                </MenuBarItemTooltip>
-                            </div>
-                        ) : this.props.authorUsername &&
-                          this.props.authorUsername !== this.props.username ? (
-                            <AuthorInfo
-                                className={styles.authorInfo}
-                                imageUrl={this.props.authorThumbnailUrl}
-                                projectTitle={this.props.projectTitle}
-                                userId={this.props.authorId}
-                                username={this.props.authorUsername}
-                            />
-                        ) : null}
+                        <div
+                            className={classNames(
+                                styles.menuBarItem,
+                                styles.growable
+                            )}
+                        >
+                            <MenuBarItemTooltip enable id="title-field">
+                                <ProjectTitleInput
+                                    className={classNames(
+                                        styles.titleFieldGrowable
+                                    )}
+                                />
+                            </MenuBarItemTooltip>
+                        </div>
+                    ) : this.props.authorUsername &&
+                      this.props.authorUsername !== this.props.username ? (
+                        <AuthorInfo
+                            className={styles.authorInfo}
+                            imageUrl={this.props.authorThumbnailUrl}
+                            projectTitle={this.props.projectTitle}
+                            userId={this.props.authorId}
+                            username={this.props.authorUsername}
+                        />
+                    ) : null}
                 </div>
                 {/* <Divider className={classNames(styles.divider)} /> */}
                 {/* <div
@@ -1007,7 +1009,7 @@ class MenuBar extends React.Component {
                         </div>
                     ) : null} */}
                 </div>
-                {this.props.username ? (
+                {/* {this.props.username ? (
                     // ************ user is logged in ************
                     <React.Fragment>
                         <div
@@ -1062,7 +1064,41 @@ class MenuBar extends React.Component {
                             />
                         </div>
                     </React.Fragment>
-                )}
+                )} */}
+                <React.Fragment>
+                    {this.props.loginState ? (
+                        <React.Fragment>
+                            <MenuBarItemTooltip
+                                id="account-nav"
+                                place={this.props.isRtl ? "right" : "left"}
+                            >
+                                <div
+                                    className={classNames(
+                                        styles.menuBarItem,
+                                        styles.hoverable,
+                                        styles.accountNavMenu
+                                    )}
+                                >
+                                    <img
+                                        className={styles.profileIcon}
+                                        src={profileIcon}
+                                    />
+                                    <span>{"小白wwj"}</span>
+                                    <img
+                                        className={styles.dropdownCaretIcon}
+                                        src={dropdownCaret}
+                                    />
+                                </div>
+                            </MenuBarItemTooltip>
+                        </React.Fragment>
+                    ) : (
+                        <Button
+                        onClick={this.props.onClickLoginPopup}
+                        >
+                            登录
+                        </Button>
+                    )}
+                </React.Fragment>
                 {aboutButton}
             </Box>
         );
@@ -1169,6 +1205,7 @@ MenuBar.propTypes = {
     deviceId: PropTypes.string,
     deviceName: PropTypes.string,
     onDeviceIsEmpty: PropTypes.func,
+    onClickLoginPopup: PropTypes.func
 };
 
 MenuBar.defaultProps = {
@@ -1214,6 +1251,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => ({
     autoUpdateProject: () => dispatch(autoUpdateProject()),
+    onClickLoginPopup: () => dispatch(openLoginModal()),
     onOpenTipLibrary: () => dispatch(openTipsLibrary()),
     onClickAccount: () => dispatch(openAccountMenu()),
     onRequestCloseAccount: () => dispatch(closeAccountMenu()),
