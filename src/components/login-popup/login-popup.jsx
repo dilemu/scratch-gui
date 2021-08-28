@@ -27,7 +27,8 @@ class LoginPopup extends React.Component {
             userid: res.data.login,
             username: res.data.login,
             nickname: res.data.login,
-            avatar: res.data.login.avatar
+            avatar: res.data.login.avatar,
+            token: res.data.token
         })
           _this.props.vm.runtime.emit('LOGIN', res.data);
           _this.props.onCancel()

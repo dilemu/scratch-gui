@@ -117,6 +117,7 @@ import downloadFirmwareIcon from "./icon--download-firmware.svg";
 import saveSvgAsPng from "openblock-save-svg-as-png";
 import { showAlertWithTimeout } from "../../reducers/alerts";
 import { clearSession } from "../../reducers/session"
+import { message } from 'antd';
 
 const ariaMessages = defineMessages({
     language: {
@@ -217,6 +218,12 @@ class MenuBar extends React.Component {
             "handleCheckUpdate",
             "handleClearCache",
         ]);
+        this.props.vm.runtime.on("MESSAGE_INFO", msg => {
+            message.info(msg)
+        })
+        this.props.vm.runtime.on("MESSAGE_ERROR", err => {
+            message.error(err)
+        })
     }
     componentDidMount() {
         document.addEventListener("keydown", this.handleKeyPress);

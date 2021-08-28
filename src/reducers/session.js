@@ -8,7 +8,8 @@ const initialState = {
     userid: 0,
     username: '',
     nickname: '',
-    avatar: ''
+    avatar: '',
+    token: null
 };
 
 const reducer = function (state, action) {
