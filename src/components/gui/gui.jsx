@@ -134,7 +134,7 @@ const GUIComponent = props => {
         tipsLibraryVisible,
         vm,
         isRealtimeMode,
-        loginState,
+        username,
         showLogin,
         userData,
         ...componentProps
@@ -181,7 +181,7 @@ const GUIComponent = props => {
                 dir={isRtl ? 'rtl' : 'ltr'}
                 {...componentProps}
             >
-                {showLogin ? (<LoginPopup title='登录'/>) : null}
+                {showLogin ? (<LoginPopup title='登录' vm={vm}/>) : null}
                 {telemetryModalVisible ? (
                     <TelemetryModal
                         isRtl={isRtl}
@@ -275,7 +275,7 @@ const GUIComponent = props => {
                     onClickCheckUpdate={onClickCheckUpdate}
                     onClickClearCache={onClickClearCache}
                     onClickInstallDriver={onClickInstallDriver}
-                    loginState={loginState}
+                    username={username}
                     userData={userData}
                 />
                 <Box className={styles.bodyWrapper}>
@@ -487,7 +487,7 @@ GUIComponent.propTypes = {
     tipsLibraryVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired,
     isRealtimeMode: PropTypes.bool,
-    showLogin: PropTypes.bool,
+    showLogin: PropTypes.bool
 };
 GUIComponent.defaultProps = {
     backpackHost: null,

@@ -7,7 +7,7 @@ import AppStateHOC from "../lib/app-state-hoc.jsx";
 import GUI from "../containers/gui.jsx";
 import HashParserHOC from "../lib/hash-parser-hoc.jsx";
 import log from "../lib/log.js";
-import {setSession} from "../reducers/session"
+import {setSession, clearSession} from "../reducers/session"
 
 const onClickLogo = () => {
     window.location = "https://openblockcc.github.io/wiki/";
@@ -39,54 +39,6 @@ const handleTelemetryModalOptIn = () => {
 
 const handleTelemetryModalOptOut = () => {
     log("User opted out of telemetry");
-};
-
-const renderLogin = () => {
-    const onFinish = (values) => {
-        setSession(values)
-        console.log("Success:", values);
-    };
-
-    const onFinishFailed = (errorInfo) => {
-        console.log("Failed:", errorInfo);
-    };
-
-    return (
-        <Form
-            name="basic"
-            labelCol={{ span: 6 }}
-            wrapperCol={{ span: 16 }}
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-        >
-            <Form.Item
-                label="用户名"
-                name="user"
-                rules={[
-                    { required: true, message: "请输入用户名" },
-                ]}
-            >
-                <Input />
-            </Form.Item>
-
-            <Form.Item
-                label="密码"
-                name="password"
-                rules={[
-                    { required: true, message: "请输入密码" },
-                ]}
-            >
-                <Input.Password />
-            </Form.Item>
-
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button type="primary" htmlType="submit">
-                    登录
-                </Button>
-            </Form.Item>
-        </Form>
-    );
 };
 
 /*
@@ -152,7 +104,6 @@ export default (appTarget) => {
                 backpackHost={backpackHost}
                 canSave={false}
                 onClickLogo={onClickLogo}
-                renderLogin={renderLogin}
             />
         ),
         appTarget

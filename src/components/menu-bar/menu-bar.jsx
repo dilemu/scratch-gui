@@ -97,6 +97,7 @@ import dropdownCaret from "./dropdown-caret.svg";
 import languageIcon from "../language-selector/language-icon.svg";
 import aboutIcon from "./icon--about.svg";
 import linkSocketIcon from "./icon--link-socket.svg"; // eslint-disable-line no-unused-vars
+import defaultUser from "./defaultUser.png"
 
 import scratchLogo from "./scratch-logo.png";
 
@@ -115,6 +116,7 @@ import settingIcon from "./icon--setting.svg";
 import downloadFirmwareIcon from "./icon--download-firmware.svg";
 import saveSvgAsPng from "openblock-save-svg-as-png";
 import { showAlertWithTimeout } from "../../reducers/alerts";
+import { clearSession } from "../../reducers/session"
 
 const ariaMessages = defineMessages({
     language: {
@@ -1009,7 +1011,7 @@ class MenuBar extends React.Component {
                         </div>
                     ) : null} */}
                 </div>
-                {/* {this.props.username ? (
+                {this.props.username ? (
                     // ************ user is logged in ************
                     <React.Fragment>
                         <div
@@ -1019,7 +1021,6 @@ class MenuBar extends React.Component {
                                 styles.accountNavMenu
                             )}
                         >
-                            <span>{this.props.username}</span>
                             <AccountNav
                                 className={classNames(
                                     styles.menuBarItem,
@@ -1037,6 +1038,9 @@ class MenuBar extends React.Component {
                                 onClick={this.props.onClickAccount}
                                 onClose={this.props.onRequestCloseAccount}
                                 onLogOut={this.props.onLogOut}
+                                classroomId={this.props.userData.request_id}
+                                thumbnailUrl={this.props.userData.avatar||defaultUser}
+                                username={this.props.userData.username}
                             />
                         </div>
                     </React.Fragment>
@@ -1049,74 +1053,23 @@ class MenuBar extends React.Component {
                             )}
                             key="login"
                             onMouseUp={this.props.onClickLogin}
+                            onClick={this.props.onClickLoginPopup}
                         >
                             <FormattedMessage
                                 defaultMessage="Sign in"
                                 description="Link for signing in to your Scratch account"
                                 id="gui.menuBar.signIn"
                             />
-                            <LoginDropdown
+                            {/* <LoginDropdown
                                 className={classNames(styles.menuBarMenu)}
                                 isOpen={this.props.loginMenuOpen}
                                 isRtl={this.props.isRtl}
                                 renderLogin={this.props.renderLogin}
                                 onClose={this.props.onRequestCloseLogin}
-                            />
+                            /> */}
                         </div>
                     </React.Fragment>
-                )} */}
-                <React.Fragment>
-                    {this.props.loginState ? (
-                        <React.Fragment>
-                            <MenuBarItemTooltip
-                                enable
-                                id="account-nav"
-                                place={this.props.isRtl ? "right" : "left"}
-                            >
-                                <div
-                                    className={classNames(
-                                        styles.menuBarItem,
-                                        styles.hoverable,
-                                        styles.accountNavMenu
-                                    )}
-                                >
-                                    <img
-                                        className={styles.profileIcon}
-                                        src={this.props.userData.login}
-                                    />
-                                    <span>{this.props.userData.login}</span>
-                                    <AccountNav
-                                        className={classNames(
-                                            styles.menuBarItem,
-                                            styles.hoverable,
-                                            {
-                                                [styles.active]:
-                                                    this.props.accountMenuOpen,
-                                            }
-                                        )}
-                                        isOpen={this.props.accountMenuOpen}
-                                        isRtl={this.props.isRtl}
-                                        menuBarMenuClassName={classNames(
-                                            styles.menuBarMenu
-                                        )}
-                                        onClick={this.props.onClickAccount}
-                                        onClose={this.props.onRequestCloseAccount}
-                                        onLogOut={this.props.onLogOut}
-                                    />
-                                </div>
-                            </MenuBarItemTooltip>
-                        </React.Fragment>
-                    ) : (
-                        <Button
-                            className={classNames(
-                                styles.hoverable,
-                            )}
-                            onClick={this.props.onClickLoginPopup}
-                        >
-                            登录
-                        </Button>
-                    )}
-                </React.Fragment>
+                )}
                 {aboutButton}
             </Box>
         );
@@ -1254,7 +1207,8 @@ const mapStateToProps = (state, ownProps) => {
         realtimeConnection: state.scratchGui.connectionModal.realtimeConnection,
         sessionExists:
             state.session && typeof state.session.session !== "undefined",
-        username: user ? user.username : null,
+        username: state.scratchGui.session.username,
+        userData: state.scratchGui.session,
         userOwnsProject:
             ownProps.authorUsername &&
             user &&
@@ -1315,6 +1269,9 @@ const mapDispatchToProps = (dispatch) => ({
         showAlertWithTimeout(dispatch, "workspaceIsNotEmpty"),
     onOpenDeviceLibrary: () => dispatch(openDeviceLibrary()),
     onDeviceIsEmpty: () => showAlertWithTimeout(dispatch, "selectADeviceFirst"),
+    onLogOut(){
+        dispatch(clearSession())
+    }
 });
 
 export default compose(

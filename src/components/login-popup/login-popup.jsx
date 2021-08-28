@@ -9,7 +9,8 @@ import { FormattedMessage } from "react-intl";
 import Button from "../button/button.jsx";
 import { closeLoginModal } from "../../reducers/modals";
 import request from "../../public/request"
-import {loginSuccess, loginError} from "../../reducers/user-state"
+import { setSession } from "../../reducers/session"
+import VM from 'delightmom-scratch-vm';
 
 class LoginPopup extends React.Component {
     loginServer(account, password) {
@@ -22,11 +23,18 @@ class LoginPopup extends React.Component {
       request({url,data,method:"POST"}).then(res => {
         if(res.code == 200) {
           console.log('login success', res.data)
-          _this.props.loginSuccess(res.data)
+          _this.props.setSession({
+            userid: res.data.login,
+            username: res.data.login,
+            nickname: res.data.login,
+            avatar: res.data.login.avatar
+        })
+          _this.props.vm.runtime.emit('LOGIN', res.data);
           _this.props.onCancel()
         } else {
           console.log('login failure', res.message)
-          _this.props.loginError(res.message)
+          _this.props.setSession({})
+          _this.props.vm.runtime.emit('LOGOUT');
           alert("账号或密码错误！")
         }
       }).catch(err => ({ err }))
@@ -73,7 +81,6 @@ class LoginPopup extends React.Component {
                             styles.btnSubmit,
                             styles.submitLoginButton
                         )}
-                        // onClick={this.props.submitLogin}
                         onClick={this.getAccountAndPasswod.bind(this)}
                     >
                         <FormattedMessage
@@ -91,16 +98,14 @@ class LoginPopup extends React.Component {
 LoginPopup.propTypes = {
     title: PropTypes.string.isRequired,
     onCancel: PropTypes.func.isRequired,
-    submitLogin: PropTypes.func,
+    vm: PropTypes.instanceOf(VM).isRequired
 };
 
 const mapStateToProps = (state) => ({ state: state });
 
 const mapDispatchToProps = (dispatch) => ({
     onCancel: () => dispatch(closeLoginModal()),
-    loginSuccess: data => dispatch(loginSuccess(data)),
-    loginError: err => dispatch(loginError(err)),
-    submitLogin: () => {},
+    setSession: session => dispatch(setSession(session)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPopup);
