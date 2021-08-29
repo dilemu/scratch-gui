@@ -21,7 +21,7 @@ class LoginPopup extends React.Component {
       }
       const _this = this
       request({url,data,method:"POST"}).then(res => {
-        if(res.code == 200) {
+        if(res.code == 0) {
           console.log('login success', res.data)
           _this.props.setSession({
             userid: res.data.login,

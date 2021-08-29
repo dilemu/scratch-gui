@@ -36,6 +36,7 @@ import UploadProgress from '../../containers/upload-progress.jsx';
 import TelemetryModal from '../telemetry-modal/telemetry-modal.jsx';
 import UpdateModal from '../../containers/update-modal.jsx';
 import LoginPopup from '../login-popup/login-popup.jsx'
+import ChooseCity from '../choose-city/choose-city.jsx'
 
 import layout, {STAGE_SIZE_MODES} from '../../lib/layout-constants';
 import {resolveStageSize} from '../../lib/screen-utils';
@@ -182,6 +183,7 @@ const GUIComponent = props => {
                 {...componentProps}
             >
                 {showLogin ? (<LoginPopup title='登录' vm={vm}/>) : null}
+                <ChooseCity vm={vm} />
                 {telemetryModalVisible ? (
                     <TelemetryModal
                         isRtl={isRtl}
