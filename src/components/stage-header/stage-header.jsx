@@ -71,14 +71,11 @@ const StageHeaderComponent = function (props) {
         const stageButton = showBranding ? (
             <div className={styles.embedScratchLogo}>
                 <a
-                    href="https://openblock.cc"
+                    href="https://delightmom.com"
                     rel="noopener noreferrer"
                     target="_blank"
                 >
-                    <img
-                        alt="OpenBlock"
-                        src={scratchLogo}
-                    />
+                    <img alt="DBit+" src={scratchLogo} />
                 </a>
             </div>
         ) : (
@@ -88,7 +85,9 @@ const StageHeaderComponent = function (props) {
                 onKeyPress={onKeyPress}
             >
                 <img
-                    alt={props.intl.formatMessage(messages.unFullStageSizeMessage)}
+                    alt={props.intl.formatMessage(
+                        messages.unFullStageSizeMessage
+                    )}
                     className={styles.stageButtonIcon}
                     draggable={false}
                     src={unFullScreenIcon}
