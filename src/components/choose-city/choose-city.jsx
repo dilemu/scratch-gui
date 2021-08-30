@@ -10,7 +10,7 @@ const ChooseCityComponent = (props) => {
     const { className, vm } = props;
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [cityList, setCityList] = useState([]);
-    const [city, setCity] = useState("");
+    const [city, setCity] = useState({});
     const [uuid, setUuid] = useState(Math.random());
 
     const showModal = () => {
@@ -37,7 +37,7 @@ const ChooseCityComponent = (props) => {
     };
 
     const onSelect = (value) => {
-        setCity(value);
+        setCity(cityList.find(elem => elem.value === value));
     };
 
     const fetchCityList = (query) => {
@@ -49,7 +49,7 @@ const ChooseCityComponent = (props) => {
                     console.log("城市列表获取成功", res.data);
                     const list = [];
                     res.data.forEach((elem) => {
-                        list.push({ label: elem.name, value: elem.id });
+                        list.push({ label: elem.name, value: elem.id, tz: elem.tz });
                     });
                     setCityList(list);
                 } else {
@@ -68,7 +68,7 @@ const ChooseCityComponent = (props) => {
     return (
         <>
             <Modal
-                title="Basic Modal"
+                title="选择城市"
                 visible={isModalVisible}
                 onOk={handleOk}
                 onCancel={handleCancel}
@@ -76,6 +76,8 @@ const ChooseCityComponent = (props) => {
                 <Select
                     style={{ width: 200 }}
                     showSearch
+                    autoClearSearchValue={false}
+                    filterOption={false}
                     placeholder="城市名称"
                     onChange={onSelect}
                     onSearch={onSearch}

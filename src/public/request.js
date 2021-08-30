@@ -3,7 +3,7 @@
  */
  
 // 全局路径
-const commonUrl = 'http://localhost:60002'
+const commonUrl = 'http://152.136.211.42:60002'
 export const parseJSON = function (response) {
     return response.json();
 };
