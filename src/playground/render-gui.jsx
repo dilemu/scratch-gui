@@ -10,7 +10,7 @@ import log from "../lib/log.js";
 import {setSession, clearSession} from "../reducers/session"
 
 const onClickLogo = () => {
-    window.location = "https://openblockcc.github.io/wiki/";
+    window.location = "https://delightmom.com";
 };
 
 const onClickCheckUpdate = () => {
