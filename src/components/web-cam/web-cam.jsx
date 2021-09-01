@@ -40,6 +40,8 @@ const ChooseCityComponent = (props) => {
     };
 
     const start = (options) => {
+        ClearTimeout()
+        vm.runtime.emit(uuid, null);
         const { uuid, type, countDown } = options;
         showModal();
         setTimeout(() => {
@@ -50,18 +52,18 @@ const ChooseCityComponent = (props) => {
         if (countDown) {
             setTimeout(() => {
                 startTimeout(countDown);
-            }, 200)
+            }, 100)
         }
     };
 
     const onStart = (event, uiData) => {
-        const { clientWidth, clientHeight } = window?.document?.documentElement;
-        const targetRect = draggleRef?.current?.getBoundingClientRect();
+        const { clientWidth, clientHeight } = window.document.documentElement;
+        const targetRect = draggleRef.current.getBoundingClientRect();
         setBounds({
-            left: -targetRect?.left + uiData?.x,
-            right: clientWidth - (targetRect?.right - uiData?.x),
-            top: -targetRect?.top + uiData?.y,
-            bottom: clientHeight - (targetRect?.bottom - uiData?.y),
+            left: -targetRect.left + uiData.x,
+            right: clientWidth - (targetRect.right - uiData.x),
+            top: -targetRect.top + uiData.y,
+            bottom: clientHeight - (targetRect.bottom - uiData.y),
         });
     };
 
@@ -88,7 +90,7 @@ const ChooseCityComponent = (props) => {
     };
 
     const startVideo = () => {
-        setCanvasCtx(videoCanvas?.current?.getContext("2d"));
+        setCanvasCtx(videoCanvas.current.getContext("2d"));
         navigator.mediaDevices
             .getUserMedia({
                 audio: true,
@@ -143,6 +145,12 @@ const ChooseCityComponent = (props) => {
             setCountDown(count);
             setCountDownAnimation(count);
         });
+    };
+
+    const ClearTimeout = () => {
+        clearTimeout(intervalRef.current);
+        setCountDownAnimation(0);
+        setCountDown(0);
     };
 
     // useEffect(() => {
