@@ -42,12 +42,12 @@ const ChooseCityComponent = (props) => {
     const start = (options) => {
         ClearTimeout()
         vm.runtime.emit(uuid, null);
-        const { uuid, type, countDown } = options;
+        const { uuid: newUuid, type, countDown } = options;
         showModal();
         setTimeout(() => {
             findDevice();
         })
-        setUuid(uuid);
+        setUuid(newUuid);
         setType(type)
         if (countDown) {
             setTimeout(() => {
@@ -189,7 +189,7 @@ const ChooseCityComponent = (props) => {
             bounds={bounds}
             onStart={(event, uiData) => onStart(event, uiData)}
         >
-            <section className="webrtc-window" style={{display: isModalVisible?'block':'none'}}>
+            <section className="webrtc-window" style={{display: isModalVisible?'block':'none'}} ref={draggleRef}>
                 <header className="webrtc-header">
                     <h2 className="title">RECOGNITION</h2>
                     <span className="actions">
