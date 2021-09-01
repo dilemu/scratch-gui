@@ -9,9 +9,9 @@ import "./web-cam.css";
 
 const ChooseCityComponent = (props) => {
     const { className, vm } = props;
-    const [isModalVisible, setIsModalVisible] = useState(true);
-    const [cityList, setCityList] = useState([]);
-    const [city, setCity] = useState({});
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isModalHide, setIsModalHide] = useState(false);
+    const [type, setType] = useState([]);
     const [uuid, setUuid] = useState(Math.random());
     const [bounds, setBounds] = useState(null);
     const [disabled, setDisabled] = useState(false);
@@ -24,24 +24,34 @@ const ChooseCityComponent = (props) => {
     const [capture, setCapture] = useState();
     const [deviceList, setDeviceList] = useState([]);
     const [deviceId, setDeviceId] = useState("");
+    const [countDownAnimation, setCountDownAnimation] = useState(0);
 
     const showModal = () => {
         setIsModalVisible(true);
     };
 
-    const handleOk = () => {
-        vm.runtime.emit(uuid, city);
-        setIsModalVisible(false);
-    };
+    const handleHide = () => {
+        setIsModalHide(!isModalHide)
+    }
 
     const handleCancel = () => {
+        vm.runtime.emit(uuid, null);
         setIsModalVisible(false);
     };
 
-    const start = (uuid) => {
+    const start = (options) => {
+        const { uuid, type, countDown } = options;
         showModal();
+        setTimeout(() => {
+            findDevice();
+        })
         setUuid(uuid);
-        console.log(uuid);
+        setType(type)
+        if (countDown) {
+            setTimeout(() => {
+                startTimeout(countDown);
+            }, 200)
+        }
     };
 
     const onStart = (event, uiData) => {
@@ -57,7 +67,6 @@ const ChooseCityComponent = (props) => {
 
     const findDevice = () => {
         let exArray = [];
-        setCanvasCtx(videoCanvas?.current?.getContext("2d"));
         //web rtc 调用摄像头(兼容性写法(谷歌、火狐、ie))
         navigator.getUserMedia =
             navigator.getUserMedia ||
@@ -79,6 +88,7 @@ const ChooseCityComponent = (props) => {
     };
 
     const startVideo = () => {
+        setCanvasCtx(videoCanvas?.current?.getContext("2d"));
         navigator.mediaDevices
             .getUserMedia({
                 audio: true,
@@ -87,25 +97,28 @@ const ChooseCityComponent = (props) => {
                 },
             })
             .then((stream) => {
-              window.stream = stream;
-              myVideo.current.srcObject = stream;
-              myVideo.current.onloadedmetadata = () => {
-                  myVideo.current.width = myVideo.current.offsetWidth;
-                  myVideo.current.height = myVideo.current.offsetHeight;
-                  videoCanvas.current.width = myVideo.current.width;
-                  videoCanvas.current.height = myVideo.current.height;
-                  canvasFrame();
-              };
+                window.stream = stream;
+                myVideo.current.srcObject = stream;
+                myVideo.current.onloadedmetadata = () => {
+                    videoCanvas.current.width = myVideo.current.width;
+                    videoCanvas.current.height = myVideo.current.height;
+                    canvasFrame();
+                };
             })
             .catch((err) => {
                 // 捕获错误
-                console.log;
+                console.log(err);
             });
     };
 
     const getCanvasBase64 = () => {
         return videoCanvas.current.toDataURL("image/jpeg", 1);
     };
+    
+    const getPhoto = () => {
+        setCapture(getCanvasBase64())
+        vm.runtime.emit(uuid, dataURLToBlob(getCanvasBase64()));
+    }
 
     const canvasFrame = () => {
         canvasCtx.drawImage(
@@ -123,41 +136,44 @@ const ChooseCityComponent = (props) => {
         setDeviceId(e.target.value);
     };
 
-    useEffect(() => {
-        // console.log("选择城市初始化");
-        // vm.runtime.on("start_choose_city", start);
-        findDevice();
-        setCountDown(10);
-    }, [myVideo]);
+    const startTimeout = (count) => {
+        clearTimeout(intervalRef.current);
+        setCountDownAnimation(0);
+        setTimeout(() => {
+            setCountDown(count);
+            setCountDownAnimation(count);
+        });
+    };
+
+    // useEffect(() => {
+    //     findDevice();
+    // }, [myVideo]);
 
     useEffect(() => {
         setDeviceId(deviceList.length && deviceList[0].key);
     }, [deviceList]);
 
     useEffect(() => {
-        // console.log("选择城市初始化");
-        // vm.runtime.on("start_choose_city", start);
-        window.stream && window.stream.getTracks().forEach((track) => {
+        window.stream &&
+            window.stream.getTracks().forEach((track) => {
                 track.stop();
             });
         startVideo();
     }, [deviceId]);
 
-    // 组件卸载时清除计时器
     useEffect(() => {
-        return () => {
-            clearInterval(intervalRef.current);
-        };
+        vm.runtime.on("start_web_cam", start);
     }, []);
 
     useEffect(() => {
-        if (countDown === 59) {
-            intervalRef.current = setInterval(() => {
-                changeCount((preCount) => preCount - 1);
-            }, 1000);
-        } else if (countDown === 0) {
-            clearInterval(intervalRef.current);
-        }
+        intervalRef.current = setTimeout(() => {
+            if (countDown > 0) {
+                setCountDown((pre) => pre - 1);
+            } else {
+                getPhoto()
+                setCountDownAnimation(0)
+            }
+        }, 1000);
     }, [countDown]);
 
     return (
@@ -165,25 +181,29 @@ const ChooseCityComponent = (props) => {
             bounds={bounds}
             onStart={(event, uiData) => onStart(event, uiData)}
         >
-            <section className="webrtc-window">
+            <section className="webrtc-window" style={{display: isModalVisible?'block':'none'}}>
                 <header className="webrtc-header">
                     <h2 className="title">RECOGNITION</h2>
                     <span className="actions">
                         <button className="webrtc-btn">
-                            <i className="cssicon cssicon-down "></i>
+                            <i className="cssicon cssicon-down"  onClick={handleHide}></i>
                         </button>{" "}
                         <button className="webrtc-btn">
-                            <i className="cssicon cssicon-close"></i>
+                            <i className="cssicon cssicon-close" onClick={handleCancel}></i>
                         </button>
                     </span>
                 </header>{" "}
-                <section className="webrtc-main">
+                <section className="webrtc-main" style={{display: isModalHide?'none':'block'}}>
                     <section className="webrtc-content webrtc-webcam">
                         <section className="webrtc-device-list"></section>{" "}
                         <section className="video-content">
                             <span
-                                className="countdown-contanier"
-                                style={{ animationIterationCount: 0 }}
+                                className={`countdown-contanier ${
+                                    countDownAnimation ? "animate" : ""
+                                }`}
+                                style={{
+                                    animationIterationCount: countDownAnimation,
+                                }}
                             >
                                 {countDown}
                             </span>
@@ -201,6 +221,7 @@ const ChooseCityComponent = (props) => {
                                 id="myVideo"
                                 autoPlay="autoplay"
                                 width="280"
+                                height="210"
                             ></video>
                             <canvas
                                 ref={videoCanvas}
@@ -240,5 +261,17 @@ const ChooseCityComponent = (props) => {
 ChooseCityComponent.propTypes = {
     className: PropTypes.string,
 };
+
+function dataURLToBlob(dataurl){
+	var arr = dataurl.split(',');
+	var mime = arr[0].match(/:(.*?);/)[1];
+	var bstr = atob(arr[1]);
+	var n = bstr.length;
+	var u8arr = new Uint8Array(n);
+	while(n--){
+		u8arr[n] = bstr.charCodeAt(n);
+	}
+	return new Blob([u8arr], {type:mime});
+}
 
 export default ChooseCityComponent;

@@ -91,6 +91,7 @@
     "react-tooltip": "3.8.0",
     "react-video-recorder": "^3.19.1",
     "react-virtualized": "9.20.1",
+    "recorder-core": "^1.1.21080800",
     "redux": "3.7.2",
     "redux-throttle": "0.1.1",
     "scratch-audio": "0.1.0-prerelease.20200528195344",
