@@ -7,7 +7,7 @@ import Draggable from "react-draggable";
 import request from "../../public/request";
 import "./web-cam.css";
 
-const ChooseCityComponent = (props) => {
+const WebCamComponent = (props) => {
     const { className, vm } = props;
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalHide, setIsModalHide] = useState(false);
@@ -266,7 +266,7 @@ const ChooseCityComponent = (props) => {
     );
 };
 
-ChooseCityComponent.propTypes = {
+WebCamComponent.propTypes = {
     className: PropTypes.string,
 };
 
@@ -282,4 +282,4 @@ function dataURLToBlob(dataurl){
 	return new Blob([u8arr], {type:mime});
 }
 
-export default ChooseCityComponent;
+export default WebCamComponent;
