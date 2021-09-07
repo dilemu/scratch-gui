@@ -1,8 +1,9 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React, { useState, useEffect, createRef, useRef } from "react";
-import { Modal } from "antd";
-import VideoRecorder from "react-video-recorder";
+import Recorder from "recorder-core";
+import "recorder-core/src/extensions/wavesurfer.view";
+import "recorder-core/src/engine/pcm";
 import Draggable from "react-draggable";
 import request from "../../public/request";
 import "./web-cam.css";
@@ -14,14 +15,14 @@ const WebCamComponent = (props) => {
     const [type, setType] = useState([]);
     const [uuid, setUuid] = useState(Math.random());
     const [bounds, setBounds] = useState(null);
-    const [disabled, setDisabled] = useState(false);
     const [countDown, setCountDown] = useState(0);
     const intervalRef = useRef(null);
     const videoCanvas = useRef();
     const myVideo = useRef();
     const draggleRef = createRef();
+    const audioRec = useRef();
     const [canvasCtx, setCanvasCtx] = useState("");
-    const [capture, setCapture] = useState();
+    const [capture, setCapture] = useState("");
     const [deviceList, setDeviceList] = useState([]);
     const [deviceId, setDeviceId] = useState("");
     const [countDownAnimation, setCountDownAnimation] = useState(0);
@@ -42,13 +43,11 @@ const WebCamComponent = (props) => {
     const start = (options) => {
         ClearTimeout();
         vm.runtime.emit(uuid, null);
-        const { uuid: newUuid, type, countDown } = options;
         showModal();
-        setTimeout(() => {
-            findDevice();
-        });
+        const { uuid: newUuid, type, countDown, duration } = options;
         setUuid(newUuid);
         setType(type);
+        startVideo(options);
         if (countDown) {
             setTimeout(() => {
                 startTimeout(countDown);
@@ -87,10 +86,58 @@ const WebCamComponent = (props) => {
             }
             setDeviceList(exArray);
         });
+        setCanvasCtx(videoCanvas.current.getContext("2d"));
     };
 
-    const startVideo = () => {
-        setCanvasCtx(videoCanvas.current.getContext("2d"));
+    const startVideo = (options) => {
+        const { duration, uuid } = options;
+        if (!Recorder.IsOpen()) {
+            let wave;
+            audioRec.current = Recorder({
+                type: "pcm",
+                sampleRate: 16000,
+                onProcess: function (
+                    buffers,
+                    powerLevel,
+                    bufferDuration,
+                    bufferSampleRate
+                ) {
+                    wave.input(
+                        buffers[buffers.length - 1],
+                        powerLevel,
+                        bufferSampleRate
+                    ); //输入音频数据，更新显示波形
+                },
+            });
+            audioRec.current.open(function () {
+                wave = Recorder.WaveSurferView({
+                    elem: "#myAudio",
+                    position: -1,
+                    duration: 3000,
+                    linear: [0, "#BAE7FF", 1, "#BAE7FF"],
+                });
+                audioRec.current.start();
+                if (duration) {
+                    let durationMs = parseInt(duration) * 1000;
+                    audioRec.current.start();
+                    setTimeout(() => {
+                        audioRec.current.stop((blob) => {
+                            getAudio(uuid, blob);
+                        });
+                    }, durationMs);
+                }
+            });
+        } else {
+            if (duration) {
+                let durationMs = parseInt(duration) * 1000;
+                audioRec.current.start();
+                setTimeout(() => {
+                    audioRec.current.stop((blob) => {
+                        getAudio(uuid, blob);
+                    });
+                }, durationMs);
+            }
+        }
         navigator.mediaDevices
             .getUserMedia({
                 audio: true,
@@ -117,9 +164,17 @@ const WebCamComponent = (props) => {
         return videoCanvas.current.toDataURL("image/jpeg", 1);
     };
 
+    const getAudio = (uuid, blob) => {
+        vm.runtime.emit(uuid, blob);
+    };
+
     const getPhoto = () => {
         setCapture(getCanvasBase64());
         vm.runtime.emit(uuid, dataURLToBlob(getCanvasBase64()));
+    };
+
+    const clearPhoto = () => {
+        setCapture("");
     };
 
     const canvasFrame = () => {
@@ -139,6 +194,7 @@ const WebCamComponent = (props) => {
     };
 
     const startTimeout = (count) => {
+        clearPhoto();
         clearTimeout(intervalRef.current);
         setCountDownAnimation(0);
         setTimeout(() => {
@@ -153,31 +209,33 @@ const WebCamComponent = (props) => {
         setCountDown(0);
     };
 
-    // useEffect(() => {
-    //     findDevice();
-    // }, [myVideo]);
-
     useEffect(() => {
         setDeviceId(deviceList.length && deviceList[0].key);
     }, [deviceList]);
 
     useEffect(() => {
-        if (isModalVisible) startVideo();
+        if (isModalVisible) return;
         else {
-            const tracks = myVideo.current && myVideo.current.srcObject && myVideo.current.srcObject.getTracks();
-            tracks && tracks.forEach((t) => {
-                t.stop();
-            });
+            const tracks =
+                myVideo.current &&
+                myVideo.current.srcObject &&
+                myVideo.current.srcObject.getTracks();
+            tracks &&
+                tracks.forEach((t) => {
+                    t.stop();
+                });
+            audioRec.current && audioRec.current.close();
         }
     }, [isModalVisible]);
 
     useEffect(() => {
+        findDevice();
         vm.runtime.on("start_web_cam", start);
-    }, [])
+    }, []);
 
     useEffect(() => {
         intervalRef.current = setTimeout(() => {
-            if (countDown > 0) {
+            if (countDown && countDown > 0) {
                 setCountDown((pre) => pre - 1);
             } else {
                 getPhoto();
@@ -243,8 +301,8 @@ const WebCamComponent = (props) => {
                                 ref={myVideo}
                                 id="myVideo"
                                 autoPlay="autoplay"
-                                width="280"
-                                height="210"
+                                width="480"
+                                height="360"
                             ></video>
                             <canvas
                                 ref={videoCanvas}
@@ -266,14 +324,10 @@ const WebCamComponent = (props) => {
                                 })}
                             </select>
                         </section>{" "}
-                        <section className="recorder-content">
-                            <span></span>
-                            <canvas
-                                // style="background-color: transparent; display: block; max-width: 100%; max-height: 100%;"
-                                width="272"
-                                height="64"
-                            ></canvas>
-                        </section>
+                        <section
+                            className="recorder-content"
+                            id="myAudio"
+                        ></section>
                     </section>
                 </section>
             </section>

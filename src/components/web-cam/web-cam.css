@@ -101,9 +101,9 @@
   z-index: 100;
   width: 280px;
   position: fixed;
-  top: 50%;
-  left: 50%;
-  z-index: 10000;
+  top: 40%;
+  left: 40%;
+  z-index: 100;
   border-radius: 0.5rem;
   box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.15);
   color: rgba(0, 0, 0, 0.65);
@@ -173,14 +173,14 @@
 .webrtc-content .video-content,
 .webrtc-content .recorder-content {
   color: #ffffff;
-  background-color: #353535;
+  background-color: #0250B3;
   border-radius: 0.25rem;
   width: 100%;
   position: relative;
   overflow: hidden;
 }
 .webrtc-content .video-content canvas,
-.webrtc-content .recorder-content canvas {
+.webrtc-content .video-content video {
   position: absolute;
   top: 0;
   left: 0;
@@ -188,8 +188,7 @@
   height: 100%;
 }
 
-.webrtc-content .video-content canvas,
-.webrtc-content .recorder-content video {
+.webrtc-content .recorder-content canvas {
   position: absolute;
   top: 0;
   left: 0;
@@ -197,7 +196,7 @@
   height: 100%;
 }
 .webrtc-content .video-content {
-  /* padding-top: 100%; */
+  padding-top: 75%;
 }
 .webrtc-content .recorder-content {
   min-height: 4rem;
