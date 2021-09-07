@@ -31,8 +31,8 @@ const WebCamComponent = (props) => {
     };
 
     const handleHide = () => {
-        setIsModalHide(!isModalHide)
-    }
+        setIsModalHide(!isModalHide);
+    };
 
     const handleCancel = () => {
         vm.runtime.emit(uuid, null);
@@ -40,19 +40,19 @@ const WebCamComponent = (props) => {
     };
 
     const start = (options) => {
-        ClearTimeout()
+        ClearTimeout();
         vm.runtime.emit(uuid, null);
         const { uuid: newUuid, type, countDown } = options;
         showModal();
         setTimeout(() => {
             findDevice();
-        })
+        });
         setUuid(newUuid);
-        setType(type)
+        setType(type);
         if (countDown) {
             setTimeout(() => {
                 startTimeout(countDown);
-            }, 100)
+            }, 100);
         }
     };
 
@@ -116,11 +116,11 @@ const WebCamComponent = (props) => {
     const getCanvasBase64 = () => {
         return videoCanvas.current.toDataURL("image/jpeg", 1);
     };
-    
+
     const getPhoto = () => {
-        setCapture(getCanvasBase64())
+        setCapture(getCanvasBase64());
         vm.runtime.emit(uuid, dataURLToBlob(getCanvasBase64()));
-    }
+    };
 
     const canvasFrame = () => {
         canvasCtx.drawImage(
@@ -162,24 +162,26 @@ const WebCamComponent = (props) => {
     }, [deviceList]);
 
     useEffect(() => {
-        window.stream &&
-            window.stream.getTracks().forEach((track) => {
-                track.stop();
+        if (isModalVisible) startVideo();
+        else {
+            const tracks = myVideo.current && myVideo.current.srcObject && myVideo.current.srcObject.getTracks();
+            tracks && tracks.forEach((t) => {
+                t.stop();
             });
-        startVideo();
-    }, [deviceId]);
+        }
+    }, [isModalVisible]);
 
     useEffect(() => {
         vm.runtime.on("start_web_cam", start);
-    }, []);
+    }, [])
 
     useEffect(() => {
         intervalRef.current = setTimeout(() => {
             if (countDown > 0) {
                 setCountDown((pre) => pre - 1);
             } else {
-                getPhoto()
-                setCountDownAnimation(0)
+                getPhoto();
+                setCountDownAnimation(0);
             }
         }, 1000);
     }, [countDown]);
@@ -189,19 +191,32 @@ const WebCamComponent = (props) => {
             bounds={bounds}
             onStart={(event, uiData) => onStart(event, uiData)}
         >
-            <section className="webrtc-window" style={{display: isModalVisible?'block':'none'}} ref={draggleRef}>
+            <section
+                className="webrtc-window"
+                style={{ display: isModalVisible ? "block" : "none" }}
+                ref={draggleRef}
+            >
                 <header className="webrtc-header">
                     <h2 className="title">RECOGNITION</h2>
                     <span className="actions">
                         <button className="webrtc-btn">
-                            <i className="cssicon cssicon-down"  onClick={handleHide}></i>
+                            <i
+                                className="cssicon cssicon-down"
+                                onClick={handleHide}
+                            ></i>
                         </button>{" "}
                         <button className="webrtc-btn">
-                            <i className="cssicon cssicon-close" onClick={handleCancel}></i>
+                            <i
+                                className="cssicon cssicon-close"
+                                onClick={handleCancel}
+                            ></i>
                         </button>
                     </span>
                 </header>{" "}
-                <section className="webrtc-main" style={{display: isModalHide?'none':'block'}}>
+                <section
+                    className="webrtc-main"
+                    style={{ display: isModalHide ? "none" : "block" }}
+                >
                     <section className="webrtc-content webrtc-webcam">
                         <section className="webrtc-device-list"></section>{" "}
                         <section className="video-content">
@@ -270,16 +285,16 @@ WebCamComponent.propTypes = {
     className: PropTypes.string,
 };
 
-function dataURLToBlob(dataurl){
-	var arr = dataurl.split(',');
-	var mime = arr[0].match(/:(.*?);/)[1];
-	var bstr = atob(arr[1]);
-	var n = bstr.length;
-	var u8arr = new Uint8Array(n);
-	while(n--){
-		u8arr[n] = bstr.charCodeAt(n);
-	}
-	return new Blob([u8arr], {type:mime});
+function dataURLToBlob(dataurl) {
+    var arr = dataurl.split(",");
+    var mime = arr[0].match(/:(.*?);/)[1];
+    var bstr = atob(arr[1]);
+    var n = bstr.length;
+    var u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
 }
 
 export default WebCamComponent;
