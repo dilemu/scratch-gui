@@ -21,7 +21,7 @@ const WebCamComponent = (props) => {
     const myVideo = useRef();
     const draggleRef = createRef();
     const audioRec = useRef();
-    const [canvasCtx, setCanvasCtx] = useState("");
+    const canvasCtx = useRef();
     const [capture, setCapture] = useState("");
     const [deviceList, setDeviceList] = useState([]);
     const [deviceId, setDeviceId] = useState("");
@@ -86,7 +86,7 @@ const WebCamComponent = (props) => {
             }
             setDeviceList(exArray);
         });
-        setCanvasCtx(videoCanvas.current.getContext("2d"));
+        canvasCtx.current = videoCanvas.current.getContext("2d");
     };
 
     const startVideo = (options) => {
@@ -178,7 +178,7 @@ const WebCamComponent = (props) => {
     };
 
     const canvasFrame = () => {
-        canvasCtx.drawImage(
+        canvasCtx.current.drawImage(
             myVideo.current,
             0,
             0,
@@ -291,7 +291,6 @@ const WebCamComponent = (props) => {
                             <span className="preview-container ">
                                 <span className="mask"></span>{" "}
                                 <img
-                                    alt="capture preview"
                                     src={capture}
                                     className="preview-img"
                                 />
