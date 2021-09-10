@@ -38,6 +38,7 @@ import UpdateModal from '../../containers/update-modal.jsx';
 import LoginPopup from '../login-popup/login-popup.jsx'
 import ChooseCity from '../choose-city/choose-city.jsx'
 import WebCam from '../web-cam/web-cam.jsx'
+import UploadModal from "../upload-modal/upload-modal.jsx";
 
 import layout, {STAGE_SIZE_MODES} from '../../lib/layout-constants';
 import {resolveStageSize} from '../../lib/screen-utils';
@@ -171,21 +172,19 @@ const GUIComponent = props => {
                 vm={vm}
             >
                 {alertsVisible ? (
-                    <Alerts
-                        vm={vm}
-                        className={styles.alertsContainer}
-                    />
+                    <Alerts vm={vm} className={styles.alertsContainer} />
                 ) : null}
             </StageWrapper>
         ) : (
             <Box
                 className={styles.pageWrapper}
-                dir={isRtl ? 'rtl' : 'ltr'}
+                dir={isRtl ? "rtl" : "ltr"}
                 {...componentProps}
             >
-                {showLogin ? (<LoginPopup title='登录' vm={vm}/>) : null}
+                {showLogin ? <LoginPopup title="登录" vm={vm} /> : null}
                 <ChooseCity vm={vm} />
                 <WebCam vm={vm} />
+                <UploadModal vm={vm} />
                 {telemetryModalVisible ? (
                     <TelemetryModal
                         isRtl={isRtl}
@@ -197,37 +196,16 @@ const GUIComponent = props => {
                         onShowPrivacyPolicy={onShowPrivacyPolicy}
                     />
                 ) : null}
-                {loading ? (
-                    <Loader />
-                ) : null}
-                {isCreating ? (
-                    <Loader messageId="gui.loader.creating" />
-                ) : null}
-                {isRendererSupported ? null : (
-                    <WebGlModal isRtl={isRtl} />
-                )}
-                {tipsLibraryVisible ? (
-                    <TipsLibrary />
-                ) : null}
-                {cardsVisible ? (
-                    <Cards />
-                ) : null}
+                {loading ? <Loader /> : null}
+                {isCreating ? <Loader messageId="gui.loader.creating" /> : null}
+                {isRendererSupported ? null : <WebGlModal isRtl={isRtl} />}
+                {tipsLibraryVisible ? <TipsLibrary /> : null}
+                {cardsVisible ? <Cards /> : null}
                 {alertsVisible ? (
-                    <Alerts
-                        vm={vm}
-                        className={styles.alertsContainer}
-                    />
+                    <Alerts vm={vm} className={styles.alertsContainer} />
                 ) : null}
-                {connectionModalVisible ? (
-                    <ConnectionModal
-                        vm={vm}
-                    />
-                ) : null}
-                {uploadProgressVisible ? (
-                    <UploadProgress
-                        vm={vm}
-                    />
-                ) : null}
+                {connectionModalVisible ? <ConnectionModal vm={vm} /> : null}
+                {uploadProgressVisible ? <UploadProgress vm={vm} /> : null}
                 {costumeLibraryVisible ? (
                     <CostumeLibrary
                         vm={vm}
@@ -241,10 +219,7 @@ const GUIComponent = props => {
                     />
                 ) : null}
                 {updateModalVisible ? (
-                    <UpdateModal
-                        vm={vm}
-                        onClickUpgrade={onClickUpgrade}
-                    />
+                    <UpdateModal vm={vm} onClickUpgrade={onClickUpgrade} />
                 ) : null}
                 <MenuBar
                     accountNavOpen={accountNavOpen}
@@ -290,15 +265,14 @@ const GUIComponent = props => {
                                 className={tabClassNames.tabs}
                                 selectedIndex={activeTabIndex}
                                 selectedTabClassName={tabClassNames.tabSelected}
-                                selectedTabPanelClassName={tabClassNames.tabPanelSelected}
+                                selectedTabPanelClassName={
+                                    tabClassNames.tabPanelSelected
+                                }
                                 onSelect={onActivateTab}
                             >
                                 <TabList className={tabClassNames.tabList}>
                                     <Tab className={tabClassNames.tab}>
-                                        <img
-                                            draggable={false}
-                                            src={codeIcon}
-                                        />
+                                        <img draggable={false} src={codeIcon} />
                                         <FormattedMessage
                                             defaultMessage="Code"
                                             description="Button to get to the code panel"
@@ -349,20 +323,28 @@ const GUIComponent = props => {
                                             grow={1}
                                             isVisible={blocksTabVisible}
                                             options={{
-                                                media: `${basePath}static/blocks-media/`
+                                                media: `${basePath}static/blocks-media/`,
                                             }}
                                             stageSize={stageSize}
                                             vm={vm}
                                         />
                                     </Box>
-                                    <Box className={styles.extensionButtonContainer}>
+                                    <Box
+                                        className={
+                                            styles.extensionButtonContainer
+                                        }
+                                    >
                                         <button
                                             className={styles.extensionButton}
-                                            title={intl.formatMessage(messages.addExtension)}
+                                            title={intl.formatMessage(
+                                                messages.addExtension
+                                            )}
                                             onClick={onExtensionButtonClick}
                                         >
                                             <img
-                                                className={styles.extensionButtonIcon}
+                                                className={
+                                                    styles.extensionButtonIcon
+                                                }
                                                 draggable={false}
                                                 src={addExtensionIcon}
                                             />
@@ -373,10 +355,14 @@ const GUIComponent = props => {
                                     </Box>
                                 </TabPanel>
                                 <TabPanel className={tabClassNames.tabPanel}>
-                                    {costumesTabVisible ? <CostumeTab vm={vm} /> : null}
+                                    {costumesTabVisible ? (
+                                        <CostumeTab vm={vm} />
+                                    ) : null}
                                 </TabPanel>
                                 <TabPanel className={tabClassNames.tabPanel}>
-                                    {soundsTabVisible ? <SoundTab vm={vm} /> : null}
+                                    {soundsTabVisible ? (
+                                        <SoundTab vm={vm} />
+                                    ) : null}
                                 </TabPanel>
                             </Tabs>
                             {/*
@@ -389,8 +375,11 @@ const GUIComponent = props => {
                         {/* stageAndTargetWrapper should use css to control show or hidden,
                         prevent scratch-vm error due to unload StageWrapper */}
                         <Box
-                            className={classNames(styles.stageAndTargetWrapper, styles[stageSize],
-                                isRealtimeMode ? styles.show : styles.hidden)}
+                            className={classNames(
+                                styles.stageAndTargetWrapper,
+                                styles[stageSize],
+                                isRealtimeMode ? styles.show : styles.hidden
+                            )}
                         >
                             <StageWrapper
                                 isFullScreen={isFullScreen}
@@ -400,10 +389,7 @@ const GUIComponent = props => {
                                 vm={vm}
                             />
                             <Box className={styles.targetWrapper}>
-                                <TargetPane
-                                    stageSize={stageSize}
-                                    vm={vm}
-                                />
+                                <TargetPane stageSize={stageSize} vm={vm} />
                             </Box>
                         </Box>
                         {/* {(isRealtimeMode === false) ? (
