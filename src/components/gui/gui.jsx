@@ -39,6 +39,7 @@ import LoginPopup from '../login-popup/login-popup.jsx'
 import ChooseCity from '../choose-city/choose-city.jsx'
 import WebCam from '../web-cam/web-cam.jsx'
 import UploadModal from "../upload-modal/upload-modal.jsx";
+import ImagePreview from "../image-preview/image-preview.jsx";
 
 import layout, {STAGE_SIZE_MODES} from '../../lib/layout-constants';
 import {resolveStageSize} from '../../lib/screen-utils';
@@ -185,6 +186,7 @@ const GUIComponent = props => {
                 <ChooseCity vm={vm} />
                 <WebCam vm={vm} />
                 <UploadModal vm={vm} />
+                <ImagePreview vm={vm} />
                 {telemetryModalVisible ? (
                     <TelemetryModal
                         isRtl={isRtl}
