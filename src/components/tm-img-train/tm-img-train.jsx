@@ -5,7 +5,7 @@ import { Modal, Button } from "antd";
 
 const ImagePreview = (props) => {
     const { className, vm } = props;
-    const [isModalVisible, setIsModalVisible] = useState(true);
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
     const showModal = () => {
         setIsModalVisible(true);
