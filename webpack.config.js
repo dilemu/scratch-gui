@@ -60,7 +60,7 @@ const base = {
         },
         {
             test: /\.css$/,
-            exclude: [MONACO_DIR, /antd.css/, /web-cam.css/],
+            exclude: [MONACO_DIR, /antd.css/, /web-cam.css/, /tm-img-train.css/],
             use: [{
                 loader: 'style-loader'
             }, {
@@ -87,7 +87,7 @@ const base = {
         },
         {
             test: /\.css$/,
-            include: [MONACO_DIR, /antd.css/, /web-cam.css/],
+            include: [MONACO_DIR, /antd.css/, /web-cam.css/, /tm-img-train.css/],
             use: ['style-loader', 'css-loader']
         }]
     },

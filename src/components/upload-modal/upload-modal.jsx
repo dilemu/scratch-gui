@@ -14,6 +14,10 @@ const UploadModal = (props) => {
         setIsModalVisible(true);
     };
 
+    const hideModal  = () => {
+        setIsModalVisible(false);
+    };
+
     const handleCancel = () => {
         vm.runtime.emit(uuid, null);
         setIsModalVisible(false);
@@ -36,7 +40,7 @@ const UploadModal = (props) => {
         name: "file",
         beforeUpload: (file) => {
             vm.runtime.emit(uuid, file);
-            handleCancel();
+            hideModal();
             return false;
         },
         showUploadList: false,

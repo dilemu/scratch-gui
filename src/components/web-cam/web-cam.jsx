@@ -31,13 +31,17 @@ const WebCamComponent = (props) => {
         setIsModalVisible(true);
     };
 
+    const hideModal  = () => {
+        setIsModalVisible(false);
+    };
+
     const handleHide = () => {
         setIsModalHide(!isModalHide);
     };
 
     const handleCancel = () => {
         vm.runtime.emit(uuid, null);
-        setIsModalVisible(false);
+        hideModal();
     };
 
     const start = (options) => {
