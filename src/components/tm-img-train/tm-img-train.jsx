@@ -1,12 +1,14 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
-import { Modal, Button } from "antd";
-import './tm-img-train.css'
+import { Modal, Button, Input } from "antd";
+import "./tm-img-train.css";
 
 const ImagePreview = (props) => {
     const { className, vm } = props;
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [sampleList, setSampleList] = useState([]);
+    const [modelResult, setModelResult] = useState(1)
 
     const showModal = () => {
         setIsModalVisible(true);
@@ -20,18 +22,28 @@ const ImagePreview = (props) => {
         setIsModalVisible(false);
     };
 
-    const start = (base64) => {
+    const start = (number) => {
         showModal();
+        let newSampleList = [];
+        for (let i = 0; i < number; i++) {
+            newSampleList.push({
+                list: [],
+                className: "分类" + i,
+                confidence: 0,
+            });
+        }
+        setSampleList(newSampleList);
     };
 
     useEffect(() => {
         console.log("机器学习图像分类窗口初始化");
         vm.runtime.on("start_img_train", start);
+        start(3);
     }, []);
 
     return (
         <>
-            <section className={isModalVisible ? "tm-page visible": "tm-page"}>
+            <section className={isModalVisible ? "tm-page visible" : "tm-page"}>
                 <button className="tm-close" onClick={hideModal}>
                     <i className="anticon anticon-close">
                         <svg
@@ -52,55 +64,65 @@ const ImagePreview = (props) => {
                 </header>
                 <section className="teachable-container">
                     <div className="input-container">
-                        <div className="input-section"></div>
+                        <div className="input-section">
+                            <section className="video-container">
+                                <section className="video-wrap">
+                                    <video className="video"></video>
+                                </section>
+                                <div>
+                                    <svg>
+                                        <text></text>
+                                    </svg>
+                                </div>
+                            </section>
+                        </div>
                     </div>
                     <div className="learning-container">
                         <div className="learning-section">
-                            <div className="learning-class-section ">
-                                <div className="sample-section">
+                            {sampleList.map((item, index) => {
+                                return (
                                     <div
-                                        className="sample-count-wrapper"
-                                        style={{color: 'rgb(183, 235, 143)'}}
+                                        className="learning-class-section "
+                                        key={index}
                                     >
-                                        <span className="sample-count">3</span>样本
+                                        <div className="sample-section">
+                                            <div className="sample-count-wrapper">
+                                                <span className="sample-count">
+                                                    {item.list.length}
+                                                </span>
+                                                样本
+                                            </div>
+                                            <div className="sample-wrapper">
+                                                <canvas
+                                                    className="canvas"
+                                                    width="114"
+                                                    height="114"
+                                                ></canvas>
+                                            </div>
+                                        </div>
+                                        <div class="learn-section">
+                                            <Input
+                                                className="input-text"
+                                                placeholder={item.className}
+                                                type="text"
+                                            />
+                                            <div class="confidence">
+                                                <span class="text"></span>
+                                                <span class="bar"></span>
+                                            </div>
+                                            <Button className="learn-btn">
+                                                学 习
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <div className="sample-wrapper">
-                                        <a className="reset-link">重置</a>
-                                        <img
-                                            className="close"
-                                            src="https://ext-cdn.makeblock.com/extlist/prod/extract/1301047349606486000/0368be00-7926-4a6e-9558-71cf99ff2bfe/tm/imgs/close.svg"
-                                        />
-                                        <canvas
-                                            className="canvas"
-                                            width="114"
-                                            height="114"
-                                        ></canvas>
-                                    </div>
-                                </div>
-                                <div className="learn-section">
-                                    <input
-                                        className="ant-input input-text"
-                                        placeholder="分类1"
-                                        type="text"
-                                        value=""
-                                        style={{color: 'rgb(183, 235, 143)'}}
-                                    />
-                                    <div className="confidence">
-                                        <span className="text">30.0%</span>
-                                        <span
-                                            className="bar"
-                                            style={{backgroundColor: "rgb(221, 221, 221)", width: "30%"}}
-                                        ></span>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        className="ant-btn learn-btn"
-                                        style={{color: "rgb(183, 235, 143)", borderColor: "rgb(183, 235, 143)",backgroundColor: "rgb(183, 235, 143) "}}
-                                    >
-                                        <span>学 习</span>
-                                    </button>
-                                </div>
-                            </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                    <div className="output-container">
+                        <div className="output-section">
+                            <h2>结果</h2>
+                            <div>{modelResult}</div>
                         </div>
                     </div>
                 </section>
