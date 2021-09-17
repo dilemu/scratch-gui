@@ -38,7 +38,7 @@ const ImagePreview = (props) => {
     useEffect(() => {
         console.log("机器学习图像分类窗口初始化");
         vm.runtime.on("start_img_train", start);
-        start(3);
+        // start(3);
     }, []);
 
     return (
