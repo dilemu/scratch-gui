@@ -2,13 +2,14 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Input } from "antd";
+
 import "./tm-img-train.css";
 
 const ImagePreview = (props) => {
     const { className, vm } = props;
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [sampleList, setSampleList] = useState([]);
-    const [modelResult, setModelResult] = useState(1)
+    const [modelResult, setModelResult] = useState(1);
 
     const showModal = () => {
         setIsModalVisible(true);
@@ -38,7 +39,7 @@ const ImagePreview = (props) => {
     useEffect(() => {
         console.log("机器学习图像分类窗口初始化");
         vm.runtime.on("start_img_train", start);
-        // start(3);
+        // start(10);
     }, []);
 
     return (
@@ -100,15 +101,15 @@ const ImagePreview = (props) => {
                                                 ></canvas>
                                             </div>
                                         </div>
-                                        <div class="learn-section">
+                                        <div className="learn-section">
                                             <Input
                                                 className="input-text"
                                                 placeholder={item.className}
                                                 type="text"
                                             />
-                                            <div class="confidence">
-                                                <span class="text"></span>
-                                                <span class="bar"></span>
+                                            <div className="confidence">
+                                                <span className="text"></span>
+                                                <span className="bar"></span>
                                             </div>
                                             <Button className="learn-btn">
                                                 学 习
@@ -117,6 +118,14 @@ const ImagePreview = (props) => {
                                     </div>
                                 );
                             })}
+                            <div
+                                id="wiresLeft"
+                                class="wires wires-left"
+                            ></div>
+                            <div
+                                id="wiresRight"
+                                class="wires wires-right"
+                            ></div>
                         </div>
                     </div>
                     <div className="output-container">
@@ -126,20 +135,16 @@ const ImagePreview = (props) => {
                         </div>
                     </div>
                 </section>
+                <footer className="tm-footer">
+                    <Button className="tm-footer-btn tm-footer-btn-new">
+                        新建模型
+                    </Button>
+                    <span className="tm-footer-btn">
+                        <Button>使用模型</Button>
+                    </span>
+                </footer>
             </section>
         </>
-        /* <Modal
-            title="机器学习 - 图像分类"
-            visible={isModalVisible}
-            onCancel={handleCancel}
-            footer={[
-                <Button key="back" onClick={handleCancel}>
-                    返回
-                </Button>,
-            ]}
-        >
-            
-        </Modal> */
     );
 };
 
