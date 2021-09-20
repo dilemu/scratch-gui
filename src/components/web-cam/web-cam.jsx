@@ -309,7 +309,6 @@ const WebCamComponent = (props) => {
                             ></video>
                             <canvas
                                 ref={videoCanvas}
-                                // style="background-color: transparent; display: block; max-width: 100%; max-height: 100%;"
                                 width="480"
                                 height="360"
                             ></canvas>
@@ -318,9 +317,9 @@ const WebCamComponent = (props) => {
                     <section className="webrtc-content webrtc-recorder">
                         <section className="webrtc-device-list">
                             <select onChange={deviceChange}>
-                                {deviceList.map((device) => {
+                                {deviceList.map((device, index) => {
                                     return (
-                                        <option value={device.key}>
+                                        <option value={device.key} key={index}>
                                             {device.value}
                                         </option>
                                     );
