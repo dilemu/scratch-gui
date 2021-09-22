@@ -449,7 +449,7 @@ const ImagePreview = (props) => {
                                                 } 0,${lineStart} 134,${lineStart}`}
                                                 stroke={
                                                     modelResult.index == index
-                                                        ? `40a9ff`
+                                                        ? `#40a9ff`
                                                         : `#ccc`
                                                 }
                                                 strokeWidth="1.5px"
