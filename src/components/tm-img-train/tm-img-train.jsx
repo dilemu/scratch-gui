@@ -274,7 +274,7 @@ const ImagePreview = (props) => {
         findDevice();
         console.log("机器学习图像分类窗口初始化");
         vm.runtime.on("start_img_train", start);
-        start(5);
+        // start(5);
     }, []);
 
     useEffect(() => {
