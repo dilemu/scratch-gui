@@ -150,7 +150,6 @@ const WebCamComponent = (props) => {
                 },
             })
             .then((stream) => {
-                window.stream = stream;
                 myVideo.current.srcObject = stream;
                 myVideo.current.onloadedmetadata = () => {
                     videoCanvas.current.width = myVideo.current.width;

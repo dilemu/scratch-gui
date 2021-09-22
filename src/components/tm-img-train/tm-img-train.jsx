@@ -17,7 +17,7 @@ const ImagePreview = (props) => {
     const [sampleList, setSampleList] = useState([]);
     const [deviceList, setDeviceList] = useState([]);
     const [deviceId, setDeviceId] = useState("");
-    const [modelResult, setModelResult] = useState(1);
+    const [modelResult, setModelResult] = useState({});
     const [curveHeight, setCurveHeight] = useState(500);
     const [lineStart, setLineStart] = useState(500);
     const [scrollTop, setScrollTop] = useState(0);
@@ -58,7 +58,7 @@ const ImagePreview = (props) => {
                 myVideo.current.onloadedmetadata = () => {
                     videoCanvas.current.width = myVideo.current.width;
                     videoCanvas.current.height = myVideo.current.height;
-                    canvasFrame();
+                    // canvasFrame();
                 };
             })
             .catch((err) => {
@@ -101,7 +101,8 @@ const ImagePreview = (props) => {
         });
     };
 
-    const start = (number) => {
+    const start = async (number) => {
+        startVideo();
         number = number || 3;
         showModal();
         let newSampleList = [];
@@ -115,10 +116,9 @@ const ImagePreview = (props) => {
         setSampleList(newSampleList);
         sampleListRef.current = newSampleList;
         setCurveHeight(sectionHeight * number + 16 * (number - 1));
-        mobilenetModule.load().then((res) => {
-            mobilenet.current = res;
-            startTimer();
-        });
+        const res = await mobilenetModule.load();
+        mobilenet.current = res;
+        startTimer();
     };
 
     const scrollSection = (e) => {
@@ -146,7 +146,7 @@ const ImagePreview = (props) => {
         // Train class if one of the buttons is held down
         if (training.current != -1) {
             logits = infer();
-            console.log(videoCanvas.current.toDataURL("image/jpeg", 1))
+            console.log(videoCanvas.current.toDataURL("image/jpeg", 1));
             // Add current image to classifier
             classifier.addExample(logits, training.current);
             const _canvasCtx = videoCanvas.current.getContext("2d");
@@ -165,7 +165,8 @@ const ImagePreview = (props) => {
             );
             const currentList = sampleListRef.current[training.current].list;
             currentList.push(data);
-            setSampleList(prev => sampleListRef.current)
+            console.log(`setSampleList((prev)`);
+            setSampleList((prev) => sampleListRef.current);
             // 绘制样本区域
             const listCtx = document
                 .getElementById(`list_${training.current}`)
@@ -196,13 +197,17 @@ const ImagePreview = (props) => {
             // If classes have been added run predict
             logits = infer();
             classifier.predictClass(logits, TOPK).then((res) => {
+                console.log(res.classIndex);
                 for (let i = 0; i < sampleListRef.current.length; i++) {
-                    // The number of examples for each class
-                    const exampleCount = classifier.getClassExampleCount();
-
+                    sampleListRef.current[i].confidence = res.confidences[i];
+                    setSampleList(() => sampleListRef.current);
+                    setModelResult({
+                        index: res.classIndex,
+                        className:
+                            sampleListRef.current[res.classIndex].className,
+                    });
                     // Make the predicted class bold
                     if (res.classIndex == i) {
-                        console.log(res.classIndex);
                     } else {
                         // this.infoTexts[i].style.fontWeight = "normal";
                     }
@@ -229,14 +234,33 @@ const ImagePreview = (props) => {
         cancelAnimationFrame(buttonTimer.current);
     };
 
-
     useEffect(() => {
         findDevice();
-        startVideo();
         console.log("机器学习图像分类窗口初始化");
         vm.runtime.on("start_img_train", start);
-        // start(5);
+        start(5);
     }, []);
+
+    useEffect(() => {
+        if (!mobilenet.current) return;
+        buttonTimer.current = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(buttonTimer.current);
+    }, []);
+
+    // 关媒体调用
+    useEffect(() => {
+        if (isModalVisible) return;
+        else {
+            const tracks =
+                myVideo.current &&
+                myVideo.current.srcObject &&
+                myVideo.current.srcObject.getTracks();
+            tracks &&
+                tracks.forEach((t) => {
+                    t.stop();
+                });
+        }
+    }, [isModalVisible]);
 
     useEffect(() => {
         setDeviceId(deviceList.length && deviceList[0].key);
@@ -245,11 +269,6 @@ const ImagePreview = (props) => {
     useEffect(() => {
         setLineStart(learningSectionRef.current.offsetHeight / 2);
     }, [learningSectionRef.current]);
-
-    useEffect(() => {
-        buttonTimer.current = requestAnimationFrame(animate);
-        return () => cancelAnimationFrame(buttonTimer.current)
-    })
 
     return (
         <>
@@ -341,8 +360,25 @@ const ImagePreview = (props) => {
                                                 type="text"
                                             />
                                             <div className="confidence">
-                                                <span className="text"></span>
-                                                <span className="bar"></span>
+                                                <span className="text">
+                                                    {item.confidence
+                                                        ? `${(
+                                                              item.confidence *
+                                                              100
+                                                          ).toFixed(2)}%`
+                                                        : ""}
+                                                </span>
+                                                <span
+                                                    className="bar"
+                                                    style={{
+                                                        backgroundColor:
+                                                            "rgb(149, 222, 100)",
+                                                        width: `${
+                                                            item.confidence *
+                                                            100
+                                                        }%`,
+                                                    }}
+                                                ></span>
                                             </div>
                                             <Button
                                                 className="learn-btn"
@@ -382,9 +418,12 @@ const ImagePreview = (props) => {
                                                     sectionHeight / 2 +
                                                     index * (sectionHeight + 16)
                                                 }`}
-                                                stroke="#ccc"
+                                                stroke={
+                                                    training == index
+                                                        ? `#40a9ff`
+                                                        : `#ccc`
+                                                }
                                                 strokeWidth="1.5px"
-                                                _stroke="40a9ff"
                                                 fill="none"
                                                 key={index}
                                             ></path>
@@ -408,9 +447,12 @@ const ImagePreview = (props) => {
                                                     sectionHeight / 2 +
                                                     index * (sectionHeight + 16)
                                                 } 0,${lineStart} 134,${lineStart}`}
-                                                stroke="#ccc"
+                                                stroke={
+                                                    modelResult.index == index
+                                                        ? `40a9ff`
+                                                        : `#ccc`
+                                                }
                                                 strokeWidth="1.5px"
-                                                _stroke="40a9ff"
                                                 fill="none"
                                                 key={index}
                                             ></path>
@@ -423,7 +465,7 @@ const ImagePreview = (props) => {
                     <div className="output-container">
                         <div className="output-section">
                             <h2>结果</h2>
-                            <div>{modelResult}</div>
+                            <div>{modelResult.className}</div>
                         </div>
                     </div>
                 </section>
