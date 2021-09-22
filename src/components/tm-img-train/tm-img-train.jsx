@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React, { useState, useEffect, useRef, createRef } from "react";
-import { Button, Input } from "antd";
+import { Button, Input, Modal, Row, Col, InputNumber, Slider } from "antd";
 const tf = require("@tensorflow/tfjs");
 const mobilenetModule = require("./mobilenet.js");
 const knnClassifier = require("@tensorflow-models/knn-classifier");
@@ -15,12 +15,16 @@ const ImagePreview = (props) => {
     const { className, vm } = props;
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [sampleList, setSampleList] = useState([]);
+    const [sampleNameList, setSampleNameList] = useState([]);
     const [deviceList, setDeviceList] = useState([]);
     const [deviceId, setDeviceId] = useState("");
     const [modelResult, setModelResult] = useState({});
     const [curveHeight, setCurveHeight] = useState(500);
     const [lineStart, setLineStart] = useState(500);
     const [scrollTop, setScrollTop] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const [newVisible, setNewVisible] = useState(false);
+    const [newModelNum, setNewModelNum] = useState(3);
     const buttonTimer = createRef();
     const mobilenet = useRef();
     const sampleListRef = useRef(sampleList);
@@ -28,7 +32,8 @@ const ImagePreview = (props) => {
     const myVideo = useRef();
     const canvasCtx = useRef();
     const learningSectionRef = useRef();
-    let training = useRef(-1);
+    const training = useRef(-1);
+    const isClear = useRef(false);
 
     const classifier = knnClassifier.create();
 
@@ -40,9 +45,15 @@ const ImagePreview = (props) => {
         setIsModalVisible(false);
     };
 
-    const handleCancel = () => {
-        setIsModalVisible(false);
+    const showNewModel = () => {
+        setNewVisible(true);
     };
+
+    const hideNewModel = () => {
+        setNewVisible(false);
+    };
+
+    const newModel = () => {};
 
     const startVideo = () => {
         navigator.mediaDevices
@@ -58,25 +69,12 @@ const ImagePreview = (props) => {
                 myVideo.current.onloadedmetadata = () => {
                     videoCanvas.current.width = myVideo.current.width;
                     videoCanvas.current.height = myVideo.current.height;
-                    // canvasFrame();
                 };
             })
             .catch((err) => {
                 // 捕获错误
                 console.log(err);
             });
-    };
-
-    const canvasFrame = () => {
-        canvasCtx.current.drawImage(
-            myVideo.current,
-            0,
-            0,
-            videoCanvas.current.width,
-            videoCanvas.current.height
-        );
-
-        requestAnimationFrame(canvasFrame);
     };
 
     const findDevice = () => {
@@ -102,22 +100,27 @@ const ImagePreview = (props) => {
     };
 
     const start = async (number) => {
+        setLoading(true);
         startVideo();
         number = number || 3;
         showModal();
         let newSampleList = [];
+        let newSampleNameList = [];
         for (let i = 0; i < number; i++) {
             newSampleList.push({
                 list: [],
                 className: "分类" + i,
                 confidence: 0,
             });
+            newSampleNameList.push("分类" + i);
         }
         setSampleList(newSampleList);
+        setSampleNameList(newSampleNameList);
         sampleListRef.current = newSampleList;
         setCurveHeight(sectionHeight * number + 16 * (number - 1));
         const res = await mobilenetModule.load();
         mobilenet.current = res;
+        setLoading(false);
         startTimer();
     };
 
@@ -136,91 +139,107 @@ const ImagePreview = (props) => {
     };
 
     const animate = () => {
-        // Get image data from video element
-        const image = tf.fromPixels(myVideo.current);
+        try {
+            // Get image data from video element
+            const image = tf.fromPixels(myVideo.current);
 
-        let logits;
-        // 'conv_preds' is the logits activation of MobileNet.
-        const infer = () => mobilenet.current.infer(image, "conv_preds");
+            let logits;
+            // 'conv_preds' is the logits activation of MobileNet.
+            const infer = () => mobilenet.current.infer(image, "conv_preds");
 
-        // Train class if one of the buttons is held down
-        if (training.current != -1) {
-            logits = infer();
-            console.log(videoCanvas.current.toDataURL("image/jpeg", 1));
-            // Add current image to classifier
-            classifier.addExample(logits, training.current);
-            const _canvasCtx = videoCanvas.current.getContext("2d");
-            _canvasCtx.drawImage(
-                myVideo.current,
-                0,
-                0,
-                videoCanvas.current.width,
-                videoCanvas.current.height
-            );
-            let data = _canvasCtx.getImageData(
-                0,
-                0,
-                videoCanvas.current.width,
-                videoCanvas.current.height
-            );
-            const currentList = sampleListRef.current[training.current].list;
-            currentList.push(data);
-            console.log(`setSampleList((prev)`);
-            setSampleList((prev) => sampleListRef.current);
-            // 绘制样本区域
-            const listCtx = document
-                .getElementById(`list_${training.current}`)
-                .getContext("2d");
-            let cols = 0;
-            let rows = 0;
-            for (let index = 0; index < currentList.length; index += 1) {
-                listCtx.putImageData(
-                    currentList[index],
-                    cols * (114 / 3),
-                    rows * (114 / 3),
+            // Train class if one of the buttons is held down
+            if (training.current != -1) {
+                logits = infer();
+                const _canvasCtx = videoCanvas.current.getContext("2d");
+                _canvasCtx.drawImage(myVideo.current, 0, 0, 114 / 3, 114 / 3);
+                let data = _canvasCtx.getImageData(
                     0,
                     0,
-                    114 / 3,
-                    114 / 3
+                    114,
+                    114
+                    // videoCanvas.current.width,
+                    // videoCanvas.current.height
                 );
-                if (cols === 2) {
-                    rows += 1;
-                    cols = 0;
+                const currentList =
+                    sampleListRef.current[training.current].list;
+                if (isClear.current) {
+                    sampleListRef.current[training.current].list = new Array();
+                    sampleListRef.current[training.current].confidence = 0;
+                    classifier.clearClass(training.current);
+                    const listCtx = document
+                        .getElementById(`list_${training.current}`)
+                        .getContext("2d");
+                    listCtx.clearRect(0, 0, 114, 114);
                 } else {
-                    cols += 1;
+                    currentList.push(data); // Add current image to classifier
+                    classifier.addExample(logits, training.current);
+                    // 绘制样本区域
+                    const listCtx = document
+                        .getElementById(`list_${training.current}`)
+                        .getContext("2d");
+                    let cols = 0;
+                    let rows = 0;
+                    for (
+                        let index = 0;
+                        index < currentList.length;
+                        index += 1
+                    ) {
+                        listCtx.putImageData(
+                            currentList[index],
+                            cols * (114 / 3),
+                            rows * (114 / 3),
+                            0,
+                            0,
+                            114 / 3,
+                            114 / 3
+                        );
+                        if (cols === 2) {
+                            rows += 1;
+                            cols = 0;
+                        } else {
+                            cols += 1;
+                        }
+                    }
                 }
+                setSampleList((prev) => sampleListRef.current);
             }
-        }
 
-        const numClasses = classifier.getNumClasses();
-        if (numClasses > 0) {
-            // If classes have been added run predict
-            logits = infer();
-            classifier.predictClass(logits, TOPK).then((res) => {
-                console.log(res.classIndex);
-                for (let i = 0; i < sampleListRef.current.length; i++) {
-                    sampleListRef.current[i].confidence = res.confidences[i];
-                    setSampleList(() => sampleListRef.current);
+            const numClasses = classifier.getNumClasses();
+            if (numClasses > 0) {
+                // If classes have been added run predict
+                logits = infer();
+                classifier.predictClass(logits, TOPK).then((res) => {
+                    console.log(res.classIndex);
                     setModelResult({
                         index: res.classIndex,
                         className:
                             sampleListRef.current[res.classIndex].className,
                     });
-                    // Make the predicted class bold
-                    if (res.classIndex == i) {
-                    } else {
-                        // this.infoTexts[i].style.fontWeight = "normal";
+                    for (let i = 0; i < sampleListRef.current.length; i++) {
+                        sampleListRef.current[i].confidence =
+                            res.confidences[i];
+                        setSampleList(() => sampleListRef.current);
+                        // Make the predicted class bold
+                        if (res.classIndex == i) {
+                        } else {
+                            // this.infoTexts[i].style.fontWeight = "normal";
+                        }
                     }
-                }
-            });
-        }
+                });
+            } else {
+                setModelResult({});
+            }
 
-        // Dispose image when done
-        image.dispose();
-        if (logits != null) {
-            logits.dispose();
+            // Dispose image when done
+            image.dispose();
+            if (logits != null) {
+                logits.dispose();
+            }
+            buttonTimer.current = requestAnimationFrame(animate);
+        } catch (error) {
+            console.log("animate error:", error);
+            buttonTimer.current = requestAnimationFrame(animate);
         }
-        buttonTimer.current = requestAnimationFrame(animate);
     };
 
     const startTimer = () => {
@@ -232,6 +251,23 @@ const ImagePreview = (props) => {
 
     const stopTimer = () => {
         cancelAnimationFrame(buttonTimer.current);
+    };
+
+    const changeClassName = (index, e) => {
+        const { value } = e.target;
+        sampleListRef.current[index].className = value;
+        setSampleList(sampleListRef.current);
+        // sampleNameList[index] = value;
+        // setSampleNameList(JSON.parse(JSON.stringify(sampleNameList)));
+    };
+
+    const resetClass = (index) => {
+        training.current = index;
+        isClear.current = true;
+        setTimeout(() => {
+            training.current = -1;
+            isClear.current = false;
+        });
     };
 
     useEffect(() => {
@@ -273,6 +309,27 @@ const ImagePreview = (props) => {
     return (
         <>
             <section className={isModalVisible ? "tm-page visible" : "tm-page"}>
+                {loading ? (
+                    <div className="no-device-mask">
+                        <i
+                            className="anticon anticon-loading"
+                            style={{ fontSize: "2rem" }}
+                        >
+                            <svg
+                                viewBox="0 0 1024 1024"
+                                className="anticon-spin"
+                                data-icon="loading"
+                                width="1em"
+                                height="1em"
+                                fill="currentColor"
+                            >
+                                <path d="M988 548c-19.9 0-36-16.1-36-36 0-59.4-11.6-117-34.6-171.3a440.45 440.45 0 0 0-94.3-139.9 437.71 437.71 0 0 0-139.9-94.3C629 83.6 571.4 72 512 72c-19.9 0-36-16.1-36-36s16.1-36 36-36c69.1 0 136.2 13.5 199.3 40.3C772.3 66 827 103 874 150c47 47 83.9 101.8 109.7 162.7 26.7 63.1 40.2 130.2 40.2 199.3.1 19.9-16 36-35.9 36z"></path>
+                            </svg>
+                        </i>
+                        <br />
+                        <p>模型资源加载中……</p>
+                    </div>
+                ) : null}
                 <button className="tm-close" onClick={hideModal}>
                     <i className="anticon anticon-close">
                         <svg
@@ -337,7 +394,13 @@ const ImagePreview = (props) => {
                                                 </span>
                                                 样本
                                             </div>
-                                            <div className="sample-wrapper">
+                                            <div
+                                                className="sample-wrapper"
+                                                onClick={resetClass.bind(
+                                                    this,
+                                                    index
+                                                )}
+                                            >
                                                 <a className="reset-link">
                                                     重置
                                                 </a>
@@ -356,8 +419,13 @@ const ImagePreview = (props) => {
                                         <div className="learn-section">
                                             <Input
                                                 className="input-text"
-                                                placeholder={item.className}
+                                                // value={sampleNameList[index]}
+                                                value={item.className}
                                                 type="text"
+                                                onChange={changeClassName.bind(
+                                                    this,
+                                                    index
+                                                )}
                                             />
                                             <div className="confidence">
                                                 <span className="text">
@@ -419,8 +487,8 @@ const ImagePreview = (props) => {
                                                     index * (sectionHeight + 16)
                                                 }`}
                                                 stroke={
-                                                    training == index
-                                                        ? `#40a9ff`
+                                                    training.current == index
+                                                        ? `#b7eb8f`
                                                         : `#ccc`
                                                 }
                                                 strokeWidth="1.5px"
@@ -449,7 +517,7 @@ const ImagePreview = (props) => {
                                                 } 0,${lineStart} 134,${lineStart}`}
                                                 stroke={
                                                     modelResult.index == index
-                                                        ? `#40a9ff`
+                                                        ? `#b7eb8f`
                                                         : `#ccc`
                                                 }
                                                 strokeWidth="1.5px"
@@ -470,7 +538,10 @@ const ImagePreview = (props) => {
                     </div>
                 </section>
                 <footer className="tm-footer">
-                    <Button className="tm-footer-btn tm-footer-btn-new">
+                    <Button
+                        className="tm-footer-btn tm-footer-btn-new"
+                        onClick={showNewModel}
+                    >
                         新建模型
                     </Button>
                     <span className="tm-footer-btn">
@@ -478,6 +549,48 @@ const ImagePreview = (props) => {
                     </span>
                 </footer>
             </section>
+            <Modal
+                title="新建模型"
+                visible={newVisible}
+                onCancel={hideNewModel}
+                onOk={newModel}
+                width={400}
+            >
+                <p>模型分类数量：</p>
+                <Slider
+                    min={1}
+                    max={20}
+                    onChange={() => {}}
+                    value={typeof newModelNum === "number" ? newModelNum : 0}
+                />
+                <InputNumber
+                    min={1}
+                    max={20}
+                    value={newModelNum}
+                    onChange={() => {}}
+                />
+
+                {/* <Row>
+                    <Col span={12}>
+                        <Slider
+                            min={1}
+                            max={20}
+                            onChange={() => {}}
+                            value={
+                                typeof newModelNum === "number" ? newModelNum : 0
+                            }
+                        />
+                    </Col>
+                    <Col span={4}>
+                        <InputNumber
+                            min={1}
+                            max={20}
+                            value={newModelNum}
+                            onChange={() => {}}
+                        />
+                    </Col>
+                </Row> */}
+            </Modal>
         </>
     );
 };
