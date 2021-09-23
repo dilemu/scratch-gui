@@ -126,7 +126,7 @@ const ImagePreview = (props) => {
 
     const scrollSection = (e) => {
         const scrollTop = e.target.scrollTop;
-        setLineStart(scrollTop + e.target.offsetHeight / 2);
+        setLineStart(scrollTop + learningSectionRef.current.offsetHeight / 2);
         setScrollTop(scrollTop);
     };
 
@@ -247,6 +247,7 @@ const ImagePreview = (props) => {
             stopTimer();
         }
         buttonTimer.current = requestAnimationFrame(animate);
+        setLineStart(learningSectionRef.current.scrollTop + learningSectionRef.current.offsetHeight / 2);
     };
 
     const stopTimer = () => {
@@ -274,7 +275,7 @@ const ImagePreview = (props) => {
         findDevice();
         console.log("机器学习图像分类窗口初始化");
         vm.runtime.on("start_img_train", start);
-        // start(5);
+        window.onresize = () => setLineStart(learningSectionRef.current.scrollTop + learningSectionRef.current.offsetHeight / 2);
     }, []);
 
     useEffect(() => {
@@ -303,7 +304,7 @@ const ImagePreview = (props) => {
     }, [deviceList]);
 
     useEffect(() => {
-        setLineStart(learningSectionRef.current.offsetHeight / 2);
+        setLineStart(learningSectionRef.current.scrollTop + learningSectionRef.current.offsetHeight / 2);
     }, [learningSectionRef.current]);
 
     return (
@@ -477,9 +478,7 @@ const ImagePreview = (props) => {
                                     {sampleList.map((item, index) => {
                                         return (
                                             <path
-                                                d={`M0,${lineStart} C107.72549019607843,${
-                                                    211 + scrollTop
-                                                } 0,${
+                                                d={`M0,${lineStart} C107.72549019607843,${lineStart} 0,${
                                                     sectionHeight / 2 +
                                                     index * (sectionHeight + 16)
                                                 } 134,${
