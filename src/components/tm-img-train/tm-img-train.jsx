@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React, { useState, useEffect, useRef, createRef } from "react";
-import { Button, Input, Modal, Row, Col, InputNumber, Slider } from "antd";
+import { Button, Input, Modal, Row, Col, InputNumber, Slider, Tooltip } from "antd";
 const tf = require("@tensorflow/tfjs");
 const mobilenetModule = require("./mobilenet.js");
 const knnClassifier = require("@tensorflow-models/knn-classifier");
@@ -25,6 +25,7 @@ const ImagePreview = (props) => {
     const [loading, setLoading] = useState(false);
     const [newVisible, setNewVisible] = useState(false);
     const [newModelNum, setNewModelNum] = useState(3);
+    const [numClasses, setNumClasses] = useState(0);
     const buttonTimer = createRef();
     const mobilenet = useRef();
     const sampleListRef = useRef(sampleList);
@@ -36,6 +37,7 @@ const ImagePreview = (props) => {
     const isClear = useRef(false);
 
     const classifier = knnClassifier.create();
+    window.imageClassifier = classifier;
 
     const showModal = () => {
         setIsModalVisible(true);
@@ -46,6 +48,7 @@ const ImagePreview = (props) => {
     };
 
     const showNewModel = () => {
+        setNewModelNum(3);
         setNewVisible(true);
     };
 
@@ -53,7 +56,10 @@ const ImagePreview = (props) => {
         setNewVisible(false);
     };
 
-    const newModel = () => {};
+    const newModel = () => {
+        start(newModelNum);
+        hideNewModel();
+    };
 
     const startVideo = () => {
         navigator.mediaDevices
@@ -99,17 +105,32 @@ const ImagePreview = (props) => {
         });
     };
 
-    const start = async (number) => {
-        setLoading(true);
+    const start = (number) => {
         startVideo();
         number = number || 3;
+        classifier.clearAllClasses();
         showModal();
+        initializeSample(number);
+        initializeMobilenet();
+        startTimer();
+    };
+
+    const initializeMobilenet = async () => {
+        if (!mobilenet.current) {
+            setLoading(true);
+            const res = await mobilenetModule.load();
+            mobilenet.current = res;
+            setLoading(false);
+        }
+    };
+
+    const initializeSample = (number) => {
         let newSampleList = [];
         let newSampleNameList = [];
         for (let i = 0; i < number; i++) {
             newSampleList.push({
                 list: [],
-                className: "分类" + i,
+                className: "分类" + (i + 1),
                 confidence: 0,
             });
             newSampleNameList.push("分类" + i);
@@ -118,10 +139,6 @@ const ImagePreview = (props) => {
         setSampleNameList(newSampleNameList);
         sampleListRef.current = newSampleList;
         setCurveHeight(sectionHeight * number + 16 * (number - 1));
-        const res = await mobilenetModule.load();
-        mobilenet.current = res;
-        setLoading(false);
-        startTimer();
     };
 
     const scrollSection = (e) => {
@@ -171,8 +188,8 @@ const ImagePreview = (props) => {
                         .getContext("2d");
                     listCtx.clearRect(0, 0, 114, 114);
                 } else {
-                    currentList.push(data); // Add current image to classifier
-                    classifier.addExample(logits, training.current);
+                    currentList.push(data);
+                    classifier.addExample(logits, training.current); // Add current image to classifier
                     // 绘制样本区域
                     const listCtx = document
                         .getElementById(`list_${training.current}`)
@@ -205,11 +222,11 @@ const ImagePreview = (props) => {
             }
 
             const numClasses = classifier.getNumClasses();
+            setNumClasses(numClasses);
             if (numClasses > 0) {
                 // If classes have been added run predict
                 logits = infer();
                 classifier.predictClass(logits, TOPK).then((res) => {
-                    console.log(res.classIndex);
                     setModelResult({
                         index: res.classIndex,
                         className:
@@ -247,7 +264,10 @@ const ImagePreview = (props) => {
             stopTimer();
         }
         buttonTimer.current = requestAnimationFrame(animate);
-        setLineStart(learningSectionRef.current.scrollTop + learningSectionRef.current.offsetHeight / 2);
+        setLineStart(
+            learningSectionRef.current.scrollTop +
+                learningSectionRef.current.offsetHeight / 2
+        );
     };
 
     const stopTimer = () => {
@@ -258,8 +278,8 @@ const ImagePreview = (props) => {
         const { value } = e.target;
         sampleListRef.current[index].className = value;
         setSampleList(sampleListRef.current);
-        // sampleNameList[index] = value;
-        // setSampleNameList(JSON.parse(JSON.stringify(sampleNameList)));
+        sampleNameList[index] = value;
+        setSampleNameList(JSON.parse(JSON.stringify(sampleNameList)));
     };
 
     const resetClass = (index) => {
@@ -271,11 +291,21 @@ const ImagePreview = (props) => {
         });
     };
 
+    const useModel = () => {
+        if (numClasses !== sampleList.length) return;
+        hideModal();
+    };
+
     useEffect(() => {
         findDevice();
         console.log("机器学习图像分类窗口初始化");
         vm.runtime.on("start_img_train", start);
-        window.onresize = () => setLineStart(learningSectionRef.current.scrollTop + learningSectionRef.current.offsetHeight / 2);
+        // start(3);
+        window.onresize = () =>
+            setLineStart(
+                learningSectionRef.current.scrollTop +
+                    learningSectionRef.current.offsetHeight / 2
+            );
     }, []);
 
     useEffect(() => {
@@ -304,7 +334,10 @@ const ImagePreview = (props) => {
     }, [deviceList]);
 
     useEffect(() => {
-        setLineStart(learningSectionRef.current.scrollTop + learningSectionRef.current.offsetHeight / 2);
+        setLineStart(
+            learningSectionRef.current.scrollTop +
+                learningSectionRef.current.offsetHeight / 2
+        );
     }, [learningSectionRef.current]);
 
     return (
@@ -420,8 +453,8 @@ const ImagePreview = (props) => {
                                         <div className="learn-section">
                                             <Input
                                                 className="input-text"
-                                                // value={sampleNameList[index]}
-                                                value={item.className}
+                                                value={sampleNameList[index]}
+                                                // value={item.className}
                                                 type="text"
                                                 onChange={changeClassName.bind(
                                                     this,
@@ -543,9 +576,23 @@ const ImagePreview = (props) => {
                     >
                         新建模型
                     </Button>
-                    <span className="tm-footer-btn">
-                        <Button>使用模型</Button>
-                    </span>
+                    <Tooltip
+                        title={numClasses !== sampleList.length ? "所有分类训练后才可以使用模型" : ""}
+                        className="tm-footer-btn"
+                        style={{
+                            cursor:
+                                numClasses !== sampleList.length
+                                    ? "not-allowed"
+                                    : "pointer",
+                        }}
+                    >
+                        <Button
+                            onClick={useModel}
+                            disabled={numClasses !== sampleList.length}
+                        >
+                            使用模型
+                        </Button>
+                    </Tooltip>
                 </footer>
             </section>
             <Modal
@@ -559,14 +606,18 @@ const ImagePreview = (props) => {
                 <Slider
                     min={1}
                     max={20}
-                    onChange={() => {}}
+                    onChange={(v) => {
+                        setNewModelNum(v);
+                    }}
                     value={typeof newModelNum === "number" ? newModelNum : 0}
                 />
                 <InputNumber
                     min={1}
                     max={20}
                     value={newModelNum}
-                    onChange={() => {}}
+                    onChange={(v) => {
+                        setNewModelNum(v);
+                    }}
                 />
 
                 {/* <Row>
