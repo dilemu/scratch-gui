@@ -5,11 +5,14 @@ import { Button, Input, Modal, Row, Col, InputNumber, Slider, Tooltip } from "an
 const tf = require("@tensorflow/tfjs");
 const mobilenetModule = require("./mobilenet.js");
 const knnClassifier = require("@tensorflow-models/knn-classifier");
+import VMScratchBlocks from '../../lib/blocks';
 
 import "./tm-img-train.css";
 
 const sectionHeight = 176;
 const TOPK = 10;
+const classifier = knnClassifier.create();
+window.imageClassifier = classifier;
 
 const ImagePreview = (props) => {
     const { className, vm } = props;
@@ -36,8 +39,7 @@ const ImagePreview = (props) => {
     const training = useRef(-1);
     const isClear = useRef(false);
 
-    const classifier = knnClassifier.create();
-    window.imageClassifier = classifier;
+    const ScratchBlocks = VMScratchBlocks(vm);
 
     const showModal = () => {
         setIsModalVisible(true);
@@ -106,10 +108,12 @@ const ImagePreview = (props) => {
     };
 
     const start = (number) => {
+        const numClasses = classifier.getNumClasses();
         startVideo();
+        showModal();
+        if(numClasses) return;
         number = number || 3;
         classifier.clearAllClasses();
-        showModal();
         initializeSample(number);
         initializeMobilenet();
         startTimer();
@@ -133,10 +137,11 @@ const ImagePreview = (props) => {
                 className: "分类" + (i + 1),
                 confidence: 0,
             });
-            newSampleNameList.push("分类" + i);
+            newSampleNameList.push("分类" + (i + 1));
         }
         setSampleList(newSampleList);
         setSampleNameList(newSampleNameList);
+        window.imgClassNameList = newSampleNameList;
         sampleListRef.current = newSampleList;
         setCurveHeight(sectionHeight * number + 16 * (number - 1));
     };
@@ -229,6 +234,7 @@ const ImagePreview = (props) => {
                 classifier.predictClass(logits, TOPK).then((res) => {
                     setModelResult({
                         index: res.classIndex,
+                        confidence: res.confidences[res.classIndex],
                         className:
                             sampleListRef.current[res.classIndex].className,
                     });
@@ -279,7 +285,8 @@ const ImagePreview = (props) => {
         sampleListRef.current[index].className = value;
         setSampleList(sampleListRef.current);
         sampleNameList[index] = value;
-        setSampleNameList(JSON.parse(JSON.stringify(sampleNameList)));
+        setSampleNameList(sampleNameList);
+        window.imgClassNameList = sampleNameList;
     };
 
     const resetClass = (index) => {
@@ -309,9 +316,9 @@ const ImagePreview = (props) => {
     }, []);
 
     useEffect(() => {
-        if (!mobilenet.current) return;
-        buttonTimer.current = requestAnimationFrame(animate);
-        return () => cancelAnimationFrame(buttonTimer.current);
+        // if (!mobilenet.current) return;
+        // buttonTimer.current = requestAnimationFrame(animate);
+        // return () => cancelAnimationFrame(buttonTimer.current);
     }, []);
 
     // 关媒体调用

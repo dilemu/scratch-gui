@@ -5,8 +5,12 @@ import Recorder from "recorder-core";
 import "recorder-core/src/extensions/wavesurfer.view";
 import "recorder-core/src/engine/pcm";
 import Draggable from "react-draggable";
-import request from "../../public/request";
+const tf = require("@tensorflow/tfjs");
+const mobilenetModule = require("../tm-img-train/mobilenet.js");
+
 import "./web-cam.css";
+
+const TOPK = 10;
 
 const WebCamComponent = (props) => {
     const { className, vm } = props;
@@ -22,16 +26,20 @@ const WebCamComponent = (props) => {
     const draggleRef = createRef();
     const audioRec = useRef();
     const canvasCtx = useRef();
+    const predictTimer = createRef();
+    const mobilenet = useRef();
     const [capture, setCapture] = useState("");
     const [deviceList, setDeviceList] = useState([]);
     const [deviceId, setDeviceId] = useState("");
     const [countDownAnimation, setCountDownAnimation] = useState(0);
+    const [predictResult, setPredictResult] = useState({});
+    const imageClassifierList = useRef([]);
 
     const showModal = () => {
         setIsModalVisible(true);
     };
 
-    const hideModal  = () => {
+    const hideModal = () => {
         setIsModalVisible(false);
     };
 
@@ -41,11 +49,12 @@ const WebCamComponent = (props) => {
 
     const handleCancel = () => {
         vm.runtime.emit(uuid, null);
+        cancelAnimationFrame(predictTimer.current);
         hideModal();
     };
 
     const start = (options) => {
-        ClearTimeout();
+        ClearCountdownTimeout();
         vm.runtime.emit(uuid, null);
         showModal();
         const { uuid: newUuid, type, countDown, duration } = options;
@@ -59,7 +68,7 @@ const WebCamComponent = (props) => {
         }
     };
 
-    const onStart = (event, uiData) => {
+    const onDraggableStart = (event, uiData) => {
         const { clientWidth, clientHeight } = window.document.documentElement;
         const targetRect = draggleRef.current.getBoundingClientRect();
         setBounds({
@@ -94,7 +103,7 @@ const WebCamComponent = (props) => {
     };
 
     const startVideo = (options) => {
-        const { duration, uuid } = options;
+        const { duration, uuid, type } = options;
         if (!Recorder.IsOpen()) {
             let wave;
             audioRec.current = Recorder({
@@ -156,11 +165,22 @@ const WebCamComponent = (props) => {
                     videoCanvas.current.height = myVideo.current.height;
                     canvasFrame();
                 };
+                if (type === "tm") {
+                    initializeMobilenet();
+                }
             })
             .catch((err) => {
                 // 捕获错误
                 console.log(err);
             });
+    };
+
+    const initializeMobilenet = async () => {
+        if (!mobilenet.current) {
+            const res = await mobilenetModule.load();
+            mobilenet.current = res;
+            animate();
+        }
     };
 
     const getCanvasBase64 = () => {
@@ -206,11 +226,55 @@ const WebCamComponent = (props) => {
         });
     };
 
-    const ClearTimeout = () => {
+    const ClearCountdownTimeout = () => {
         clearTimeout(intervalRef.current);
         setCountDownAnimation(0);
         setCountDown(0);
     };
+
+    const animate = () => {
+        // Get image data from video element
+        const image = tf.fromPixels(myVideo.current);
+
+        let logits;
+        // 'conv_preds' is the logits activation of MobileNet.
+        const infer = () => mobilenet.current.infer(image, "conv_preds");
+        const numClasses = window.imageClassifier.getNumClasses();
+        if (numClasses > 0) {
+            // If classes have been added run predict
+            logits = infer();
+            window.imageClassifier.predictClass(logits, TOPK).then((res) => {
+                setPredictResult({
+                    index: res.classIndex,
+                    confidence: res.confidences[res.classIndex],
+                    className:
+                        window.imgClassNameList[res.classIndex],
+                });
+                const _imageClassifierList = []
+                for (let i = 0; i < window.imgClassNameList.length; i++) {
+                    _imageClassifierList.push({
+                        className: window.imgClassNameList[i],
+                        confidence: res.confidences[i]
+                    })
+                    imageClassifierList.current = _imageClassifierList;
+                }
+            });
+        } else {
+            setPredictResult({});
+        }
+
+        // Dispose image when done
+        image.dispose();
+        if (logits != null) {
+            logits.dispose();
+        }
+        predictTimer.current = requestAnimationFrame(animate);
+    };
+
+    const imgPredictResult = (name) => {
+        // const result = imageClassifierList.current.length && imageClassifierList.current.find(className => className === name);
+        vm.runtime.emit("img_predict_result", imageClassifierList.current);
+    }
 
     useEffect(() => {
         setDeviceId(deviceList.length && deviceList[0].key);
@@ -234,6 +298,8 @@ const WebCamComponent = (props) => {
     useEffect(() => {
         findDevice();
         vm.runtime.on("start_web_cam", start);
+        vm.runtime.on("start_img_predict_result", imgPredictResult);
+        vm.runtime.on("start_img_predict", start);
     }, []);
 
     useEffect(() => {
@@ -250,7 +316,9 @@ const WebCamComponent = (props) => {
     return (
         <Draggable
             bounds={bounds}
-            onStart={(event, uiData) => onStart(event, uiData)}
+            onDraggableStart={(event, uiData) =>
+                onDraggableStart(event, uiData)
+            }
         >
             <section
                 className="webrtc-window"
@@ -258,7 +326,7 @@ const WebCamComponent = (props) => {
                 ref={draggleRef}
             >
                 <header className="webrtc-header">
-                    <h2 className="title">RECOGNITION</h2>
+                    <h2 className="title">多媒体窗口</h2>
                     <span className="actions">
                         <button className="webrtc-btn">
                             <i
@@ -279,7 +347,7 @@ const WebCamComponent = (props) => {
                     style={{ display: isModalHide ? "none" : "block" }}
                 >
                     <section className="webrtc-content webrtc-webcam">
-                        <section className="webrtc-device-list"></section>{" "}
+                        <section className="webrtc-device-list"></section>
                         <section className="video-content">
                             <span
                                 className={`countdown-contanier ${
@@ -296,8 +364,12 @@ const WebCamComponent = (props) => {
                                 <img
                                     src={capture}
                                     className="preview-img"
+                                    style={{
+                                        opacity:
+                                            type === "tm" ? "0" : "inherit",
+                                    }}
                                 />
-                            </span>{" "}
+                            </span>
                             <span></span>
                             <video
                                 ref={myVideo}
@@ -312,7 +384,27 @@ const WebCamComponent = (props) => {
                                 height="360"
                             ></canvas>
                         </section>
-                    </section>{" "}
+                        <span
+                            className="tm-result"
+                            style={{
+                                display: type === "tm" ? "block" : "none",
+                            }}
+                        >
+                            <span className="predict-result">
+                                {Object.keys(predictResult).length
+                                    ? `${predictResult.className}（${(
+                                          predictResult.confidence * 100
+                                      ).toFixed(2)}）`
+                                    : ""}
+                            </span>
+                            <span
+                                className="predict-process"
+                                style={{
+                                    width: `${predictResult.confidence * 100}%`,
+                                }}
+                            ></span>
+                        </span>
+                    </section>
                     <section className="webrtc-content webrtc-recorder">
                         <section className="webrtc-device-list">
                             <select onChange={deviceChange}>

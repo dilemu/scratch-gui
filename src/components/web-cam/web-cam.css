@@ -1,407 +1,437 @@
 .cssicon {
-  overflow: hidden;
-  position: relative;
-  display: inline-block;
-  width: 1.25rem;
-  height: 1.25rem;
-  vertical-align: top;
-  -webkit-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+    width: 1.25rem;
+    height: 1.25rem;
+    vertical-align: top;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 .cssicon::before,
 .cssicon::after {
-  content: '';
-  background-color: #9A9A9A;
-  -webkit-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
+    content: "";
+    background-color: #9a9a9a;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 .cssicon:hover::before,
 .cssicon:hover::after {
-  background-color: #1eaaff;
+    background-color: #1eaaff;
 }
 .cssicon-close::before,
 .cssicon-close::after {
-  content: '';
-  position: absolute;
-  height: 2px;
-  width: 100%;
-  top: 50%;
-  left: 0;
-  margin-top: -1px;
-  border-radius: 2px;
+    content: "";
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    margin-top: -1px;
+    border-radius: 2px;
 }
 .cssicon-close::before {
-  -webkit-transform: rotate(45deg);
-          transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
 }
 .cssicon-close::after {
-  -webkit-transform: rotate(-45deg);
-          transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
 }
 .cssicon-down.cssicon-up::before {
-  -webkit-transform: rotate(-45deg);
-          transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
 }
 .cssicon-down.cssicon-up::after {
-  -webkit-transform: rotate(45deg);
-          transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
 }
 .cssicon-down::before,
 .cssicon-down::after {
-  position: absolute;
-  top: 0.625rem;
-  width: 0.75rem;
-  height: 2px;
-  display: block;
-  border-radius: 2px;
+    position: absolute;
+    top: 0.625rem;
+    width: 0.75rem;
+    height: 2px;
+    display: block;
+    border-radius: 2px;
 }
 .cssicon-down::before {
-  left: 0.5px;
-  -webkit-transform: rotate(45deg);
-          transform: rotate(45deg);
+    left: 0.5px;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
 }
 .cssicon-down::after {
-  right: 0.5px;
-  -webkit-transform: rotate(-45deg);
-          transform: rotate(-45deg);
+    right: 0.5px;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
 }
 @-webkit-keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 @-webkit-keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
 }
 @keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
 }
 .webrtc-window {
-  z-index: 100;
-  width: 280px;
-  position: fixed;
-  top: 40%;
-  left: 40%;
-  z-index: 100;
-  border-radius: 0.5rem;
-  box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.15);
-  color: rgba(0, 0, 0, 0.65);
-  background-color: #fff;
-  -webkit-animation-duration: 0.2s;
-          animation-duration: 0.2s;
-  -webkit-animation-fill-mode: backwards;
-          animation-fill-mode: backwards;
-  -webkit-animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-          animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-  will-change: animation;
+    z-index: 100;
+    width: 280px;
+    position: fixed;
+    top: 40%;
+    left: 40%;
+    z-index: 100;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.15);
+    color: rgba(0, 0, 0, 0.65);
+    background-color: #fff;
+    -webkit-animation-duration: 0.2s;
+    animation-duration: 0.2s;
+    -webkit-animation-fill-mode: backwards;
+    animation-fill-mode: backwards;
+    -webkit-animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    will-change: animation;
 }
 .webrtc-window.webrtc-window-enter-to {
-  -webkit-animation-name: fadeIn;
-          animation-name: fadeIn;
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
 }
 .webrtc-window.webrtc-window-leave-to {
-  -webkit-animation-name: fadeOut;
-          animation-name: fadeOut;
+    -webkit-animation-name: fadeOut;
+    animation-name: fadeOut;
 }
 .webrtc-header {
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-align: center;
-          align-items: center;
-  -webkit-box-pack: justify;
-          justify-content: space-between;
-  position: relative;
-  z-index: 1;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
 }
 .webrtc-header .title {
-  font-size: 1rem;
-  font-weight: normal;
-  margin: 0;
-  padding: 1rem;
-  -webkit-box-flex: 1;
-          flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    font-size: 1rem;
+    font-weight: normal;
+    margin: 0;
+    padding: 1rem;
+    -webkit-box-flex: 1;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .webrtc-header .actions {
-  display: -webkit-box;
-  display: flex;
+    display: -webkit-box;
+    display: flex;
 }
 .webrtc-btn {
-  border: none;
-  background-color: transparent;
-  outline: none;
-  display: inline-block;
-  padding: 1rem 0.75rem;
-  -webkit-transition: opacity 0.2s ease-in-out;
-  transition: opacity 0.2s ease-in-out;
-  will-change: opacity;
-  cursor: pointer;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    display: inline-block;
+    padding: 1rem 0.75rem;
+    -webkit-transition: opacity 0.2s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
+    will-change: opacity;
+    cursor: pointer;
 }
 .webrtc-btn:active {
-  opacity: 0.8;
+    opacity: 0.8;
 }
 .webrtc-main {
-  overflow: hidden;
-  box-shadow: 0 -1px 0 0 #eee;
+    overflow: hidden;
+    box-shadow: 0 -1px 0 0 #eee;
 }
 .webrtc-content {
-  margin: 0.25rem;
+    margin: 0.25rem;
 }
 .webrtc-content .video-content,
 .webrtc-content .recorder-content {
-  color: #ffffff;
-  background-color: #0250B3;
-  border-radius: 0.25rem;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
+    color: #ffffff;
+    background-color: #0250b3;
+    border-radius: 0.25rem;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
 }
 .webrtc-content .video-content canvas,
 .webrtc-content .video-content video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .webrtc-content .recorder-content canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 .webrtc-content .video-content {
-  padding-top: 75%;
+    padding-top: 75%;
+}
+.webrtc-content .tm-result {
+    display: block;
+    height: 1.5rem;
+    width: 100%;
+    position: relative;
+    background-color: rgb(238, 238, 238);
+    color: rgb(255, 255, 255);
+    margin-top: 0.25rem;
+    text-align: center;
+}
+.tm-result .predict-result {
+    display: block;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: transparent;
+    z-index: 1;
+    line-height: 1.5rem;
+    width: 100%;
+}
+.tm-result .predict-process {
+    display: block;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: rgb(89, 192, 89);
+    z-index: 0;
 }
 .webrtc-content .recorder-content {
-  min-height: 4rem;
+    min-height: 4rem;
 }
 .webrtc-device-list {
-  margin-bottom: 0.25rem;
+    margin-bottom: 0.25rem;
 }
 .webrtc-device-list select {
-  display: block;
-  width: 100%;
+    display: block;
+    width: 100%;
 }
 .webrtc-nodevice-content,
 .webrtc-loading-content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-          justify-content: center;
-  z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    z-index: 1;
 }
 .webrtc-nodevice-content.hide,
 .webrtc-loading-content.hide {
-  display: none;
+    display: none;
 }
 .webrtc-nodevice-content h3.text,
 .webrtc-loading-content h3.text {
-  margin: 1rem 0 0;
-  font-size: 1rem;
-  font-weight: 200;
-  color: #fff;
+    margin: 1rem 0 0;
+    font-size: 1rem;
+    font-weight: 200;
+    color: #fff;
 }
 .recorder-content .webrtc-nodevice-content {
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-          flex-direction: col;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: col;
 }
 .recorder-content .webrtc-nodevice-content h3.text {
-  margin: 0 0 0 1rem;
-  color: #fff;
+    margin: 0 0 0 1rem;
+    color: #fff;
 }
 .webrtc-nodevice-content {
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-          flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
 }
 .preview-container {
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 .preview-container.animate .mask {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  -webkit-animation: pc-animate 0.3s ease-out;
-          animation: pc-animate 0.3s ease-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-animation: pc-animate 0.3s ease-out;
+    animation: pc-animate 0.3s ease-out;
 }
 .preview-container.animate .preview-img {
-  -webkit-animation: ip-animate 0.25s ease-out 0.35s forwards;
-          animation: ip-animate 0.25s ease-out 0.35s forwards;
+    -webkit-animation: ip-animate 0.25s ease-out 0.35s forwards;
+    animation: ip-animate 0.25s ease-out 0.35s forwards;
 }
 @-webkit-keyframes ip-animate {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 @keyframes ip-animate {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 @-webkit-keyframes pc-animate {
-  0% {
-    box-shadow: 0 0 0 #fff inset;
-  }
-  50% {
-    box-shadow: 0 0 5rem #fff inset;
-  }
-  100% {
-    box-shadow: 0 0 0 #fff inset;
-  }
+    0% {
+        box-shadow: 0 0 0 #fff inset;
+    }
+    50% {
+        box-shadow: 0 0 5rem #fff inset;
+    }
+    100% {
+        box-shadow: 0 0 0 #fff inset;
+    }
 }
 @keyframes pc-animate {
-  0% {
-    box-shadow: 0 0 0 #fff inset;
-  }
-  50% {
-    box-shadow: 0 0 5rem #fff inset;
-  }
-  100% {
-    box-shadow: 0 0 0 #fff inset;
-  }
+    0% {
+        box-shadow: 0 0 0 #fff inset;
+    }
+    50% {
+        box-shadow: 0 0 5rem #fff inset;
+    }
+    100% {
+        box-shadow: 0 0 0 #fff inset;
+    }
 }
 .preview-container .preview-img {
-  display: block;
-  width: 100%;
-  -webkit-transform: scale(0.25);
-          transform: scale(0.25);
-  -webkit-transform-origin: 95% 95%;
-          transform-origin: 95% 95%;
-  box-shadow: 0 0 3rem 0 rgba(255, 255, 255, 0.5);
-  z-index: 2;
-  position: absolute;
+    display: block;
+    width: 100%;
+    -webkit-transform: scale(0.25);
+    transform: scale(0.25);
+    -webkit-transform-origin: 95% 95%;
+    transform-origin: 95% 95%;
+    box-shadow: 0 0 3rem 0 rgba(255, 255, 255, 0.5);
+    z-index: 2;
+    position: absolute;
 }
 .preview-container .preview-img img {
-  opacity: 1;
-  -webkit-transition: opacity 0.3s ease-in-out;
-  transition: opacity 0.3s ease-in-out;
-  will-change: opacity;
+    opacity: 1;
+    -webkit-transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
+    will-change: opacity;
 }
 .countdown-contanier {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-          justify-content: center;
-  color: #000;
-  background-color: rgba(255, 255, 255, 0.5);
-  font-size: 4.5rem;
-  z-index: 1;
-  opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    color: #000;
+    background-color: rgba(255, 255, 255, 0.5);
+    font-size: 4.5rem;
+    z-index: 1;
+    opacity: 0;
 }
 .countdown-contanier.animate {
-  -webkit-animation-name: countdown-animate;
-          animation-name: countdown-animate;
-  -webkit-animation-duration: 1s;
-          animation-duration: 1s;
-  -webkit-animation-timing-function: linear;
-          animation-timing-function: linear;
+    -webkit-animation-name: countdown-animate;
+    animation-name: countdown-animate;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
 }
 @-webkit-keyframes countdown-animate {
-  0% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0.2;
-  }
+    0% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0.2;
+    }
 }
 @keyframes countdown-animate {
-  0% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0.2;
-  }
+    0% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0.2;
+    }
 }
 .webrtc-loading-content .device-loading {
-  width: 2rem;
-  height: 2rem;
-  margin: 0;
-  background: transparent;
-  border-top: 0.25rem solid rgba(248, 248, 248, 0.5);
-  border-right: 0.25rem solid transparent;
-  border-radius: 50%;
-  -webkit-animation: 1s device-spinner linear infinite;
-          animation: 1s device-spinner linear infinite;
+    width: 2rem;
+    height: 2rem;
+    margin: 0;
+    background: transparent;
+    border-top: 0.25rem solid rgba(248, 248, 248, 0.5);
+    border-right: 0.25rem solid transparent;
+    border-radius: 50%;
+    -webkit-animation: 1s device-spinner linear infinite;
+    animation: 1s device-spinner linear infinite;
 }
 @-webkit-keyframes device-spinner {
-  from {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+    from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
 @keyframes device-spinner {
-  from {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+    from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
 .help-link {
-  color: #fff;
-  font-size: 12px;
+    color: #fff;
+    font-size: 12px;
 }
 .audio-info {
-  display: -webkit-box;
-  display: flex;
+    display: -webkit-box;
+    display: flex;
 }

@@ -126,7 +126,10 @@ class Blocks extends React.Component {
         toolboxWorkspace.registerButtonCallback('MAKE_A_LIST', varListButtonCallback('list'));
         toolboxWorkspace.registerButtonCallback('MAKE_A_PROCEDURE', procButtonCallback);
         toolboxWorkspace.registerButtonCallback('trainModel', (e, p) => {
-            this.props.vm.runtime.emit("start_img_train")
+            this.props.vm.runtime.emit("start_img_train");
+        });
+        toolboxWorkspace.registerButtonCallback('startImgPredict', (e, p) => {
+            this.props.vm.runtime.emit("start_img_predict", {uuid: "mg_predict", type: "tm"});
         });
 
         // Store the xml of the toolbox that is actually rendered.
