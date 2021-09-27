@@ -30,23 +30,103 @@
 }
 
 .xiaodi {
-    width: 300px;
-    height: 300px;
+    -webkit-animation: bounce-down 1.6s linear infinite;
+    animation: bounce-down 1.6s linear infinite;
+}
+
+@-webkit-keyframes bounce-down {
+    25% {
+        -webkit-transform: translateY(-4px);
+    }
+    50%,
+    100% {
+        -webkit-transform: translateY(0);
+    }
+    75% {
+        -webkit-transform: translateY(4px);
+    }
+}
+
+@keyframes bounce-down {
+    25% {
+        transform: translateY(-4px);
+    }
+    50%,
+    100% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(4px);
+    }
 }
 
 .process-bar {
-  width: 420px;
-  height: 20px;
-  background-color: #1A1A1A;
-  line-height: 20px;
-  padding: 4px;
-  margin-top: 40px;
+    width: 420px;
+    height: 20px;
+    background-color: #1a1a1a;
+    line-height: 20px;
+    padding: 4px;
+    margin-top: 40px;
 }
 
 .process-bar .process-content {
-  width: 60%;
-  height: 12px;
-  background-color: #17E9EA;
+    width: 0;
+    height: 12px;
+    background-color: #17e9ea;
+    animation: process-animate-1 2s forwards,
+    process-animate-2 4s 2s forwards,
+    process-animate-3 2s 6s forwards;
+}
+
+@keyframes process-animate-1 {
+    from {
+        width: 0;
+    }
+    to {
+        width: 20%;
+    }
+}
+@-webkit-keyframes process-animate-1 {
+    from {
+        width: 0;
+    }
+    to {
+        width: 20%;
+    }
+}
+
+@keyframes process-animate-2 {
+    from {
+        width: 20%;
+    }
+    to {
+        width: 80%;
+    }
+}
+@-webkit-keyframes process-animate-2 {
+    from {
+        width: 20%;
+    }
+    to {
+        width: 80%;
+    }
+}
+
+@keyframes process-animate-3 {
+    from {
+        width: 80%;
+    }
+    to {
+        width: 100%;
+    }
+}
+@-webkit-keyframes process-animate-3 {
+    from {
+        width: 80%;
+    }
+    to {
+        width: 100%;
+    }
 }
 
 .block-animation {

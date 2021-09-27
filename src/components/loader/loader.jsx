@@ -121,7 +121,8 @@ class LoaderComponent extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            messageNumber: this.chooseRandomMessage()
+            messageNumber: this.chooseRandomMessage(),
+            processing: 0
         };
     }
     componentDidMount () {
@@ -129,6 +130,9 @@ class LoaderComponent extends React.Component {
         this.intervalId = setInterval(() => {
             this.setState({messageNumber: this.chooseRandomMessage()});
         }, 5000);
+        // this.processId = setInterval(() => {
+        //     if(this.state.processing < 100) this.setState({processing: this.state.processing + 2})
+        // }, 100)
     }
     componentWillUnmount () {
         clearInterval(this.intervalId);
