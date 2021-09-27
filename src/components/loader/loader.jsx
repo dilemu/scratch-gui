@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import topBlock from './top-block.svg';
 import middleBlock from './middle-block.svg';
 import bottomBlock from './bottom-block.svg';
+import Xiaodi from './xiaodi.png';
 const messages = [
     {
         message: (
@@ -149,10 +150,18 @@ class LoaderComponent extends React.Component {
         return (
             <div
                 className={classNames(styles.background, {
-                    [styles.fullscreen]: this.props.isFullScreen
+                    [styles.fullscreen]: this.props.isFullScreen,
                 })}
             >
                 <div className={styles.container}>
+                    <div className={styles.xiaodi}>
+                        <img src={Xiaodi} alt="xiaodi" />
+                    </div>
+                    <div className={styles.processBar}>
+                        <div className={styles.processContent}></div>
+                    </div>
+                </div>
+                {/* <div className={styles.container}>
                     <div className={styles.blockAnimation}>
                         <img
                             className={styles.topBlock}
@@ -186,6 +195,7 @@ class LoaderComponent extends React.Component {
                         </div>
                     </div>
                 </div>
+             */}
             </div>
         );
     }

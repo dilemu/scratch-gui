@@ -200,8 +200,9 @@ const GUIComponent = props => {
                         onShowPrivacyPolicy={onShowPrivacyPolicy}
                     />
                 ) : null}
-                {loading ? <Loader /> : null}
-                {isCreating ? <Loader messageId="gui.loader.creating" /> : null}
+                {/* {loading ? <Loader /> : null} */}
+                <Loader />
+                {/* {isCreating ? <Loader messageId="gui.loader.creating" /> : null} */}
                 {isRendererSupported ? null : <WebGlModal isRtl={isRtl} />}
                 {tipsLibraryVisible ? <TipsLibrary /> : null}
                 {cardsVisible ? <Cards /> : null}
