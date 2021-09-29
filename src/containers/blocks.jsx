@@ -502,6 +502,7 @@ class Blocks extends React.Component {
         const toolboxXML = this.getToolboxXML();
         if (toolboxXML) {
             this.props.updateToolboxState(toolboxXML);
+            this.requestToolboxUpdate();
         }
     }
 

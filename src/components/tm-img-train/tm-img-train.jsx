@@ -1,11 +1,20 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import React, { useState, useEffect, useRef, createRef } from "react";
-import { Button, Input, Modal, Row, Col, InputNumber, Slider, Tooltip } from "antd";
+import {
+    Button,
+    Input,
+    Modal,
+    Row,
+    Col,
+    InputNumber,
+    Slider,
+    Tooltip,
+} from "antd";
 const tf = require("@tensorflow/tfjs");
 const mobilenetModule = require("./mobilenet.js");
 const knnClassifier = require("@tensorflow-models/knn-classifier");
-import VMScratchBlocks from '../../lib/blocks';
+import VMScratchBlocks from "../../lib/blocks";
 
 import "./tm-img-train.css";
 
@@ -39,8 +48,6 @@ const ImagePreview = (props) => {
     const training = useRef(-1);
     const isClear = useRef(false);
 
-    const ScratchBlocks = VMScratchBlocks(vm);
-
     const showModal = () => {
         setIsModalVisible(true);
     };
@@ -59,7 +66,7 @@ const ImagePreview = (props) => {
     };
 
     const newModel = () => {
-        start(newModelNum);
+        start(newModelNum, true);
         hideNewModel();
     };
 
@@ -107,16 +114,25 @@ const ImagePreview = (props) => {
         });
     };
 
-    const start = (number) => {
+    const start = (number, newFlag) => {
         const numClasses = classifier.getNumClasses();
         startVideo();
         showModal();
-        if(numClasses) return;
-        number = number || 3;
-        classifier.clearAllClasses();
-        initializeSample(number);
-        initializeMobilenet();
-        startTimer();
+        if (numClasses) {
+            if (newFlag) {
+                document.querySelectorAll('[id^="list_"]').forEach(item => item.getContext("2d").clearRect(0, 0, 114, 114))
+                number = number || 3;
+                initializeSample(number);
+                initializeMobilenet();
+                startTimer();
+                classifier.clearAllClasses();
+            } else return;
+        } else {
+            number = number || 3;
+            initializeSample(number);
+            initializeMobilenet();
+            startTimer();
+        }
     };
 
     const initializeMobilenet = async () => {
@@ -185,13 +201,13 @@ const ImagePreview = (props) => {
                 const currentList =
                     sampleListRef.current[training.current].list;
                 if (isClear.current) {
-                    sampleListRef.current[training.current].list = new Array();
-                    sampleListRef.current[training.current].confidence = 0;
-                    classifier.clearClass(training.current);
                     const listCtx = document
                         .getElementById(`list_${training.current}`)
                         .getContext("2d");
                     listCtx.clearRect(0, 0, 114, 114);
+                    sampleListRef.current[training.current].list = new Array();
+                    sampleListRef.current[training.current].confidence = 0;
+                    classifier.clearClass(training.current);
                 } else {
                     currentList.push(data);
                     classifier.addExample(logits, training.current); // Add current image to classifier
@@ -300,6 +316,7 @@ const ImagePreview = (props) => {
 
     const useModel = () => {
         if (numClasses !== sampleList.length) return;
+        vm.runtime.emit("use_model", sampleNameList);
         hideModal();
     };
 
@@ -584,7 +601,11 @@ const ImagePreview = (props) => {
                         新建模型
                     </Button>
                     <Tooltip
-                        title={numClasses !== sampleList.length ? "所有分类训练后才可以使用模型" : ""}
+                        title={
+                            numClasses !== sampleList.length
+                                ? "所有分类训练后才可以使用模型"
+                                : ""
+                        }
                         className="tm-footer-btn"
                         style={{
                             cursor:
