@@ -469,7 +469,7 @@ class Blocks extends React.Component {
                 const staticBlocksJson = [];
                 const dynamicBlocksInfo = [];
                 blockInfoArray.forEach(blockInfo => {
-                    if (blockInfo.info && blockInfo.info.isDynamic) {
+                    if (blockInfo.info && blockInfo.info.isDynamic1) {
                         dynamicBlocksInfo.push(blockInfo);
                     } else if (blockInfo.json) {
                         staticBlocksJson.push(blockInfo.json);
