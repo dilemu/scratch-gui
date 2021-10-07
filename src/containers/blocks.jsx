@@ -487,6 +487,7 @@ class Blocks extends React.Component {
                         defineDynamicBlock(this.ScratchBlocks, categoryInfo, blockInfo, extendedOpcode);
                     this.ScratchBlocks.Blocks[extendedOpcode] = blockDefinition;
                 });
+                // this.requestToolboxUpdate()
             }
         };
 
