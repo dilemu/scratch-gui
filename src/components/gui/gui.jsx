@@ -223,9 +223,9 @@ const GUIComponent = props => {
                         onRequestClose={onRequestCloseBackdropLibrary}
                     />
                 ) : null}
-                {updateModalVisible ? (
+                {/* {updateModalVisible ? (
                     <UpdateModal vm={vm} onClickUpgrade={onClickUpgrade} />
-                ) : null}
+                ) : null} */}
                 <MenuBar
                     accountNavOpen={accountNavOpen}
                     authorId={authorId}
