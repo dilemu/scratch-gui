@@ -803,6 +803,21 @@ class MenuBar extends React.Component {
                             </MenuSection>
                         </MenuBarMenu>
                     </div>
+                    <div
+                        className={classNames(
+                            styles.menuBarItem,
+                            styles.hoverable
+                        )}
+                    >
+                        <img className={styles.fileIcon} src={navIcon} />
+                        <div className={classNames(styles.editMenu)}>
+                            <FormattedMessage
+                                defaultMessage="Deploy"
+                                description="Text for deploy dropdown menu"
+                                id="gui.menuBar.deploy"
+                            />
+                        </div>
+                    </div>
                     {/* <div className={styles.fileMenu}>
                         
                     </div> */}
@@ -1046,7 +1061,9 @@ class MenuBar extends React.Component {
                                 onClose={this.props.onRequestCloseAccount}
                                 onLogOut={this.props.onLogOut}
                                 classroomId={this.props.userData.request_id}
-                                thumbnailUrl={this.props.userData.avatar||defaultUser}
+                                thumbnailUrl={
+                                    this.props.userData.avatar || defaultUser
+                                }
                                 username={this.props.userData.username}
                             />
                         </div>

@@ -108,7 +108,13 @@ const WebCamComponent = (props) => {
             let wave;
             audioRec.current = Recorder({
                 type: "pcm",
+                play: false,
                 sampleRate: 16000,
+                audioTrackSet: {
+                    autoGainControl: true,
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                },
                 onProcess: function (
                     buffers,
                     powerLevel,
@@ -153,7 +159,7 @@ const WebCamComponent = (props) => {
         }
         navigator.mediaDevices
             .getUserMedia({
-                audio: true,
+                audio: false,
                 video: {
                     deviceId,
                 },
@@ -247,15 +253,14 @@ const WebCamComponent = (props) => {
                 setPredictResult({
                     index: res.classIndex,
                     confidence: res.confidences[res.classIndex],
-                    className:
-                        window.imgClassNameList[res.classIndex],
+                    className: window.imgClassNameList[res.classIndex],
                 });
-                const _imageClassifierList = []
+                const _imageClassifierList = [];
                 for (let i = 0; i < window.imgClassNameList.length; i++) {
                     _imageClassifierList.push({
                         className: window.imgClassNameList[i],
-                        confidence: res.confidences[i]
-                    })
+                        confidence: res.confidences[i],
+                    });
                     imageClassifierList.current = _imageClassifierList;
                 }
             });
@@ -274,7 +279,7 @@ const WebCamComponent = (props) => {
     const imgPredictResult = (name) => {
         // const result = imageClassifierList.current.length && imageClassifierList.current.find(className => className === name);
         vm.runtime.emit("img_predict_result", imageClassifierList.current);
-    }
+    };
 
     useEffect(() => {
         setDeviceId(deviceList.length && deviceList[0].key);
@@ -377,6 +382,7 @@ const WebCamComponent = (props) => {
                                 autoPlay="autoplay"
                                 width="480"
                                 height="360"
+                                mute
                             ></video>
                             <canvas
                                 ref={videoCanvas}

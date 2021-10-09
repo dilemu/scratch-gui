@@ -417,6 +417,7 @@ const ImagePreview = (props) => {
                                         className="video"
                                         width="480"
                                         height="360"
+                                        mute
                                     ></video>
                                     <canvas
                                         ref={videoCanvas}
