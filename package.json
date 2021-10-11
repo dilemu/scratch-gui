@@ -1,6 +1,6 @@
 {
   "name": "delightmom-scratch-gui",
-  "version": "0.1.29",
+  "version": "0.1.31",
   "description": "Scratch for Delightmom",
   "main": "./dist/scratch-gui.js",
   "scripts": {
@@ -28,9 +28,9 @@
     "url": "git+ssh://git@github.com/dilemu/scratch-gui.git"
   },
   "dependencies": {
+    "@ramonak/react-progress-bar": "^3.1.0",
     "@tensorflow-models/knn-classifier": "^1.2.2",
     "@tensorflow/tfjs": "0.13.5",
-    "@ramonak/react-progress-bar": "^3.1.0",
     "ansi-to-react": "^6.0.8",
     "antd": "^4.16.13",
     "arraybuffer-loader": "^1.0.6",
