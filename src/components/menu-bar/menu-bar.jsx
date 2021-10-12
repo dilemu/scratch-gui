@@ -110,6 +110,7 @@ import unconnectedIcon from "./icon--unconnected.svg";
 import connectedIcon from "./icon--connected.svg";
 import fileIcon from "./icon--file.svg";
 import navIcon from "./icon--nav.svg";
+import delpoyIcon from "./icon--deploy.png";
 import screenshotIcon from "./icon--screenshot.svg";
 import settingIcon from "./icon--setting.svg";
 
@@ -809,7 +810,7 @@ class MenuBar extends React.Component {
                             styles.hoverable
                         )}
                     >
-                        <img className={styles.fileIcon} src={navIcon} />
+                        <img className={styles.fileIcon} src={delpoyIcon} />
                         <div className={classNames(styles.editMenu)}>
                             <FormattedMessage
                                 defaultMessage="Deploy"

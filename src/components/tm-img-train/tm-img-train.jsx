@@ -73,7 +73,7 @@ const ImagePreview = (props) => {
     const startVideo = () => {
         navigator.mediaDevices
             .getUserMedia({
-                audio: true,
+                audio: false,
                 video: {
                     deviceId,
                 },
@@ -120,7 +120,11 @@ const ImagePreview = (props) => {
         showModal();
         if (numClasses) {
             if (newFlag) {
-                document.querySelectorAll('[id^="list_"]').forEach(item => item.getContext("2d").clearRect(0, 0, 114, 114))
+                document
+                    .querySelectorAll('[id^="list_"]')
+                    .forEach((item) =>
+                        item.getContext("2d").clearRect(0, 0, 114, 114)
+                    );
                 number = number || 3;
                 initializeSample(number);
                 initializeMobilenet();
@@ -176,109 +180,124 @@ const ImagePreview = (props) => {
         training.current = -1;
     };
 
+    const fps = 15;
+    const fpsInterval = 1000 / fps;
+    let last = new Date().getTime();
+
     const animate = () => {
-        try {
-            // Get image data from video element
-            const image = tf.fromPixels(myVideo.current);
+        const now = new Date().getTime();
+        const elapsed = now - last;
+        buttonTimer.current = requestAnimationFrame(animate);
+        if (elapsed < fpsInterval) return
+        last = now - (elapsed % fpsInterval);
+            try {
+                // Get image data from video element
+                const image = tf.fromPixels(myVideo.current);
 
-            let logits;
-            // 'conv_preds' is the logits activation of MobileNet.
-            const infer = () => mobilenet.current.infer(image, "conv_preds");
+                let logits;
+                // 'conv_preds' is the logits activation of MobileNet.
+                const infer = () =>
+                    mobilenet.current.infer(image, "conv_preds");
 
-            // Train class if one of the buttons is held down
-            if (training.current != -1) {
-                logits = infer();
-                const _canvasCtx = videoCanvas.current.getContext("2d");
-                _canvasCtx.drawImage(myVideo.current, 0, 0, 114 / 3, 114 / 3);
-                let data = _canvasCtx.getImageData(
-                    0,
-                    0,
-                    114,
-                    114
-                    // videoCanvas.current.width,
-                    // videoCanvas.current.height
-                );
-                const currentList =
-                    sampleListRef.current[training.current].list;
-                if (isClear.current) {
-                    const listCtx = document
-                        .getElementById(`list_${training.current}`)
-                        .getContext("2d");
-                    listCtx.clearRect(0, 0, 114, 114);
-                    sampleListRef.current[training.current].list = new Array();
-                    sampleListRef.current[training.current].confidence = 0;
-                    classifier.clearClass(training.current);
-                } else {
-                    currentList.push(data);
-                    classifier.addExample(logits, training.current); // Add current image to classifier
-                    // 绘制样本区域
-                    const listCtx = document
-                        .getElementById(`list_${training.current}`)
-                        .getContext("2d");
-                    let cols = 0;
-                    let rows = 0;
-                    for (
-                        let index = 0;
-                        index < currentList.length;
-                        index += 1
-                    ) {
-                        listCtx.putImageData(
-                            currentList[index],
-                            cols * (114 / 3),
-                            rows * (114 / 3),
-                            0,
-                            0,
-                            114 / 3,
-                            114 / 3
-                        );
-                        if (cols === 2) {
-                            rows += 1;
-                            cols = 0;
-                        } else {
-                            cols += 1;
+                // Train class if one of the buttons is held down
+                if (training.current != -1) {
+                    logits = infer();
+                    const _canvasCtx = videoCanvas.current.getContext("2d");
+                    _canvasCtx.drawImage(
+                        myVideo.current,
+                        0,
+                        0,
+                        114 / 3,
+                        114 / 3
+                    );
+                    let data = _canvasCtx.getImageData(
+                        0,
+                        0,
+                        114,
+                        114
+                        // videoCanvas.current.width,
+                        // videoCanvas.current.height
+                    );
+                    const currentList =
+                        sampleListRef.current[training.current].list;
+                    if (isClear.current) {
+                        const listCtx = document
+                            .getElementById(`list_${training.current}`)
+                            .getContext("2d");
+                        listCtx.clearRect(0, 0, 114, 114);
+                        sampleListRef.current[training.current].list =
+                            new Array();
+                        sampleListRef.current[training.current].confidence = 0;
+                        classifier.clearClass(training.current);
+                    } else {
+                        currentList.push(data);
+                        classifier.addExample(logits, training.current); // Add current image to classifier
+                        // 绘制样本区域
+                        const listCtx = document
+                            .getElementById(`list_${training.current}`)
+                            .getContext("2d");
+                        let cols = 0;
+                        let rows = 0;
+                        for (
+                            let index = 0;
+                            index < currentList.length;
+                            index += 1
+                        ) {
+                            listCtx.putImageData(
+                                currentList[index],
+                                cols * (114 / 3),
+                                rows * (114 / 3),
+                                0,
+                                0,
+                                114 / 3,
+                                114 / 3
+                            );
+                            if (cols === 2) {
+                                rows += 1;
+                                cols = 0;
+                            } else {
+                                cols += 1;
+                            }
                         }
                     }
+                    setSampleList((prev) => sampleListRef.current);
                 }
-                setSampleList((prev) => sampleListRef.current);
-            }
 
-            const numClasses = classifier.getNumClasses();
-            setNumClasses(numClasses);
-            if (numClasses > 0) {
-                // If classes have been added run predict
-                logits = infer();
-                classifier.predictClass(logits, TOPK).then((res) => {
-                    setModelResult({
-                        index: res.classIndex,
-                        confidence: res.confidences[res.classIndex],
-                        className:
-                            sampleListRef.current[res.classIndex].className,
-                    });
-                    for (let i = 0; i < sampleListRef.current.length; i++) {
-                        sampleListRef.current[i].confidence =
-                            res.confidences[i];
-                        setSampleList(() => sampleListRef.current);
-                        // Make the predicted class bold
-                        if (res.classIndex == i) {
-                        } else {
-                            // this.infoTexts[i].style.fontWeight = "normal";
+                const numClasses = classifier.getNumClasses();
+                setNumClasses(numClasses);
+                if (numClasses > 0) {
+                    // If classes have been added run predict
+                    logits = infer();
+                    classifier.predictClass(logits, TOPK).then((res) => {
+                        setModelResult({
+                            index: res.classIndex,
+                            confidence: res.confidences[res.classIndex],
+                            className:
+                                sampleListRef.current[res.classIndex].className,
+                        });
+                        for (let i = 0; i < sampleListRef.current.length; i++) {
+                            sampleListRef.current[i].confidence =
+                                res.confidences[i];
+                            setSampleList(() => sampleListRef.current);
+                            // Make the predicted class bold
+                            if (res.classIndex == i) {
+                            } else {
+                                // this.infoTexts[i].style.fontWeight = "normal";
+                            }
                         }
-                    }
-                });
-            } else {
-                setModelResult({});
-            }
+                    });
+                } else {
+                    setModelResult({});
+                }
 
-            // Dispose image when done
-            image.dispose();
-            if (logits != null) {
-                logits.dispose();
+                // Dispose image when done
+                image.dispose();
+                if (logits != null) {
+                    logits.dispose();
+                }
+            } catch (error) {
+                console.log("animate error:", error);
             }
-            buttonTimer.current = requestAnimationFrame(animate);
-        } catch (error) {
-            console.log("animate error:", error);
-            buttonTimer.current = requestAnimationFrame(animate);
-        }
     };
 
     const startTimer = () => {
@@ -330,12 +349,6 @@ const ImagePreview = (props) => {
                 learningSectionRef.current.scrollTop +
                     learningSectionRef.current.offsetHeight / 2
             );
-    }, []);
-
-    useEffect(() => {
-        // if (!mobilenet.current) return;
-        // buttonTimer.current = requestAnimationFrame(animate);
-        // return () => cancelAnimationFrame(buttonTimer.current);
     }, []);
 
     // 关媒体调用
@@ -417,7 +430,7 @@ const ImagePreview = (props) => {
                                         className="video"
                                         width="480"
                                         height="360"
-                                        mute
+                                        mute="true"
                                     ></video>
                                     <canvas
                                         ref={videoCanvas}
@@ -476,15 +489,12 @@ const ImagePreview = (props) => {
                                             </div>
                                         </div>
                                         <div className="learn-section">
-                                            <Input
-                                                className="input-text"
-                                                value={sampleNameList[index]}
-                                                // value={item.className}
-                                                type="text"
-                                                onChange={changeClassName.bind(
-                                                    this,
-                                                    index
-                                                )}
+                                            <ClassNameInput
+                                                sampleNameList={sampleNameList}
+                                                changeClassName={
+                                                    changeClassName
+                                                }
+                                                index={index}
                                             />
                                             <div className="confidence">
                                                 <span className="text">
@@ -672,6 +682,20 @@ const ImagePreview = (props) => {
             </Modal>
         </>
     );
+};
+
+const ClassNameInput = (props) => {
+    const index = props.index;
+    const sampleNameList = props.sampleNameList;
+    const changeClassName = props.changeClassName;
+    return sampleNameList && sampleNameList.length ? (
+        <Input
+            className="input-text"
+            value={sampleNameList[index]}
+            type="text"
+            onChange={changeClassName.bind(this, index)}
+        />
+    ) : null;
 };
 
 ImagePreview.propTypes = {
