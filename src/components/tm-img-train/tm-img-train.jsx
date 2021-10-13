@@ -1,6 +1,13 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import React, { useState, useEffect, useRef, createRef } from "react";
+import React, {
+    useState,
+    useEffect,
+    useRef,
+    createRef,
+    useMemo,
+    memo,
+} from "react";
 import {
     Button,
     Input,
@@ -23,7 +30,7 @@ const TOPK = 10;
 const classifier = knnClassifier.create();
 window.imageClassifier = classifier;
 
-const ImagePreview = (props) => {
+const TmImgTrain = (props) => {
     const { className, vm } = props;
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [sampleList, setSampleList] = useState([]);
@@ -188,116 +195,114 @@ const ImagePreview = (props) => {
         const now = new Date().getTime();
         const elapsed = now - last;
         buttonTimer.current = requestAnimationFrame(animate);
-        if (elapsed < fpsInterval) return
+        if (elapsed < fpsInterval) return;
         last = now - (elapsed % fpsInterval);
-            try {
-                // Get image data from video element
-                const image = tf.fromPixels(myVideo.current);
+        try {
+            // Get image data from video element
+            const image = tf.fromPixels(myVideo.current);
 
-                let logits;
-                // 'conv_preds' is the logits activation of MobileNet.
-                const infer = () =>
-                    mobilenet.current.infer(image, "conv_preds");
+            let logits;
+            // 'conv_preds' is the logits activation of MobileNet.
+            const infer = () => mobilenet.current.infer(image, "conv_preds");
 
-                // Train class if one of the buttons is held down
-                if (training.current != -1) {
-                    logits = infer();
-                    const _canvasCtx = videoCanvas.current.getContext("2d");
-                    _canvasCtx.drawImage(
-                        myVideo.current,
-                        0,
-                        0,
-                        114 / 3,
-                        114 / 3
-                    );
-                    let data = _canvasCtx.getImageData(
-                        0,
-                        0,
-                        114,
-                        114
-                        // videoCanvas.current.width,
-                        // videoCanvas.current.height
-                    );
-                    const currentList =
-                        sampleListRef.current[training.current].list;
-                    if (isClear.current) {
-                        const listCtx = document
-                            .getElementById(`list_${training.current}`)
-                            .getContext("2d");
-                        listCtx.clearRect(0, 0, 114, 114);
-                        sampleListRef.current[training.current].list =
-                            new Array();
-                        sampleListRef.current[training.current].confidence = 0;
-                        classifier.clearClass(training.current);
-                    } else {
-                        currentList.push(data);
-                        classifier.addExample(logits, training.current); // Add current image to classifier
-                        // 绘制样本区域
-                        const listCtx = document
-                            .getElementById(`list_${training.current}`)
-                            .getContext("2d");
-                        let cols = 0;
-                        let rows = 0;
-                        for (
-                            let index = 0;
-                            index < currentList.length;
-                            index += 1
-                        ) {
-                            listCtx.putImageData(
-                                currentList[index],
-                                cols * (114 / 3),
-                                rows * (114 / 3),
-                                0,
-                                0,
-                                114 / 3,
-                                114 / 3
-                            );
-                            if (cols === 2) {
-                                rows += 1;
-                                cols = 0;
-                            } else {
-                                cols += 1;
-                            }
+            // Train class if one of the buttons is held down
+            if (training.current != -1) {
+                logits = infer();
+                const _canvasCtx = videoCanvas.current.getContext("2d");
+                _canvasCtx.drawImage(myVideo.current, 0, 0, 114 / 3, 114 / 3);
+                let data = _canvasCtx.getImageData(
+                    0,
+                    0,
+                    114,
+                    114
+                    // videoCanvas.current.width,
+                    // videoCanvas.current.height
+                );
+                const currentList =
+                    sampleListRef.current[training.current].list;
+                if (isClear.current) {
+                    const listCtx = document
+                        .getElementById(`list_${training.current}`)
+                        .getContext("2d");
+                    listCtx.clearRect(0, 0, 114, 114);
+                    sampleListRef.current[training.current].list = new Array();
+                    sampleListRef.current[training.current].confidence = 0;
+                    classifier.clearClass(training.current);
+                } else {
+                    currentList.push(data);
+                    classifier.addExample(logits, training.current); // Add current image to classifier
+                    // 绘制样本区域
+                    const listCtx = document
+                        .getElementById(`list_${training.current}`)
+                        .getContext("2d");
+                    let cols = 0;
+                    let rows = 0;
+                    for (
+                        let index = 0;
+                        index < currentList.length;
+                        index += 1
+                    ) {
+                        listCtx.putImageData(
+                            currentList[index],
+                            cols * (114 / 3),
+                            rows * (114 / 3),
+                            0,
+                            0,
+                            114 / 3,
+                            114 / 3
+                        );
+                        if (cols === 2) {
+                            rows += 1;
+                            cols = 0;
+                        } else {
+                            cols += 1;
                         }
                     }
-                    setSampleList((prev) => sampleListRef.current);
                 }
+                setSampleList((prev) => sampleListRef.current);
+            }
 
-                const numClasses = classifier.getNumClasses();
-                setNumClasses(numClasses);
-                if (numClasses > 0) {
-                    // If classes have been added run predict
-                    logits = infer();
-                    classifier.predictClass(logits, TOPK).then((res) => {
+            const _numClasses = classifier.getNumClasses();
+            if (_numClasses !== numClasses) setNumClasses(_numClasses);
+            if (_numClasses > 0) {
+                // If classes have been added run predict
+                logits = infer();
+                classifier.predictClass(logits, TOPK).then((res) => {
+                    if (
+                        modelResult.index !== res.classIndex ||
+                        modelResult.confidences[modelResult.index] !==
+                            res.confidences[res.classIndex]
+                    ) {
                         setModelResult({
                             index: res.classIndex,
                             confidence: res.confidences[res.classIndex],
                             className:
                                 sampleListRef.current[res.classIndex].className,
                         });
-                        for (let i = 0; i < sampleListRef.current.length; i++) {
-                            sampleListRef.current[i].confidence =
-                                res.confidences[i];
-                            setSampleList(() => sampleListRef.current);
-                            // Make the predicted class bold
-                            if (res.classIndex == i) {
-                            } else {
-                                // this.infoTexts[i].style.fontWeight = "normal";
-                            }
+                    }
+                    for (let i = 0; i < sampleListRef.current.length; i++) {
+                        sampleListRef.current[i].confidence =
+                            res.confidences[i];
+                        setSampleList(() => sampleListRef.current);
+                        // Make the predicted class bold
+                        if (res.classIndex == i) {
+                        } else {
+                            // this.infoTexts[i].style.fontWeight = "normal";
                         }
-                    });
-                } else {
-                    setModelResult({});
-                }
-
-                // Dispose image when done
-                image.dispose();
-                if (logits != null) {
-                    logits.dispose();
-                }
-            } catch (error) {
-                console.log("animate error:", error);
+                    }
+                });
+            } else {
+                if (Object.keys(modelResult).length) setModelResult({});
             }
+
+            // Dispose image when done
+            image.dispose();
+            if (logits != null) {
+                logits.dispose();
+            }
+        } catch (error) {
+            console.log("animate error:", error);
+        }
     };
 
     const startTimer = () => {
@@ -453,6 +458,12 @@ const ImagePreview = (props) => {
                             onScroll={scrollSection}
                             ref={learningSectionRef}
                         >
+                            <Input
+                                className="input-text"
+                                // value={item.className}
+                                type="text"
+                                onChange={changeClassName.bind(this, 0)}
+                            />
                             {sampleList.map((item, index) => {
                                 return (
                                     <div
@@ -489,12 +500,16 @@ const ImagePreview = (props) => {
                                             </div>
                                         </div>
                                         <div className="learn-section">
-                                            <ClassNameInput
-                                                sampleNameList={sampleNameList}
-                                                changeClassName={
-                                                    changeClassName
+                                            <Input
+                                                className="input-text"
+                                                defaultValue={
+                                                    item.className
                                                 }
-                                                index={index}
+                                                type="text"
+                                                onChange={changeClassName.bind(
+                                                    this,
+                                                    index
+                                                )}
                                             />
                                             <div className="confidence">
                                                 <span className="text">
@@ -684,22 +699,8 @@ const ImagePreview = (props) => {
     );
 };
 
-const ClassNameInput = (props) => {
-    const index = props.index;
-    const sampleNameList = props.sampleNameList;
-    const changeClassName = props.changeClassName;
-    return sampleNameList && sampleNameList.length ? (
-        <Input
-            className="input-text"
-            value={sampleNameList[index]}
-            type="text"
-            onChange={changeClassName.bind(this, index)}
-        />
-    ) : null;
-};
-
-ImagePreview.propTypes = {
+TmImgTrain.propTypes = {
     className: PropTypes.string,
 };
 
-export default ImagePreview;
+export default TmImgTrain;
