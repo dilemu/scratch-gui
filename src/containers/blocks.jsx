@@ -54,40 +54,41 @@ class Blocks extends React.Component {
         super(props);
         this.ScratchBlocks = VMScratchBlocks(props.vm);
         bindAll(this, [
-            'attachVM',
-            'detachVM',
-            'getToolboxXML',
-            'handleBlocksInfoUpdate',
-            'handleCategorySelected',
-            'handleConnectionModalStart',
-            'handleDeviceAdded',
-            'handleDeviceChanged',
-            'handleDeviceExtensionAdded',
-            'handleDeviceExtensionRemoved',
-            'handleDeviceSelected',
-            'handleDrop',
-            'handleExtensionAdded',
-            'handleStatusButtonUpdate',
-            'handleOpenSoundRecorder',
-            'handleCodeNeedUpdate',
-            'handlePromptStart',
-            'handlePromptCallback',
-            'handlePromptClose',
-            'handleToolboxUploadFinish',
-            'handleCustomProceduresClose',
-            'onScriptGlowOn',
-            'onScriptGlowOff',
-            'onBlockGlowOn',
-            'onBlockGlowOff',
-            'onProgramModeUpdate',
-            'onTargetsUpdate',
-            'onVisualReport',
-            'onActivateColorPicker',
-            'onWorkspaceUpdate',
-            'onWorkspaceMetricsChange',
-            'setBlocks',
-            'setLocale',
-            'workspaceToCode'
+            "attachVM",
+            "detachVM",
+            "getToolboxXML",
+            "handleBlocksInfoUpdate",
+            "handleCategorySelected",
+            "handleConnectionModalStart",
+            "handleDeviceAdded",
+            "handleDeviceChanged",
+            "handleDeviceExtensionAdded",
+            "handleDeviceExtensionRemoved",
+            "handleDeviceSelected",
+            "handleDrop",
+            "handleExtensionAdded",
+            "handleStatusButtonUpdate",
+            "handleOpenSoundRecorder",
+            "handleCodeNeedUpdate",
+            "handlePromptStart",
+            "handlePromptCallback",
+            "handlePromptClose",
+            "handleToolboxUploadFinish",
+            "handleCustomProceduresClose",
+            "onScriptGlowOn",
+            "onScriptGlowOff",
+            "onBlockGlowOn",
+            "onBlockGlowOff",
+            "onProgramModeUpdate",
+            "onTargetsUpdate",
+            "onVisualReport",
+            "onActivateColorPicker",
+            "onWorkspaceUpdate",
+            "onWorkspaceMetricsChange",
+            "setBlocks",
+            "setLocale",
+            "workspaceToCode",
+            "forceRefreshWorkspace",
         ]);
         this.ScratchBlocks.prompt = this.handlePromptStart;
         this.ScratchBlocks.statusButtonCallback = this.handleConnectionModalStart;
@@ -173,7 +174,31 @@ class Blocks extends React.Component {
             this.props.isRealtimeMode !== nextProps.isRealtimeMode
         );
     }
+    forceRefreshWorkspace() {
+        // this.props.vm.refreshWorkspace();
+        // this.handleCodeNeedUpdate();
+        // this.props.vm.runtime.emitProjectChanged();
+        // this.props.vm.runtime.requestCodeUpdate();
+        // this.requestGetXMLAndUpdateToolbox();
+        // const workspaceConfig = defaultsDeep(
+        //     {},
+        //     Blocks.defaultOptions,
+        //     this.props.options,
+        //     { rtl: this.props.isRtl, toolbox: this.props.toolboxXML }
+        // );
+        // const oldDefaultToolbox = this.ScratchBlocks.Blocks.defaultToolbox;
+        // this.ScratchBlocks.Blocks.defaultToolbox = null;
+        // this.workspace = this.ScratchBlocks.inject(this.blocks, workspaceConfig);
+        // this.ScratchBlocks.Blocks.defaultToolbox = oldDefaultToolbox;
+        const offset = this.workspace.toolbox_.getCategoryScrollOffset();
+        this.blocks.innerHTML="";
+        this.componentDidMount();
+        setTimeout(() => {
+            this.workspace.toolbox_.setFlyoutScrollPos(offset);
+        })
+    }
     componentDidUpdate (prevProps) {
+        console.log("componentDidUpdate");
         // If any modals are open, call hideChaff to close z-indexed field editors
         if (this.props.anyModalVisible && !prevProps.anyModalVisible) {
             this.ScratchBlocks.hideChaff();
@@ -311,6 +336,7 @@ class Blocks extends React.Component {
         this.props.vm.addListener('DEVICE_ADDED', this.handleDeviceAdded);
         this.props.vm.addListener('DEVICE_EXTENSION_ADDED', this.handleDeviceExtensionAdded);
         this.props.vm.addListener('BLOCKSINFO_UPDATE', this.handleBlocksInfoUpdate);
+        this.props.vm.addListener('FORCE_REFRESH_WORKSPACE', this.forceRefreshWorkspace);
         this.props.vm.addListener('PERIPHERAL_CONNECTED', this.handleStatusButtonUpdate);
         this.props.vm.addListener('PERIPHERAL_DISCONNECTED', this.handleStatusButtonUpdate);
         this.props.vm.addListener('CODE_NEED_UPDATE', this.handleCodeNeedUpdate);
@@ -329,6 +355,7 @@ class Blocks extends React.Component {
         this.props.vm.removeListener('DEVICE_EXTENSION_ADDED', this.handleDeviceExtensionAdded);
         this.props.vm.removeListener('DEVICE_EXTENSION_REMOVED', this.handleDeviceExtensionRemoved);
         this.props.vm.removeListener('BLOCKSINFO_UPDATE', this.handleBlocksInfoUpdate);
+        this.props.vm.removeListener('FORCE_REFRESH_WORKSPACE', this.forceRefreshWorkspace);
         this.props.vm.removeListener('PERIPHERAL_CONNECTED', this.handleStatusButtonUpdate);
         this.props.vm.removeListener('PERIPHERAL_DISCONNECTED', this.handleStatusButtonUpdate);
         this.props.vm.removeListener('CODE_NEED_UPDATE', this.handleCodeNeedUpdate);
@@ -487,7 +514,6 @@ class Blocks extends React.Component {
                         defineDynamicBlock(this.ScratchBlocks, categoryInfo, blockInfo, extendedOpcode);
                     this.ScratchBlocks.Blocks[extendedOpcode] = blockDefinition;
                 });
-                // this.requestToolboxUpdate()
             }
         };
 
@@ -758,6 +784,7 @@ class Blocks extends React.Component {
         /* eslint-enable no-unused-vars */
         return (
             <React.Fragment>
+                <button onClick={this.forceRefreshWorkspace}>debug</button>
                 <DroppableBlocks
                     componentRef={this.setBlocks}
                     onDrop={this.handleDrop}

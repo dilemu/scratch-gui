@@ -45,7 +45,7 @@ const TmImgTrain = (props) => {
     const [newVisible, setNewVisible] = useState(false);
     const [newModelNum, setNewModelNum] = useState(3);
     const [numClasses, setNumClasses] = useState(0);
-    const buttonTimer = createRef();
+    const buttonTimer = useRef();
     const mobilenet = useRef();
     const sampleListRef = useRef(sampleList);
     const videoCanvas = useRef();
@@ -137,7 +137,7 @@ const TmImgTrain = (props) => {
                 initializeMobilenet();
                 startTimer();
                 classifier.clearAllClasses();
-            } else return;
+            } else startTimer();
         } else {
             number = number || 3;
             initializeSample(number);
@@ -187,7 +187,7 @@ const TmImgTrain = (props) => {
         training.current = -1;
     };
 
-    const fps = 15;
+    const fps = 5;
     const fpsInterval = 1000 / fps;
     let last = new Date().getTime();
 
@@ -270,7 +270,7 @@ const TmImgTrain = (props) => {
                 classifier.predictClass(logits, TOPK).then((res) => {
                     if (
                         modelResult.index !== res.classIndex ||
-                        modelResult.confidences[modelResult.index] !==
+                        (modelResult.confidences && modelResult.confidences[modelResult.index]) !==
                             res.confidences[res.classIndex]
                     ) {
                         setModelResult({
@@ -335,7 +335,7 @@ const TmImgTrain = (props) => {
         setTimeout(() => {
             training.current = -1;
             isClear.current = false;
-        });
+        }, fpsInterval);
     };
 
     const useModel = () => {
@@ -458,12 +458,6 @@ const TmImgTrain = (props) => {
                             onScroll={scrollSection}
                             ref={learningSectionRef}
                         >
-                            <Input
-                                className="input-text"
-                                // value={item.className}
-                                type="text"
-                                onChange={changeClassName.bind(this, 0)}
-                            />
                             {sampleList.map((item, index) => {
                                 return (
                                     <div
@@ -510,6 +504,7 @@ const TmImgTrain = (props) => {
                                                     this,
                                                     index
                                                 )}
+                                                key={item.className}
                                             />
                                             <div className="confidence">
                                                 <span className="text">
@@ -673,27 +668,6 @@ const TmImgTrain = (props) => {
                         setNewModelNum(v);
                     }}
                 />
-
-                {/* <Row>
-                    <Col span={12}>
-                        <Slider
-                            min={1}
-                            max={20}
-                            onChange={() => {}}
-                            value={
-                                typeof newModelNum === "number" ? newModelNum : 0
-                            }
-                        />
-                    </Col>
-                    <Col span={4}>
-                        <InputNumber
-                            min={1}
-                            max={20}
-                            value={newModelNum}
-                            onChange={() => {}}
-                        />
-                    </Col>
-                </Row> */}
             </Modal>
         </>
     );
