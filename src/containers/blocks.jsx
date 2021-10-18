@@ -155,11 +155,6 @@ class Blocks extends React.Component {
         addFunctionListener(this.workspace, 'zoom', this.onWorkspaceMetricsChange);
 
         this.attachVM();
-        // Only update blocks/vm locale when visible to avoid sizing issues
-        // If locale changes while not visible it will get handled in didUpdate
-        if (this.props.isVisible) {
-            this.setLocale();
-        }
     }
     shouldComponentUpdate (nextProps, nextState) {
         return (
@@ -190,12 +185,71 @@ class Blocks extends React.Component {
         // this.ScratchBlocks.Blocks.defaultToolbox = null;
         // this.workspace = this.ScratchBlocks.inject(this.blocks, workspaceConfig);
         // this.ScratchBlocks.Blocks.defaultToolbox = oldDefaultToolbox;
+        // const offset = this.workspace.toolbox_.getCategoryScrollOffset();
+        // this.blocks.innerHTML="";
+        // this.componentDidMount();
+        // setTimeout(() => {
+        //     this.workspace.toolbox_.setFlyoutScrollPos(offset);
+        // })
+        const categoryId = this.workspace.toolbox_.getSelectedCategoryId();
         const offset = this.workspace.toolbox_.getCategoryScrollOffset();
-        this.blocks.innerHTML="";
-        this.componentDidMount();
-        setTimeout(() => {
-            this.workspace.toolbox_.setFlyoutScrollPos(offset);
-        })
+        this.detachVM();
+        this.workspace.dispose();
+        this.blocks.innerHTML = "";
+        const workspaceConfig = defaultsDeep({},
+            Blocks.defaultOptions,
+            this.props.options,
+            {rtl: this.props.isRtl, toolbox: this.props.toolboxXML}
+        );
+        this.workspace = this.ScratchBlocks.inject(this.blocks, workspaceConfig);
+        const currentCategoryPos = this.workspace.toolbox_.getCategoryPositionById(categoryId);
+        const currentCategoryLen = this.workspace.toolbox_.getCategoryLengthById(categoryId);
+        if (offset < currentCategoryLen) {
+            this.workspace.toolbox_.setFlyoutScrollPos(currentCategoryPos + offset);
+        } else {
+            this.workspace.toolbox_.setFlyoutScrollPos(currentCategoryPos);
+        }
+        // this.workspace.toolbox_.setFlyoutScrollPos(offset);
+
+        // Register buttons under new callback keys for creating variables,
+        // lists, and procedures from extensions.
+
+        const toolboxWorkspace = this.workspace.getFlyout().getWorkspace();
+
+        const varListButtonCallback = type =>
+            (() => this.ScratchBlocks.Variables.createVariable(this.workspace, null, type));
+        const procButtonCallback = () => {
+            this.ScratchBlocks.Procedures.createProcedureDefCallback_(this.workspace);
+        };
+
+        toolboxWorkspace.registerButtonCallback('MAKE_A_VARIABLE', varListButtonCallback(''));
+        toolboxWorkspace.registerButtonCallback('MAKE_A_LIST', varListButtonCallback('list'));
+        toolboxWorkspace.registerButtonCallback('MAKE_A_PROCEDURE', procButtonCallback);
+        toolboxWorkspace.registerButtonCallback('trainModel', (e, p) => {
+            this.props.vm.runtime.emit("start_img_train");
+        });
+        toolboxWorkspace.registerButtonCallback('startImgPredict', (e, p) => {
+            this.props.vm.runtime.emit("start_img_predict", {uuid: "mg_predict", type: "tm"});
+        });
+
+        // we actually never want the workspace to enable "refresh toolbox" - this basically re-renders the
+        // entire toolbox every time we reset the workspace.  We call updateToolbox as a part of
+        // componentDidUpdate so the toolbox will still correctly be updated
+        this.setToolboxRefreshEnabled = this.workspace.setToolboxRefreshEnabled.bind(this.workspace);
+        this.workspace.setToolboxRefreshEnabled = () => {
+            this.setToolboxRefreshEnabled(false);
+        };
+
+        // @todo change this when blockly supports UI events
+        addFunctionListener(this.workspace, 'translate', this.onWorkspaceMetricsChange);
+        addFunctionListener(this.workspace, 'zoom', this.onWorkspaceMetricsChange);
+
+        this.attachVM();
+        // Only update blocks/vm locale when visible to avoid sizing issues
+        // If locale changes while not visible it will get handled in didUpdate
+        if (this.props.isVisible) {
+            this.setLocale();
+        }
     }
     componentDidUpdate (prevProps) {
         console.log("componentDidUpdate");

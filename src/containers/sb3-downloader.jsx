@@ -49,7 +49,7 @@ const getProjectFilename = (curTitle, defaultTitle) => {
     if (!filenameTitle || filenameTitle.length === 0) {
         filenameTitle = defaultTitle;
     }
-    return `${filenameTitle.substring(0, 100)}.defile`;
+    return `${filenameTitle.substring(0, 100)}.dbit`;
 };
 
 SB3Downloader.propTypes = {

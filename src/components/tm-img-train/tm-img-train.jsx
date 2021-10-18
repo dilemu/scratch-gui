@@ -192,6 +192,7 @@ const TmImgTrain = (props) => {
     let last = new Date().getTime();
 
     const animate = () => {
+        console.log('tm animate')
         const now = new Date().getTime();
         const elapsed = now - last;
         buttonTimer.current = requestAnimationFrame(animate);
@@ -368,6 +369,7 @@ const TmImgTrain = (props) => {
                 tracks.forEach((t) => {
                     t.stop();
                 });
+            stopTimer();
         }
     }, [isModalVisible]);
 

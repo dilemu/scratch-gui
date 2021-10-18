@@ -26,7 +26,7 @@ const WebCamComponent = (props) => {
     const draggleRef = createRef();
     const audioRec = useRef();
     const canvasCtx = useRef();
-    const predictTimer = createRef();
+    const predictTimer = useRef();
     const mobilenet = useRef();
     const [capture, setCapture] = useState("");
     const [deviceList, setDeviceList] = useState([]);
@@ -49,7 +49,6 @@ const WebCamComponent = (props) => {
 
     const handleCancel = () => {
         vm.runtime.emit(uuid, null);
-        cancelAnimationFrame(predictTimer.current);
         hideModal();
     };
 
@@ -185,7 +184,9 @@ const WebCamComponent = (props) => {
         if (!mobilenet.current) {
             const res = await mobilenetModule.load();
             mobilenet.current = res;
-            animate();
+            predictTimer.current = requestAnimationFrame(animate);
+        } else {
+            predictTimer.current = requestAnimationFrame(animate);
         }
     };
 
@@ -239,6 +240,7 @@ const WebCamComponent = (props) => {
     };
 
     const animate = () => {
+        console.log('web cam animate')
         // Get image data from video element
         const image = tf.fromPixels(myVideo.current);
 
@@ -297,6 +299,7 @@ const WebCamComponent = (props) => {
                     t.stop();
                 });
             audioRec.current && audioRec.current.close();
+            cancelAnimationFrame(predictTimer.current);
         }
     }, [isModalVisible]);
 
