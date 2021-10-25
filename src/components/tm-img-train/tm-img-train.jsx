@@ -21,14 +21,18 @@ import {
 const tf = require("@tensorflow/tfjs");
 const mobilenetModule = require("./mobilenet.js");
 const knnClassifier = require("@tensorflow-models/knn-classifier");
-import VMScratchBlocks from "../../lib/blocks";
 
 import "./tm-img-train.css";
 
 const sectionHeight = 176;
 const TOPK = 10;
-const classifier = knnClassifier.create();
-window.imageClassifier = classifier;
+let classifier;
+if(!window.imageClassifier) {
+    classifier = knnClassifier.create();
+    window.imageClassifier = classifier;
+} else {
+    classifier = window.imageClassifier;
+}
 
 const TmImgTrain = (props) => {
     const { className, vm } = props;
@@ -50,7 +54,6 @@ const TmImgTrain = (props) => {
     const sampleListRef = useRef(sampleList);
     const videoCanvas = useRef();
     const myVideo = useRef();
-    const canvasCtx = useRef();
     const learningSectionRef = useRef();
     const training = useRef(-1);
     const isClear = useRef(false);
@@ -126,7 +129,7 @@ const TmImgTrain = (props) => {
         startVideo();
         showModal();
         if (numClasses) {
-            if (newFlag) {
+            if (newFlag || window.imgTrainNeedInitial) {
                 document
                     .querySelectorAll('[id^="list_"]')
                     .forEach((item) =>
@@ -136,7 +139,8 @@ const TmImgTrain = (props) => {
                 initializeSample(number);
                 initializeMobilenet();
                 startTimer();
-                classifier.clearAllClasses();
+                if (!window.imgTrainNeedInitial) classifier.clearAllClasses();
+                window.imgTrainNeedInitial = false;
             } else startTimer();
         } else {
             number = number || 3;
@@ -155,6 +159,20 @@ const TmImgTrain = (props) => {
         }
     };
 
+    const restoreClassifier = (imgClassifierDataset) => {
+        const parse = (data) => {
+            return JSON.parse(data).reduce(
+                (dataset, { label, values, shape }) => {
+                    return Object.assign(Object.assign({}, dataset), {
+                        [label]: tf.tensor(values, shape),
+                    });
+                },
+                {}
+            );
+        };
+        classifier.setClassifierDataset(parse(imgClassifierDataset));
+    };
+
     const initializeSample = (number) => {
         let newSampleList = [];
         let newSampleNameList = [];
@@ -167,8 +185,10 @@ const TmImgTrain = (props) => {
             newSampleNameList.push("分类" + (i + 1));
         }
         setSampleList(newSampleList);
-        setSampleNameList(newSampleNameList);
-        window.imgClassNameList = newSampleNameList;
+        setSampleNameList(window.imgTrainNeedInitial ? imgClassNameList : newSampleNameList);
+        window.imgClassNameList = window.imgTrainNeedInitial
+            ? imgClassNameList
+            : newSampleNameList;
         sampleListRef.current = newSampleList;
         setCurveHeight(sectionHeight * number + 16 * (number - 1));
     };
@@ -215,7 +235,7 @@ const TmImgTrain = (props) => {
                     0,
                     0,
                     114,
-                    114
+                    114,
                     // videoCanvas.current.width,
                     // videoCanvas.current.height
                 );
@@ -349,6 +369,7 @@ const TmImgTrain = (props) => {
         findDevice();
         console.log("机器学习图像分类窗口初始化");
         vm.runtime.on("start_img_train", start);
+        vm.runtime.on("restore_img_classifier", restoreClassifier);
         // start(3);
         window.onresize = () =>
             setLineStart(

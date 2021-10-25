@@ -315,7 +315,7 @@ const WebCamComponent = (props) => {
             if (countDown && countDown > 0) {
                 setCountDown((pre) => pre - 1);
             } else {
-                getPhoto();
+                // getPhoto();
                 setCountDownAnimation(0);
             }
         }, 1000);
