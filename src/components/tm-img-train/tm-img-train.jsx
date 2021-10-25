@@ -290,15 +290,15 @@ const TmImgTrain = (props) => {
                 logits = infer();
                 classifier.predictClass(logits, TOPK).then((res) => {
                     if (
-                        modelResult.index !== res.classIndex ||
+                        modelResult.index !== res.label ||
                         (modelResult.confidences && modelResult.confidences[modelResult.index]) !==
-                            res.confidences[res.classIndex]
+                            res.confidences[res.label]
                     ) {
                         setModelResult({
-                            index: res.classIndex,
-                            confidence: res.confidences[res.classIndex],
+                            index: res.label,
+                            confidence: res.confidences[res.label],
                             className:
-                                sampleListRef.current[res.classIndex].className,
+                                sampleListRef.current[res.label].className,
                         });
                     }
                     for (let i = 0; i < sampleListRef.current.length; i++) {
@@ -306,7 +306,7 @@ const TmImgTrain = (props) => {
                             res.confidences[i];
                         setSampleList(() => sampleListRef.current);
                         // Make the predicted class bold
-                        if (res.classIndex == i) {
+                        if (res.label == i) {
                         } else {
                             // this.infoTexts[i].style.fontWeight = "normal";
                         }

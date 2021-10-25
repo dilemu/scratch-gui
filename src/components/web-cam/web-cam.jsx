@@ -253,9 +253,9 @@ const WebCamComponent = (props) => {
             logits = infer();
             window.imageClassifier.predictClass(logits, TOPK).then((res) => {
                 setPredictResult({
-                    index: res.classIndex,
-                    confidence: res.confidences[res.classIndex],
-                    className: window.imgClassNameList[res.classIndex],
+                    index: res.label,
+                    confidence: res.confidences[res.label],
+                    className: window.imgClassNameList[res.label],
                 });
                 const _imageClassifierList = [];
                 for (let i = 0; i < window.imgClassNameList.length; i++) {
