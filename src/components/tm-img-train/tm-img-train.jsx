@@ -184,11 +184,15 @@ const TmImgTrain = (props) => {
             });
             newSampleNameList.push("分类" + (i + 1));
         }
+        if (window.imgTrainNeedInitial) {
+            newSampleList = window.imgClassNameList.map((elem) => {
+                return { list: [], className: elem, confidence: 0 };
+            });
+            newSampleNameList = window.imgClassNameList;
+        }
         setSampleList(newSampleList);
-        setSampleNameList(window.imgTrainNeedInitial ? imgClassNameList : newSampleNameList);
-        window.imgClassNameList = window.imgTrainNeedInitial
-            ? imgClassNameList
-            : newSampleNameList;
+        setSampleNameList(newSampleNameList);
+        window.imgClassNameList = newSampleNameList;
         sampleListRef.current = newSampleList;
         setCurveHeight(sectionHeight * number + 16 * (number - 1));
     };

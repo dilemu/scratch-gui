@@ -279,8 +279,8 @@ const WebCamComponent = (props) => {
     };
 
     const imgPredictResult = (name) => {
-        // const result = imageClassifierList.current.length && imageClassifierList.current.find(className => className === name);
-        vm.runtime.emit("img_predict_result", imageClassifierList.current);
+        if (predictTimer.current) vm.runtime.emit("img_predict_result", imageClassifierList.current);
+        else vm.runtime.emit("img_predict_result", null);
     };
 
     useEffect(() => {
