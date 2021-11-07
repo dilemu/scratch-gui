@@ -280,7 +280,21 @@ const WebCamComponent = (props) => {
 
     const imgPredictResult = (name) => {
         if (predictTimer.current) vm.runtime.emit("img_predict_result", imageClassifierList.current);
-        else vm.runtime.emit("img_predict_result", null);
+        else {
+            showModal();
+            const type = "tm";
+            setType(type);
+            startVideo({type});
+            const waitResult = setInterval(() => {
+                if(imageClassifierList.current.length) {
+                    clearInterval(waitResult);
+                    vm.runtime.emit(
+                        "img_predict_result",
+                        imageClassifierList.current
+                    );
+                }
+            }, 100)
+        }
     };
 
     useEffect(() => {
@@ -300,6 +314,7 @@ const WebCamComponent = (props) => {
                 });
             audioRec.current && audioRec.current.close();
             cancelAnimationFrame(predictTimer.current);
+            predictTimer.current = null;
         }
     }, [isModalVisible]);
 
@@ -315,7 +330,7 @@ const WebCamComponent = (props) => {
             if (countDown && countDown > 0) {
                 setCountDown((pre) => pre - 1);
             } else {
-                // getPhoto();
+                getPhoto();
                 setCountDownAnimation(0);
             }
         }, 1000);
@@ -404,7 +419,7 @@ const WebCamComponent = (props) => {
                                     ? `${predictResult.className}（${(
                                           predictResult.confidence * 100
                                       ).toFixed(2)}）`
-                                    : ""}
+                                    : "加载中..."}
                             </span>
                             <span
                                 className="predict-process"
