@@ -183,7 +183,7 @@ const GUIComponent = props => {
                 dir={isRtl ? "rtl" : "ltr"}
                 {...componentProps}
             >
-                {showLogin ? <LoginPopup title="登录" vm={vm} /> : null}
+                <LoginPopup title="登录" vm={vm} showLogin={showLogin} />
                 <ChooseCity vm={vm} />
                 <WebCam vm={vm} />
                 <UploadModal vm={vm} />

@@ -29,3 +29,52 @@
     padding-left: 9.75rem;
     user-select: none;
 }
+
+.logo {
+    text-align: center;
+    line-height: 66px;
+}
+
+.logo-img {
+    width: 198px;
+    height: 29px;
+}
+
+.content {
+    
+}
+
+.forget-link {
+    font-size: 14px;
+    font-weight: 400;
+    color: #1890FF;
+}
+
+.captcha-link {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.login-button {
+    width: 332px;
+    height: 40px;
+    background: #DEEDFC;
+    border-radius: 20px;
+    color: #000000;
+    border-color: transparent transparent transparent;
+}
+
+.login-button:hover {
+    background: linear-gradient(180deg, #69B8FB 0%, #3679E6 100%);
+    color: #FFFFFF;
+}
+
+.input-item {
+    padding: 3px 0;
+}
+
+.extra-line {
+    display: flex;
+    justify-content: space-between;
+}

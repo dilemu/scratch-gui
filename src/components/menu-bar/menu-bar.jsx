@@ -813,7 +813,7 @@ class MenuBar extends React.Component {
                         <img className={styles.fileIcon} src={delpoyIcon} />
                         <div className={classNames(styles.editMenu)}>
                             <FormattedMessage
-                                defaultMessage="Deploy"
+                                defaultMessage="发布"
                                 description="Text for deploy dropdown menu"
                                 id="gui.menuBar.deploy"
                             />
