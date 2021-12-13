@@ -10,7 +10,7 @@ import { FormattedMessage } from "react-intl";
 import { closeLoginModal } from "../../reducers/modals";
 import request from "../../public/request"
 import { setSession } from "../../reducers/session"
-import { Modal as ReactModal, Tabs, Form, Input, Button, Icon } from 'antd';
+import { Modal as ReactModal, Tabs, Form, Input, Button, Row, Col, Checkbox } from 'antd';
 import Logo from "./logo.png";
 import UserIcon from "./account.svg";
 import PwdIcon from "./password.svg";
@@ -19,6 +19,13 @@ import VM from 'delightmom-scratch-vm';
 const { TabPane } = Tabs;
 
 class LoginPopup extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      type: 'account',
+      tabIndex: "login"
+    }
+  }
   loginServer(account, password) {
     const url = '/api/user/login'
     const data = {
@@ -56,7 +63,28 @@ class LoginPopup extends React.Component {
     }
   };
 
+  onTabSwitch(key) {
+    this.setState({
+      tabIndex: key
+    })
+  }
+
+  switchLoginType() {
+    const {type } = this.state;
+    if (type === "phone") {
+      this.setState({
+        type: "account"
+      })
+    }
+    if (type === "account") {
+      this.setState({
+        type: "phone"
+      })
+    }
+  }
+
   render() {
+    const { tabIndex, type } = this.state
     return (
       <>
         <ReactModal
@@ -70,36 +98,65 @@ class LoginPopup extends React.Component {
             <img src={Logo} className={styles.logoImg} />
           </div>
           <div className={styles.content}>
-            <Tabs defaultActiveKey="1" centered>
-              <TabPane tab="登录" key="1">
+            <Tabs defaultActiveKey={tabIndex} centered onChange={this.onTabSwitch.bind(this)}>
+              <TabPane tab="登录" key="login">
                 <Form
                   name="normal_login"
                   className="login-form"
-                  // initialValues={{ remember: true }}
-                  // onFinish={onFinish}
+                // initialValues={{ remember: true }}
+                // onFinish={onFinish}
                 >
-                  <Form.Item
-                    name="username"
-                    rules={[{ required: true, message: '请输入账户名' }]}
-                    className={styles.inputItem}
-                  >
-                    <Input prefix={<img src={UserIcon} />} placeholder="账户" size="large"/>
-                  </Form.Item>
-                  <Form.Item
-                    name="password"
-                    rules={[{ required: true, message: '请输入密码' }]}
-                    className={styles.inputItem}
-                  >
-                    <Input
-                      prefix={<img src={PwdIcon} />}
-                      type="password"
-                      placeholder="密码"
-                      size="large"
-                    />
-                  </Form.Item>
-                  <Form.Item style={{ marginBottom: "15px"}}>
+                  {
+                    type === "account" ? <><Form.Item
+                      name="account"
+                      rules={[{ required: true, message: '请输入账户名' }]}
+                      className={styles.inputItem}
+                    >
+                      <Input prefix={<img src={UserIcon} />} placeholder="账户" size="large" />
+                    </Form.Item>
+                      <Form.Item
+                        name="password"
+                        rules={[{ required: true, message: '请输入密码' }]}
+                        className={styles.inputItem}
+                      >
+                        <Input.Password
+                          prefix={<img src={PwdIcon} />}
+                          type="password"
+                          placeholder="密码"
+                          size="large"
+                        />
+                      </Form.Item></> : null
+                  }
+                  {
+                    type === "phone" ? <><Form.Item
+                      name="mobile"
+                      rules={[{ required: true, message: '请输入手机号' }]}
+                      className={styles.inputItem}
+                    >
+                      <Input placeholder="账户" size="large" />
+                    </Form.Item>
+                      <Form.Item
+                        name="code"
+                        rules={[{ required: true, message: '请输入验证码' }]}
+                        className={styles.inputItem}
+                      >
+                        <Row gutter={8} justify="space-between">
+                          <Col span={16}>
+                            <Input
+                              placeholder="验证码"
+                              size="large"
+                            />
+                          </Col>
+                          <Col span={7}>
+                            <Button size="large" type="primary" className={styles.captchaBtn} >获取验证码</Button>
+                          </Col>
+                        </Row>
+                      </Form.Item></> : null
+                  }
+                  <Form.Item style={{ marginBottom: "15px" }}>
                     <div className={styles.extraLine}>
-                      <a className={styles.captchaLink}>手机验证码登录</a>
+                      {type === "phone" ? <a className={styles.captchaLink} onClick={this.switchLoginType.bind(this)}>手机验证码登录</a> : null}
+                      {type === "account" ? <a className={styles.captchaLink} onClick={this.switchLoginType.bind(this)}>密码登录</a> : null}
                       <a className={styles.forgetLink} href="#">忘记密码</a>
                     </div>
                   </Form.Item>
@@ -111,8 +168,63 @@ class LoginPopup extends React.Component {
                   </Form.Item>
                 </Form>
               </TabPane>
-              <TabPane tab="注册" key="2">
-                Content of Tab Pane 2
+              <TabPane tab="注册" key="registry">
+                <Form
+                  name="normal_login"
+                  className="login-form"
+                // initialValues={{ remember: true }}
+                // onFinish={onFinish}
+                >
+                  <Form.Item
+                    name="mobile"
+                    rules={[{ required: true, message: '请输入手机号' }]}
+                    className={styles.inputItem}
+                  >
+                    <Input placeholder="账户" size="large" />
+                  </Form.Item>
+                  <Form.Item
+                    name="password"
+                    rules={[{ required: true, message: '请输入密码' }]}
+                    className={styles.inputItem}
+                  >
+                    <Input.Password
+                      prefix={<img src={PwdIcon} />}
+                      type="password"
+                      placeholder="8~20位密码，字母/数字/符号至少2种"
+                      size="large"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name="code"
+                    rules={[{ required: true, message: '请输入验证码' }]}
+                    className={styles.inputItem}
+                  >
+                    <Row gutter={8} justify="space-between">
+                      <Col span={16}>
+                        <Input
+                          placeholder="验证码"
+                          size="large"
+                        />
+                      </Col>
+                      <Col span={7}>
+                        <Button size="large" type="primary" className={styles.captchaBtn} >获取验证码</Button>
+                      </Col>
+                    </Row>
+                  </Form.Item>
+                  <Form.Item name="agreement"
+                    valuePropName="checked"
+                     style={{ marginBottom: "15px" }}>
+                    <Checkbox>
+                      我已阅读并同意 <a href="#">《用户协议》</a><a href="#">《隐私政策》</a>
+                    </Checkbox>
+                  </Form.Item>
+
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit" className={styles.loginButton}>
+                      注册
+                    </Button>
+                  </Form.Item>
+                </Form>
               </TabPane>
             </Tabs>
           </div>

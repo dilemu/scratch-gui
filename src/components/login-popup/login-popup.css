@@ -40,8 +40,8 @@
     height: 29px;
 }
 
-.content {
-    
+.content > input {
+    border-radius: 8px;
 }
 
 .forget-link {
@@ -63,6 +63,7 @@
     border-radius: 20px;
     color: #000000;
     border-color: transparent transparent transparent;
+    transition: none;
 }
 
 .login-button:hover {
@@ -74,7 +75,34 @@
     padding: 3px 0;
 }
 
+.input-item input {
+    border-radius: 8px;
+}
+
+:global(.ant-input-password-large) {
+    border-radius: 8px;
+}
+
+:global(.ant-input-affix-wrapper-lg) {
+    border-radius: 8px;
+}
+
 .extra-line {
     display: flex;
     justify-content: space-between;
+}
+
+.captcha-btn {
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 13px;
+    border: 1px solid #D9D9D9;
+    transition: none;
+}
+
+.captcha-btn:hover {
+    background: linear-gradient(180deg, #69B8FB 0%, #3679E6 100%);
+    color: #FFFFFF;
+    border: 1px solid transparent;
 }
