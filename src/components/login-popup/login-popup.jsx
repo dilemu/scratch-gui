@@ -19,11 +19,16 @@ import VM from 'delightmom-scratch-vm';
 const { TabPane } = Tabs;
 
 class LoginPopup extends React.Component {
+  loginFormRef = React.createRef();
+  registryFormRef = React.createRef();
   constructor(props) {
     super(props);
     this.state = {
       type: 'account',
-      tabIndex: "login"
+      tabIndex: "login",
+      countDown: 0,
+      captchaStatus: false,
+      countDownFull: 60
     }
   }
   loginServer(account, password) {
@@ -83,8 +88,36 @@ class LoginPopup extends React.Component {
     }
   }
 
+  onFinish(values) {
+    console.log(values);
+  };
+
+  getCode() {
+    if(!this.state.captchaStatus && this.state.countDown === 0) {
+      this.setState({
+        captchaStatus: true,
+        countDown: this.state.countDownFull
+      })
+      const _this = this;
+      const countDownEvent = setInterval(() => {
+        if (_this.state.countDown > 1) {
+          _this.setState({
+            captchaStatus: true,
+            countDown: --_this.state.countDown
+          })
+        } else {
+          _this.setState({
+            captchaStatus: false,
+            countDown: 0
+          })
+          clearInterval(countDownEvent);
+        }
+      }, 1000)
+    }
+  }
+
   render() {
-    const { tabIndex, type } = this.state
+    const { tabIndex, type, captchaStatus, countDown } = this.state
     return (
       <>
         <ReactModal
@@ -103,6 +136,8 @@ class LoginPopup extends React.Component {
                 <Form
                   name="normal_login"
                   className="login-form"
+                  ref={this.loginFormRef}
+                  onFinish={this.onFinish}
                 // initialValues={{ remember: true }}
                 // onFinish={onFinish}
                 >
@@ -130,7 +165,9 @@ class LoginPopup extends React.Component {
                   {
                     type === "phone" ? <><Form.Item
                       name="mobile"
-                      rules={[{ required: true, message: '请输入手机号' }]}
+                      rules={[{ required: true, message: '请输入手机号' }, {
+                        pattern: /^1[3|4|5|7|8][0-9]\d{8}$/, message: '请输入正确的手机号'
+                      }]}
                       className={styles.inputItem}
                     >
                       <Input placeholder="账户" size="large" />
@@ -148,15 +185,15 @@ class LoginPopup extends React.Component {
                             />
                           </Col>
                           <Col span={7}>
-                            <Button size="large" type="primary" className={styles.captchaBtn} >获取验证码</Button>
+                            <span className={styles.captchaBtn} onClick={this.getCode.bind(this)}>{captchaStatus ? `${countDown}秒后重发` : "获取验证码"}</span>
                           </Col>
                         </Row>
                       </Form.Item></> : null
                   }
                   <Form.Item style={{ marginBottom: "15px" }}>
                     <div className={styles.extraLine}>
-                      {type === "phone" ? <a className={styles.captchaLink} onClick={this.switchLoginType.bind(this)}>手机验证码登录</a> : null}
-                      {type === "account" ? <a className={styles.captchaLink} onClick={this.switchLoginType.bind(this)}>密码登录</a> : null}
+                      {type === "phone" ? <a className={styles.captchaLink} onClick={this.switchLoginType.bind(this)}>密码登录</a> : null}
+                      {type === "account" ? <a className={styles.captchaLink} onClick={this.switchLoginType.bind(this)}>手机验证码登录</a> : null}
                       <a className={styles.forgetLink} href="#">忘记密码</a>
                     </div>
                   </Form.Item>
@@ -172,6 +209,7 @@ class LoginPopup extends React.Component {
                 <Form
                   name="normal_login"
                   className="login-form"
+                  ref={this.registryFormRef}
                 // initialValues={{ remember: true }}
                 // onFinish={onFinish}
                 >
