@@ -59,6 +59,8 @@ class LoginPopup extends React.Component {
     }).catch(err => ({ err }))
   }
 
+  registryServer(mobile, password, code) {}
+
   getAccountAndPasswod() {
     const { account, password } = this.refs;
     if (account.value !== '' & password.value !== '') {
@@ -89,30 +91,53 @@ class LoginPopup extends React.Component {
   }
 
   onFinish(values) {
+    this.loginServer(values.account, values.password)
     console.log(values);
   };
 
-  getCode() {
+  onRegistryFinish(values) {
+    this.registryServer(values.mobile, values.password, values.code)
+    console.log(values);
+  };
+
+  async getCode(form) {
+    const mobileValidateResult = await form.current.validateFields(["mobile"]);
+    if (!mobileValidateResult) return;
+    const url = '/api/user/getCode';
+    const data = {
+      mobile: form.current.mobile
+    }
     if(!this.state.captchaStatus && this.state.countDown === 0) {
-      this.setState({
-        captchaStatus: true,
-        countDown: this.state.countDownFull
-      })
-      const _this = this;
-      const countDownEvent = setInterval(() => {
-        if (_this.state.countDown > 1) {
-          _this.setState({
+      request({ url, data, method: "POST" }).then(res => {
+        if (res.code == 0) {
+          console.log('get captcha success', res.data)
+          this.setState({
             captchaStatus: true,
-            countDown: --_this.state.countDown
+            countDown: this.state.countDownFull
           })
+          const _this = this;
+          const countDownEvent = setInterval(() => {
+            if (_this.state.countDown > 1) {
+              _this.setState({
+                captchaStatus: true,
+                countDown: --_this.state.countDown
+              })
+            } else {
+              _this.setState({
+                captchaStatus: false,
+                countDown: 0
+              })
+              clearInterval(countDownEvent);
+            }
+          }, 1000)
         } else {
-          _this.setState({
-            captchaStatus: false,
-            countDown: 0
-          })
-          clearInterval(countDownEvent);
+          console.log('get captcha failure', res.message)
+          alert("验证码获取失败！")
         }
-      }, 1000)
+      }).catch(err => {
+        console.log('get captcha failure', err)
+        alert("验证码获取失败！")
+      })
     }
   }
 
@@ -137,7 +162,7 @@ class LoginPopup extends React.Component {
                   name="normal_login"
                   className="login-form"
                   ref={this.loginFormRef}
-                  onFinish={this.onFinish}
+                  onFinish={this.onFinish.bind(this)}
                 // initialValues={{ remember: true }}
                 // onFinish={onFinish}
                 >
@@ -166,7 +191,7 @@ class LoginPopup extends React.Component {
                     type === "phone" ? <><Form.Item
                       name="mobile"
                       rules={[{ required: true, message: '请输入手机号' }, {
-                        pattern: /^1[3|4|5|7|8][0-9]\d{8}$/, message: '请输入正确的手机号'
+                        pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号'
                       }]}
                       className={styles.inputItem}
                     >
@@ -185,7 +210,7 @@ class LoginPopup extends React.Component {
                             />
                           </Col>
                           <Col span={7}>
-                            <span className={styles.captchaBtn} onClick={this.getCode.bind(this)}>{captchaStatus ? `${countDown}秒后重发` : "获取验证码"}</span>
+                            <span className={styles.captchaBtn} onClick={this.getCode.bind(this, this.loginFormRef)}>{captchaStatus ? `${countDown}秒后重发` : "获取验证码"}</span>
                           </Col>
                         </Row>
                       </Form.Item></> : null
@@ -211,14 +236,14 @@ class LoginPopup extends React.Component {
                   className="login-form"
                   ref={this.registryFormRef}
                 // initialValues={{ remember: true }}
-                // onFinish={onFinish}
+                  onFinish={this.onRegistryFinish.bind(this)}
                 >
                   <Form.Item
                     name="mobile"
                     rules={[{ required: true, message: '请输入手机号' }]}
                     className={styles.inputItem}
                   >
-                    <Input placeholder="账户" size="large" />
+                    <Input placeholder="手机号" size="large" />
                   </Form.Item>
                   <Form.Item
                     name="password"
@@ -245,15 +270,21 @@ class LoginPopup extends React.Component {
                         />
                       </Col>
                       <Col span={7}>
-                        <Button size="large" type="primary" className={styles.captchaBtn} >获取验证码</Button>
+                        <span className={styles.captchaBtn} onClick={this.getCode.bind(this, this.registryFormRef)}>{captchaStatus ? `${countDown}秒后重发` : "获取验证码"}</span>
                       </Col>
                     </Row>
                   </Form.Item>
                   <Form.Item name="agreement"
                     valuePropName="checked"
+                    rules={[
+                      {
+                        validator: (_, value) =>
+                          value ? Promise.resolve() : Promise.reject(new Error('请勾选同意用户协议')),
+                      },
+                    ]}
                      style={{ marginBottom: "15px" }}>
                     <Checkbox>
-                      我已阅读并同意 <a href="#">《用户协议》</a><a href="#">《隐私政策》</a>
+                      我已阅读并同意 <a href="#">《用户协议》</a>
                     </Checkbox>
                   </Form.Item>
 
