@@ -19,8 +19,6 @@ import VM from 'delightmom-scratch-vm';
 const { TabPane } = Tabs;
 
 class LoginPopup extends React.Component {
-  loginFormRef = React.createRef();
-  registryFormRef = React.createRef();
   constructor(props) {
     super(props);
     this.state = {
@@ -30,22 +28,25 @@ class LoginPopup extends React.Component {
       captchaStatus: false,
       countDownFull: 60
     }
+    this.loginFormRef = React.createRef();
+    this.registryFormRef = React.createRef();
   }
-  loginServer(account, password) {
+  loginServer(account, code) {
     const url = '/api/user/login'
     const data = {
-      userName: account,
-      password: password
+      account,
+      code,
+      type: this.state.type
     }
     const _this = this
     request({ url, data, method: "POST" }).then(res => {
       if (res.code == 0) {
         console.log('login success', res.data)
         _this.props.setSession({
-          userid: res.data.login,
-          username: res.data.login,
-          nickname: res.data.login,
-          avatar: res.data.login.avatar,
+          userid: res.data.username,
+          username: res.data.username,
+          nickname: res.data.username,
+          avatar: res.data.avatar,
           token: res.data.token
         })
         _this.props.vm.runtime.emit('LOGIN', res.data);
@@ -54,21 +55,32 @@ class LoginPopup extends React.Component {
         console.log('login failure', res.message)
         _this.props.setSession({})
         _this.props.vm.runtime.emit('LOGOUT');
-        alert("账号或密码错误！")
+        alert(res.message)
       }
     }).catch(err => ({ err }))
   }
 
-  registryServer(mobile, password, code) {}
-
-  getAccountAndPasswod() {
-    const { account, password } = this.refs;
-    if (account.value !== '' & password.value !== '') {
-      this.loginServer(account.value, password.value)
-    } else {
-      alert('账号或密码不能为空！')
+  registryServer(mobile, password, code) {
+    const url = '/api/user/register'
+    const data = {
+      mobile,
+      password,
+      code
     }
-  };
+    const _this = this
+    request({ url, data, method: "POST" }).then(res => {
+      if (res.code == 0) {
+        console.log('registry success', res.data)
+        alert("注册成功!")
+        _this.setState({
+          tabIndex: "registry"
+        })
+      } else {
+        console.log('register failure', res.message)
+        alert(res.message)
+      }
+    }).catch(err => ({ err }))
+  }
 
   onTabSwitch(key) {
     this.setState({
@@ -90,22 +102,22 @@ class LoginPopup extends React.Component {
     }
   }
 
-  onFinish(values) {
-    this.loginServer(values.account, values.password)
+  onLoginFinish(values) {
+    this.loginServer(values.account, values.code)
     console.log(values);
   };
 
   onRegistryFinish(values) {
-    this.registryServer(values.mobile, values.password, values.code)
+    this.registryServer(values.account, values.password, values.code)
     console.log(values);
   };
 
   async getCode(form) {
-    const mobileValidateResult = await form.current.validateFields(["mobile"]);
+    const mobileValidateResult = await form.current.validateFields(["account"]);
     if (!mobileValidateResult) return;
     const url = '/api/user/getCode';
     const data = {
-      mobile: form.current.mobile
+      mobile: form.current.getFieldValue("account")
     }
     if(!this.state.captchaStatus && this.state.countDown === 0) {
       request({ url, data, method: "POST" }).then(res => {
@@ -156,15 +168,13 @@ class LoginPopup extends React.Component {
             <img src={Logo} className={styles.logoImg} />
           </div>
           <div className={styles.content}>
-            <Tabs defaultActiveKey={tabIndex} centered onChange={this.onTabSwitch.bind(this)}>
+            <Tabs defaultActiveKey={tabIndex} activeKey={tabIndex} centered onChange={this.onTabSwitch.bind(this)}>
               <TabPane tab="登录" key="login">
                 <Form
                   name="normal_login"
                   className="login-form"
                   ref={this.loginFormRef}
-                  onFinish={this.onFinish.bind(this)}
-                // initialValues={{ remember: true }}
-                // onFinish={onFinish}
+                  onFinish={this.onLoginFinish.bind(this)}
                 >
                   {
                     type === "account" ? <><Form.Item
@@ -175,7 +185,7 @@ class LoginPopup extends React.Component {
                       <Input prefix={<img src={UserIcon} />} placeholder="账户" size="large" />
                     </Form.Item>
                       <Form.Item
-                        name="password"
+                        name="code"
                         rules={[{ required: true, message: '请输入密码' }]}
                         className={styles.inputItem}
                       >
@@ -189,7 +199,7 @@ class LoginPopup extends React.Component {
                   }
                   {
                     type === "phone" ? <><Form.Item
-                      name="mobile"
+                      name="account"
                       rules={[{ required: true, message: '请输入手机号' }, {
                         pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号'
                       }]}
@@ -239,7 +249,7 @@ class LoginPopup extends React.Component {
                   onFinish={this.onRegistryFinish.bind(this)}
                 >
                   <Form.Item
-                    name="mobile"
+                    name="account"
                     rules={[{ required: true, message: '请输入手机号' }]}
                     className={styles.inputItem}
                   >

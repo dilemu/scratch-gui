@@ -10,7 +10,7 @@
     bottom: 0;
     z-index: $z-index-modal;
     background-color: #000000;
-    opacity: 0.46;
+    /* opacity: 0.46; */
 }
 
 .modal-content * {
