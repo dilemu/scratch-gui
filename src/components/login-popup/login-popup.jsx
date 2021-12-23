@@ -10,7 +10,7 @@ import { FormattedMessage } from "react-intl";
 import { closeLoginModal } from "../../reducers/modals";
 import request from "../../public/request"
 import { setSession } from "../../reducers/session"
-import { Modal as ReactModal, Tabs, Form, Input, Button, Row, Col, Checkbox } from 'antd';
+import { Modal as ReactModal, Tabs, Form, Input, Button, Row, Col, Checkbox, message } from 'antd';
 import Logo from "./logo.png";
 import UserIcon from "./account.svg";
 import PwdIcon from "./password.svg";
@@ -56,7 +56,7 @@ class LoginPopup extends React.Component {
         console.log('login failure', res.message)
         _this.props.setSession({})
         _this.props.vm.runtime.emit('LOGOUT');
-        alert(res.message)
+        message.info(res.message)
       }
     }).catch(err => ({ err }))
   }
@@ -72,13 +72,13 @@ class LoginPopup extends React.Component {
     request({ url, data, method: "POST" }).then(res => {
       if (res.code == 0) {
         console.log('registry success', res.data)
-        alert("注册成功!")
+        message.info("注册成功!")
         _this.setState({
           tabIndex: "registry"
         })
       } else {
         console.log('register failure', res.message)
-        alert(res.message)
+        message.info(res.message)
       }
     }).catch(err => ({ err }))
   }
@@ -145,11 +145,11 @@ class LoginPopup extends React.Component {
           }, 1000)
         } else {
           console.log('get captcha failure', res.message)
-          alert("验证码获取失败！")
+          message.info("验证码获取失败！")
         }
       }).catch(err => {
         console.log('get captcha failure', err)
-        alert("验证码获取失败！")
+        message.info("验证码获取失败！")
       })
     }
   }
