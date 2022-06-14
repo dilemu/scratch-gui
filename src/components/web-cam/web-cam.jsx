@@ -400,7 +400,7 @@ const WebCamComponent = (props) => {
                                 autoPlay="autoplay"
                                 width="480"
                                 height="360"
-                                mute
+                                muted={true}
                             ></video>
                             <canvas
                                 ref={videoCanvas}

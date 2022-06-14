@@ -139,8 +139,7 @@ import screenshotIcon from "./icon--screenshot.svg";
 import settingIcon from "./icon--setting.svg";
 
 import uploadFirmwareIcon from './icon--upload-firmware.svg';
-import saveSvgAsPng from 'openblock-save-svg-as-png';
-import downloadFirmwareIcon from "./icon--download-firmware.svg";
+// import downloadFirmwareIcon from "./icon--download-firmware.svg";
 import saveSvgAsPng from "openblock-save-svg-as-png";
 import { showAlertWithTimeout } from "../../reducers/alerts";
 import { clearSession } from "../../reducers/session"
