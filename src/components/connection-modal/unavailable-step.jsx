@@ -12,14 +12,12 @@ import scratchLinkIcon from './icons/scratchlink.svg';
 
 import styles from './connection-modal.css';
 
-const UnavailableStep = props => (
+const UnavailableStep = (props) => (
     <Box className={styles.body}>
         <Box className={styles.activityArea}>
             <div className={styles.scratchLinkHelp}>
                 <div className={styles.scratchLinkHelpStep}>
-                    <div className={styles.helpStepNumber}>
-                        {'1'}
-                    </div>
+                    <div className={styles.helpStepNumber}>{"1"}</div>
                     <div className={styles.helpStepImage}>
                         <img
                             className={styles.scratchLinkIcon}
@@ -28,16 +26,14 @@ const UnavailableStep = props => (
                     </div>
                     <div className={styles.helpStepText}>
                         <FormattedMessage
-                            defaultMessage="Make sure you have OpenBlock Link installed and running"
-                            description="Message for getting OpenBlock Link installed"
+                            defaultMessage="Make sure you have DBit+ Link installed and running"
+                            description="Message for getting DBit+ Link installed"
                             id="gui.connection.unavailable.installscratchlink"
                         />
                     </div>
                 </div>
                 <div className={styles.scratchLinkHelpStep}>
-                    <div className={styles.helpStepNumber}>
-                        {'2'}
-                    </div>
+                    <div className={styles.helpStepNumber}>{"2"}</div>
                     <div className={styles.helpStepImage}>
                         <img
                             className={styles.scratchLinkIcon}
@@ -55,18 +51,19 @@ const UnavailableStep = props => (
             </div>
         </Box>
         <Box className={styles.bottomArea}>
-            <Dots
-                error
-                className={styles.bottomAreaItem}
-                total={3}
-            />
-            <Box className={classNames(styles.bottomAreaItem, styles.buttonRow)}>
+            <Dots error className={styles.bottomAreaItem} total={3} />
+            <Box
+                className={classNames(styles.bottomAreaItem, styles.buttonRow)}
+            >
                 <button
                     className={styles.connectionButton}
                     onClick={props.onScanning}
                 >
                     <img
-                        className={classNames(styles.buttonIconLeft, styles.buttonIconBack)}
+                        className={classNames(
+                            styles.buttonIconLeft,
+                            styles.buttonIconBack
+                        )}
                         src={backIcon}
                     />
                     <FormattedMessage
@@ -79,10 +76,7 @@ const UnavailableStep = props => (
                     className={styles.connectionButton}
                     onClick={props.onHelp}
                 >
-                    <img
-                        className={styles.buttonIconLeft}
-                        src={helpIcon}
-                    />
+                    <img className={styles.buttonIconLeft} src={helpIcon} />
                     <FormattedMessage
                         defaultMessage="Help"
                         description="Button to view help content"

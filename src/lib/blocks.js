@@ -1,4 +1,6 @@
-import ScratchBlocks from 'openblock-blocks';
+import ScratchBlocks from 'delightmom-scratch-blocks';
+import 'delightmom-scratch-blocks/arduino_compressed';
+import 'delightmom-scratch-blocks/python_compressed';
 import iconv from 'iconv-lite';
 
 /**

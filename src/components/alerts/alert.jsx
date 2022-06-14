@@ -31,26 +31,16 @@ const AlertComponent = ({
     onReconnect,
     onUploadFirmware,
     showUploadFirmware,
-    showReconnect
+    showReconnect,
 }) => (
-    <Box
-        className={classNames(styles.alert, styles[level])}
-    >
+    <Box className={classNames(styles.alert, styles[level])}>
         {/* TODO: implement Rtl handling */}
         {(iconSpinner || iconURL) && (
             <div className={styles.iconSection}>
                 {iconSpinner && (
-                    <Spinner
-                        className={styles.alertSpinner}
-                        level={level}
-                    />
+                    <Spinner className={styles.alertSpinner} level={level} />
                 )}
-                {iconURL && (
-                    <img
-                        className={styles.alertIcon}
-                        src={iconURL}
-                    />
-                )}
+                {iconURL && <img className={styles.alertIcon} src={iconURL} />}
             </div>
         )}
         <div className={styles.alertMessage}>
@@ -59,17 +49,17 @@ const AlertComponent = ({
                     extensionMessage
                 ) : (
                     <FormattedMessage
-                        defaultMessage="OpenBlock lost connection to {extensionName}."
+                        defaultMessage="DBit+ lost connection to {extensionName}."
                         description="Message indicating that an extension peripheral has been disconnected"
                         id="gui.alerts.lostPeripheralConnection"
                         values={{
-                            extensionName: (
-                                `${extensionName}`
-                            )
+                            extensionName: `${extensionName}`,
                         }}
                     />
                 )
-            ) : content}
+            ) : (
+                content
+            )}
         </div>
         <div className={styles.alertButtons}>
             {showSaveNow && (
@@ -121,9 +111,7 @@ const AlertComponent = ({
                 </button>
             )}
             {closeButton && (
-                <Box
-                    className={styles.alertCloseButtonContainer}
-                >
+                <Box className={styles.alertCloseButtonContainer}>
                     <CloseButton
                         className={classNames(styles.alertCloseButton)}
                         color={closeButtonColors[level]}

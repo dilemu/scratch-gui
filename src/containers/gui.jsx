@@ -3,7 +3,7 @@ import React from 'react';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
 import ReactModal from 'react-modal';
-import VM from 'openblock-vm';
+import VM from 'delightmom-scratch-vm';
 import {injectIntl, intlShape} from 'react-intl';
 
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
@@ -119,7 +119,8 @@ GUI.propTypes = {
     projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     telemetryModalVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired,
-    isRealtimeMode: PropTypes.bool
+    isRealtimeMode: PropTypes.bool,
+    loginState: PropTypes.bool,
 };
 
 GUI.defaultProps = {
@@ -159,7 +160,10 @@ const mapStateToProps = state => {
         telemetryModalVisible: state.scratchGui.modals.telemetryModal,
         tipsLibraryVisible: state.scratchGui.modals.tipsLibrary,
         vm: state.scratchGui.vm,
-        isRealtimeMode: state.scratchGui.programMode.isRealtimeMode
+        isRealtimeMode: state.scratchGui.programMode.isRealtimeMode,
+        userData: state.scratchGui.session,
+        username: state.scratchGui.session.username,
+        showLogin: state.scratchGui.modals.loginPopup,
     };
 };
 

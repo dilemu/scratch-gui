@@ -5,6 +5,7 @@ import Box from '../box/box.jsx';
 import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-intl';
 
 import styles from './browser-modal.css';
+import 'antd/dist/antd.css';
 import unhappyBrowser from './unsupported-browser.svg';
 
 const messages = defineMessages({
@@ -26,11 +27,11 @@ const BrowserModal = ({intl, ...props}) => {
         <ReactModal
             isOpen
             className={styles.modalContent}
-            contentLabel={intl.formatMessage({...messages.label})}
+            contentLabel={intl.formatMessage({ ...messages.label })}
             overlayClassName={styles.modalOverlay}
             onRequestClose={props.onBack}
         >
-            <div dir={props.isRtl ? 'rtl' : 'ltr'} >
+            <div dir={props.isRtl ? "rtl" : "ltr"}>
                 <Box className={styles.illustration}>
                     <img src={unhappyBrowser} />
                 </Box>
@@ -40,19 +41,21 @@ const BrowserModal = ({intl, ...props}) => {
                         <FormattedMessage {...label} />
                     </h2>
                     <p>
-                        { /* eslint-disable max-len */ }
-                        {
-                            props.error ? <FormattedMessage
-                                defaultMessage="We are very sorry, but it looks like you are using a browser version that OpenBlock does not support. We recommend updating to the latest version of a supported browser such as Google Chrome, Mozilla Firefox, Microsoft Edge, or Apple Safari. "
+                        {/* eslint-disable max-len */}
+                        {props.error ? (
+                            <FormattedMessage
+                                defaultMessage="We are very sorry, but it looks like you are using a browser version that DBit+ does not support. We recommend updating to the latest version of a supported browser such as Google Chrome, Mozilla Firefox, Microsoft Edge, or Apple Safari. "
                                 description="Error message when the browser does not meet our minimum requirements"
                                 id="gui.unsupportedBrowser.notRecommended"
-                            /> : <FormattedMessage
-                                defaultMessage="We are very sorry, but OpenBlock does not support this browser. We recommend updating to the latest version of a supported browser such as Google Chrome, Mozilla Firefox, Microsoft Edge, or Apple Safari."
+                            />
+                        ) : (
+                            <FormattedMessage
+                                defaultMessage="We are very sorry, but DBit+ does not support this browser. We recommend updating to the latest version of a supported browser such as Google Chrome, Mozilla Firefox, Microsoft Edge, or Apple Safari."
                                 description="Error message when the browser does not work at all (IE)"
                                 id="gui.unsupportedBrowser.description"
                             />
-                        }
-                        { /* eslint-enable max-len */ }
+                        )}
+                        {/* eslint-enable max-len */}
                     </p>
 
                     <Box className={styles.buttonRow}>
@@ -66,7 +69,6 @@ const BrowserModal = ({intl, ...props}) => {
                                 id="gui.unsupportedBrowser.back"
                             />
                         </button>
-
                     </Box>
                     <div className={styles.faqLinkText}>
                         <FormattedMessage
@@ -77,15 +79,15 @@ const BrowserModal = ({intl, ...props}) => {
                                 previewFaqLink: (
                                     <a
                                         className={styles.faqLink}
-                                        href="//openblock.cc/faq"
+                                        href="//DBit+.cc/faq"
                                     >
                                         <FormattedMessage
                                             defaultMessage="FAQ"
-                                            description="link to OpenBlock FAQ page"
+                                            description="link to DBit+ FAQ page"
                                             id="gui.unsupportedBrowser.previewfaqlinktext"
                                         />
                                     </a>
-                                )
+                                ),
                             }}
                         />
                     </div>

@@ -11,13 +11,13 @@ import styles from './telemetry-modal.css';
 const messages = defineMessages({
     label: {
         id: 'gui.telemetryOptIn.label',
-        defaultMessage: 'Report statistics to improve OpenBlock',
-        description: 'OpenBlock telemetry modal label - for accessibility'
+        defaultMessage: 'Report statistics to improve DBit+',
+        description: 'DBit+ telemetry modal label - for accessibility'
     },
     bodyText1: {
-        defaultMessage: 'The OpenBlock Team is always looking to better understand how OpenBlock is used around the ' +
-            'world. To help support this effort, you can allow OpenBlock to automatically send usage information to ' +
-            'the OpenBlock Team.',
+        defaultMessage: 'The DBit+ Team is always looking to better understand how DBit+ is used around the ' +
+            'world. To help support this effort, you can allow DBit+ to automatically send usage information to ' +
+            'the DBit+ Team.',
         description: 'First paragraph of body text for telemetry opt-in modal',
         id: 'gui.telemetryOptIn.body1'
     },
@@ -30,11 +30,11 @@ const messages = defineMessages({
     },
     privacyPolicyLink: {
         defaultMessage: 'Privacy Policy',
-        description: 'Link to the OpenBlock privacy policy',
+        description: 'Link to the DBit+ privacy policy',
         id: 'gui.telemetryOptIn.privacyPolicyLink'
     },
     optInText: {
-        defaultMessage: 'Share my usage data with the Openblock Team',
+        defaultMessage: 'Share my usage data with the DBit+ Team',
         description: 'Text for telemetry modal opt-in button',
         id: 'gui.telemetryOptIn.optInText'
     },
@@ -44,7 +44,7 @@ const messages = defineMessages({
         id: 'gui.telemetryOptIn.optInTooltip'
     },
     optOutText: {
-        defaultMessage: 'Do not share my usage data with the Openblock Team',
+        defaultMessage: 'Do not share my usage data with the DBit+ Team',
         description: 'Text for telemetry modal opt-in button',
         id: 'gui.telemetryOptIn.optOutText'
     },
@@ -149,7 +149,7 @@ class TelemetryModal extends React.PureComponent {
                         values={{
                             privacyPolicyLink: (<a
                                 className={styles.privacyPolicyLink}
-                                href="https://openblock.cc/privacy_policy/"
+                                href="https://DBit+.cc/privacy_policy/"
                                 onClick={this.props.onShowPrivacyPolicy}
                                 target="_blank"
                                 rel="noopener noreferrer"

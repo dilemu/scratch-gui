@@ -14,6 +14,7 @@ const MODAL_TIPS_LIBRARY = 'tipsLibrary';
 const MODAL_UPLOAD_PROGRESS = 'uploadProgress';
 const MODAL_DEVICE_LIBRARY = 'deviceLibrary';
 const MODAL_UPDATE = 'updateModal';
+const MODAL_LOGIN = 'loginPopup';
 
 const initialState = {
     [MODAL_BACKDROP_LIBRARY]: false,
@@ -28,7 +29,8 @@ const initialState = {
     [MODAL_UPLOAD_PROGRESS]: false,
     [MODAL_DEVICE_LIBRARY]: false,
     [MODAL_TIPS_LIBRARY]: false,
-    [MODAL_UPDATE]: false
+    [MODAL_UPDATE]: false,
+    [MODAL_LOGIN]: false
 };
 
 const reducer = function (state, action) {
@@ -97,6 +99,12 @@ const openTipsLibrary = function () {
 const openUpdateModal = function () {
     return openModal(MODAL_UPDATE);
 };
+const openLoginModal = function() {
+    return openModal(MODAL_LOGIN);
+};
+const closeLoginModal = function() {
+    return closeModal(MODAL_LOGIN)
+}
 const closeBackdropLibrary = function () {
     return closeModal(MODAL_BACKDROP_LIBRARY);
 };
@@ -152,6 +160,8 @@ export {
     openTipsLibrary,
     openUploadProgress,
     openUpdateModal,
+    openLoginModal,
+    closeLoginModal,
     closeBackdropLibrary,
     closeConnectionModal,
     closeCostumeLibrary,

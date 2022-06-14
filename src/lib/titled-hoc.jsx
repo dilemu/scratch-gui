@@ -11,10 +11,10 @@ import {setProjectTitle} from '../reducers/project-title';
 
 const messages = defineMessages({
     defaultProjectTitle: {
-        id: 'gui.gui.defaultProjectTitle',
-        description: 'Default title for project',
-        defaultMessage: 'OpenBlock Project'
-    }
+        id: "gui.gui.defaultProjectTitle",
+        description: "Default title for project",
+        defaultMessage: "DBit+ Project",
+    },
 });
 
 /* Higher Order Component to get and set the project title

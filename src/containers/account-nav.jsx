@@ -33,21 +33,21 @@ AccountNav.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    classroomId: state.session && state.session.session && state.session.session.user ?
-        state.session.session.user.classroomId : '',
+    classroomId: state.session && state.session ?
+        state.session.request_id : '',
     isEducator: state.session && state.session.permissions && state.session.permissions.educator,
     isStudent: state.session && state.session.permissions && state.session.permissions.student,
-    profileUrl: state.session && state.session.session && state.session.session.user ?
-        `/users/${state.session.session.user.username}` : '',
-    thumbnailUrl: state.session && state.session.session && state.session.session.user ?
-        state.session.session.user.thumbnailUrl : null,
-    username: state.session && state.session.session && state.session.session.user ?
-        state.session.session.user.username : ''
+    profileUrl: state.session && state.session ?
+        `/users/${state.session.username}` : '',
+    thumbnailUrl: state.session && state.session?
+        state.session.thumbnailUrl : null,
+    username: state.session && state.session ?
+        state.session.username : ''
 });
 
 const mapDispatchToProps = () => ({});
 
 export default injectIntl(connect(
-    mapStateToProps,
+    // mapStateToProps,
     mapDispatchToProps
 )(AccountNav));

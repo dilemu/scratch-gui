@@ -5,7 +5,7 @@ import makeToolboxXML from '../lib/make-toolbox-xml';
 import PropTypes from 'prop-types';
 import React from 'react';
 import VMScratchBlocks from '../lib/blocks';
-import VM from 'openblock-vm';
+import VM from 'delightmom-scratch-vm';
 
 import log from '../lib/log.js';
 import Prompt from './prompt.jsx';
@@ -56,39 +56,41 @@ class Blocks extends React.Component {
         super(props);
         this.ScratchBlocks = VMScratchBlocks(props.vm);
         bindAll(this, [
-            'attachVM',
-            'detachVM',
-            'getToolboxXML',
-            'handleBlocksInfoUpdate',
-            'handleCategorySelected',
-            'handleConnectionModalStart',
-            'handleDeviceAdded',
-            'handleDeviceExtensionAdded',
-            'handleDeviceExtensionRemoved',
-            'handleDeviceSelected',
-            'handleDrop',
-            'handleExtensionAdded',
-            'handleStatusButtonUpdate',
-            'handleOpenSoundRecorder',
-            'handlePromptStart',
-            'handlePromptCallback',
-            'handlePromptClose',
-            'handleToolboxUploadFinish',
-            'handleCustomProceduresClose',
-            'onCodeNeedUpdate',
-            'onScriptGlowOn',
-            'onScriptGlowOff',
-            'onBlockGlowOn',
-            'onBlockGlowOff',
-            'onProgramModeUpdate',
-            'onTargetsUpdate',
-            'onVisualReport',
-            'onActivateColorPicker',
-            'onWorkspaceUpdate',
-            'onWorkspaceMetricsChange',
-            'setBlocks',
-            'setLocale',
-            'workspaceToCode'
+            "attachVM",
+            "detachVM",
+            "getToolboxXML",
+            "handleBlocksInfoUpdate",
+            "handleCategorySelected",
+            "handleConnectionModalStart",
+            "handleDeviceAdded",
+            "handleDeviceChanged",
+            "handleDeviceExtensionAdded",
+            "handleDeviceExtensionRemoved",
+            "handleDeviceSelected",
+            "handleDrop",
+            "handleExtensionAdded",
+            "handleStatusButtonUpdate",
+            "handleOpenSoundRecorder",
+            "handleCodeNeedUpdate",
+            "handlePromptStart",
+            "handlePromptCallback",
+            "handlePromptClose",
+            "handleToolboxUploadFinish",
+            "handleCustomProceduresClose",
+            "onScriptGlowOn",
+            "onScriptGlowOff",
+            "onBlockGlowOn",
+            "onBlockGlowOff",
+            "onProgramModeUpdate",
+            "onTargetsUpdate",
+            "onVisualReport",
+            "onActivateColorPicker",
+            "onWorkspaceUpdate",
+            "onWorkspaceMetricsChange",
+            "setBlocks",
+            "setLocale",
+            "workspaceToCode",
+            "forceRefreshWorkspace",
         ]);
         this.ScratchBlocks.prompt = this.handlePromptStart;
         this.ScratchBlocks.statusButtonCallback = this.handleConnectionModalStart;
@@ -126,6 +128,12 @@ class Blocks extends React.Component {
         toolboxWorkspace.registerButtonCallback('MAKE_A_VARIABLE', varListButtonCallback(''));
         toolboxWorkspace.registerButtonCallback('MAKE_A_LIST', varListButtonCallback('list'));
         toolboxWorkspace.registerButtonCallback('MAKE_A_PROCEDURE', procButtonCallback);
+        toolboxWorkspace.registerButtonCallback('trainModel', (e, p) => {
+            this.props.vm.runtime.emit("start_img_train");
+        });
+        toolboxWorkspace.registerButtonCallback('startImgPredict', (e, p) => {
+            this.props.vm.runtime.emit("start_img_predict", {uuid: "mg_predict", type: "tm"});
+        });
 
         // Store the xml of the toolbox that is actually rendered.
         // This is used in componentDidUpdate instead of prevProps, because
@@ -155,11 +163,6 @@ class Blocks extends React.Component {
         addFunctionListener(this.workspace, 'zoom', this.onWorkspaceMetricsChange);
 
         this.attachVM();
-        // Only update blocks/vm locale when visible to avoid sizing issues
-        // If locale changes while not visible it will get handled in didUpdate
-        if (this.props.isVisible) {
-            this.setLocale();
-        }
     }
     shouldComponentUpdate (nextProps, nextState) {
         return (
@@ -175,7 +178,90 @@ class Blocks extends React.Component {
             this.props.isCodeEditorLocked !== nextProps.isCodeEditorLocked
         );
     }
+    forceRefreshWorkspace() {
+        // this.props.vm.refreshWorkspace();
+        // this.handleCodeNeedUpdate();
+        // this.props.vm.runtime.emitProjectChanged();
+        // this.props.vm.runtime.requestCodeUpdate();
+        // this.requestGetXMLAndUpdateToolbox();
+        // const workspaceConfig = defaultsDeep(
+        //     {},
+        //     Blocks.defaultOptions,
+        //     this.props.options,
+        //     { rtl: this.props.isRtl, toolbox: this.props.toolboxXML }
+        // );
+        // const oldDefaultToolbox = this.ScratchBlocks.Blocks.defaultToolbox;
+        // this.ScratchBlocks.Blocks.defaultToolbox = null;
+        // this.workspace = this.ScratchBlocks.inject(this.blocks, workspaceConfig);
+        // this.ScratchBlocks.Blocks.defaultToolbox = oldDefaultToolbox;
+        // const offset = this.workspace.toolbox_.getCategoryScrollOffset();
+        // this.blocks.innerHTML="";
+        // this.componentDidMount();
+        // setTimeout(() => {
+        //     this.workspace.toolbox_.setFlyoutScrollPos(offset);
+        // })
+        const categoryId = this.workspace.toolbox_.getSelectedCategoryId();
+        const offset = this.workspace.toolbox_.getCategoryScrollOffset();
+        this.detachVM();
+        this.workspace.dispose();
+        this.blocks.innerHTML = "";
+        const workspaceConfig = defaultsDeep({},
+            Blocks.defaultOptions,
+            this.props.options,
+            {rtl: this.props.isRtl, toolbox: this.props.toolboxXML}
+        );
+        this.workspace = this.ScratchBlocks.inject(this.blocks, workspaceConfig);
+        const currentCategoryPos = this.workspace.toolbox_.getCategoryPositionById(categoryId);
+        const currentCategoryLen = this.workspace.toolbox_.getCategoryLengthById(categoryId);
+        if (offset < currentCategoryLen) {
+            this.workspace.toolbox_.setFlyoutScrollPos(currentCategoryPos + offset);
+        } else {
+            this.workspace.toolbox_.setFlyoutScrollPos(currentCategoryPos);
+        }
+        // this.workspace.toolbox_.setFlyoutScrollPos(offset);
+
+        // Register buttons under new callback keys for creating variables,
+        // lists, and procedures from extensions.
+
+        const toolboxWorkspace = this.workspace.getFlyout().getWorkspace();
+
+        const varListButtonCallback = type =>
+            (() => this.ScratchBlocks.Variables.createVariable(this.workspace, null, type));
+        const procButtonCallback = () => {
+            this.ScratchBlocks.Procedures.createProcedureDefCallback_(this.workspace);
+        };
+
+        toolboxWorkspace.registerButtonCallback('MAKE_A_VARIABLE', varListButtonCallback(''));
+        toolboxWorkspace.registerButtonCallback('MAKE_A_LIST', varListButtonCallback('list'));
+        toolboxWorkspace.registerButtonCallback('MAKE_A_PROCEDURE', procButtonCallback);
+        toolboxWorkspace.registerButtonCallback('trainModel', (e, p) => {
+            this.props.vm.runtime.emit("start_img_train");
+        });
+        toolboxWorkspace.registerButtonCallback('startImgPredict', (e, p) => {
+            this.props.vm.runtime.emit("start_img_predict", {uuid: "mg_predict", type: "tm"});
+        });
+
+        // we actually never want the workspace to enable "refresh toolbox" - this basically re-renders the
+        // entire toolbox every time we reset the workspace.  We call updateToolbox as a part of
+        // componentDidUpdate so the toolbox will still correctly be updated
+        this.setToolboxRefreshEnabled = this.workspace.setToolboxRefreshEnabled.bind(this.workspace);
+        this.workspace.setToolboxRefreshEnabled = () => {
+            this.setToolboxRefreshEnabled(false);
+        };
+
+        // @todo change this when blockly supports UI events
+        addFunctionListener(this.workspace, 'translate', this.onWorkspaceMetricsChange);
+        addFunctionListener(this.workspace, 'zoom', this.onWorkspaceMetricsChange);
+
+        this.attachVM();
+        // Only update blocks/vm locale when visible to avoid sizing issues
+        // If locale changes while not visible it will get handled in didUpdate
+        if (this.props.isVisible) {
+            this.setLocale();
+        }
+    }
     componentDidUpdate (prevProps) {
+        console.log("componentDidUpdate");
         // If any modals are open, call hideChaff to close z-indexed field editors
         if (this.props.anyModalVisible && !prevProps.anyModalVisible) {
             this.ScratchBlocks.hideChaff();
@@ -311,6 +397,7 @@ class Blocks extends React.Component {
         this.props.vm.addListener('DEVICE_ADDED', this.handleDeviceAdded);
         this.props.vm.addListener('DEVICE_EXTENSION_ADDED', this.handleDeviceExtensionAdded);
         this.props.vm.addListener('BLOCKSINFO_UPDATE', this.handleBlocksInfoUpdate);
+        this.props.vm.addListener('FORCE_REFRESH_WORKSPACE', this.forceRefreshWorkspace);
         this.props.vm.addListener('PERIPHERAL_CONNECTED', this.handleStatusButtonUpdate);
         this.props.vm.addListener('PERIPHERAL_DISCONNECTED', this.handleStatusButtonUpdate);
         this.props.vm.addListener('CODE_NEED_UPDATE', this.onCodeNeedUpdate);
@@ -329,6 +416,7 @@ class Blocks extends React.Component {
         this.props.vm.removeListener('DEVICE_EXTENSION_ADDED', this.handleDeviceExtensionAdded);
         this.props.vm.removeListener('DEVICE_EXTENSION_REMOVED', this.handleDeviceExtensionRemoved);
         this.props.vm.removeListener('BLOCKSINFO_UPDATE', this.handleBlocksInfoUpdate);
+        this.props.vm.removeListener('FORCE_REFRESH_WORKSPACE', this.forceRefreshWorkspace);
         this.props.vm.removeListener('PERIPHERAL_CONNECTED', this.handleStatusButtonUpdate);
         this.props.vm.removeListener('PERIPHERAL_DISCONNECTED', this.handleStatusButtonUpdate);
         this.props.vm.removeListener('CODE_NEED_UPDATE', this.onCodeNeedUpdate);
@@ -470,7 +558,7 @@ class Blocks extends React.Component {
                 const staticBlocksJson = [];
                 const dynamicBlocksInfo = [];
                 blockInfoArray.forEach(blockInfo => {
-                    if (blockInfo.info && blockInfo.info.isDynamic) {
+                    if (blockInfo.info && blockInfo.info.isDynamic1) {
                         dynamicBlocksInfo.push(blockInfo);
                     } else if (blockInfo.json) {
                         staticBlocksJson.push(blockInfo.json);
@@ -491,7 +579,7 @@ class Blocks extends React.Component {
             }
         };
 
-        // openblock-blocks implements a menu or custom field as a special kind of block ("shadow" block)
+        // delightmom-scratch-blocks implements a menu or custom field as a special kind of block ("shadow" block)
         // these actually define blocks and MUST run regardless of the UI state
         defineBlocks(
             Object.getOwnPropertyNames(categoryInfo.customFieldTypes)
@@ -503,6 +591,7 @@ class Blocks extends React.Component {
         const toolboxXML = this.getToolboxXML();
         if (toolboxXML) {
             this.props.updateToolboxState(toolboxXML);
+            this.requestToolboxUpdate();
         }
     }
 
@@ -569,7 +658,7 @@ class Blocks extends React.Component {
                     }
                 };
 
-                // openblock-blocks implements a menu or custom field as a special kind of block ("shadow" block)
+                // delightmom-scratch-blocks implements a menu or custom field as a special kind of block ("shadow" block)
                 // these actually define blocks and MUST run regardless of the UI state
                 defineBlocks(
                     Object.getOwnPropertyNames(categoryInfo.customFieldTypes)
@@ -699,7 +788,7 @@ class Blocks extends React.Component {
     /*
      * Pass along information about proposed name and variable options (scope and isCloud)
      * and additional potentially conflicting variable names from the VM
-     * to the variable validation prompt callback used in openblock-blocks.
+     * to the variable validation prompt callback used in delightmom-scratch-blocks.
      */
     handlePromptCallback (input, variableOptions) {
         this.state.prompt.callback(
@@ -768,6 +857,7 @@ class Blocks extends React.Component {
         /* eslint-enable no-unused-vars */
         return (
             <React.Fragment>
+                <button onClick={this.forceRefreshWorkspace}>debug</button>
                 <DroppableBlocks
                     componentRef={this.setBlocks}
                     onDrop={this.handleDrop}

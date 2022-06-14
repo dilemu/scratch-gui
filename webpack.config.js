@@ -15,6 +15,7 @@ var postcssImport = require('postcss-import');
 
 const STATIC_PATH = process.env.STATIC_PATH || '/static';
 const MONACO_DIR = path.resolve(__dirname, './node_modules/monaco-editor');
+const ANTD_DIR = path.resolve(__dirname, './node_modules/@ant-design');
 
 const base = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
@@ -40,7 +41,8 @@ const base = {
                 path.resolve(__dirname, 'src'),
                 /node_modules[\\/]scratch-[^\\/]+[\\/]src/,
                 /node_modules[\\/]pify/,
-                /node_modules[\\/]@vernier[\\/]godirect/
+                /node_modules[\\/]@vernier[\\/]godirect/,
+                /node_modules[\\/]@ant-design/
             ],
             options: {
                 // Explicitly disable babelrc so we don't catch various config
@@ -58,7 +60,7 @@ const base = {
         },
         {
             test: /\.css$/,
-            exclude: MONACO_DIR,
+            exclude: [MONACO_DIR, /antd.css/, /web-cam.css/, /tm-img-train.css/],
             use: [{
                 loader: 'style-loader'
             }, {
@@ -85,7 +87,7 @@ const base = {
         },
         {
             test: /\.css$/,
-            include: MONACO_DIR,
+            include: [MONACO_DIR, /antd.css/, /web-cam.css/, /tm-img-train.css/],
             use: ['style-loader', 'css-loader']
         }]
     },
@@ -151,33 +153,33 @@ module.exports = [
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'gui'],
                 template: 'src/playground/index.ejs',
-                title: 'Dbit+',
+                title: 'DBit+',
                 sentryConfig: process.env.SENTRY_CONFIG ? '"' + process.env.SENTRY_CONFIG + '"' : null
             }),
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'blocksonly'],
                 template: 'src/playground/index.ejs',
                 filename: 'blocks-only.html',
-                title: 'OpenBlock GUI: Blocks Only Example'
+                title: 'DBit+ GUI: Blocks Only Example'
             }),
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'compatibilitytesting'],
                 template: 'src/playground/index.ejs',
                 filename: 'compatibility-testing.html',
-                title: 'OpenBlock GUI: Compatibility Testing'
+                title: 'DBit+ GUI: Compatibility Testing'
             }),
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'player'],
                 template: 'src/playground/index.ejs',
                 filename: 'player.html',
-                title: 'OpenBlock GUI: Player Example'
+                title: 'DBit+ GUI: Player Example'
             }),
             new CopyWebpackPlugin([{
                 from: 'static',
                 to: 'static'
             }]),
             new CopyWebpackPlugin([{
-                from: 'node_modules/openblock-blocks/media',
+                from: 'node_modules/delightmom-scratch-blocks/media',
                 to: 'static/blocks-media'
             }]),
             new CopyWebpackPlugin([{
@@ -187,7 +189,7 @@ module.exports = [
             }]),
             new CopyWebpackPlugin([{
                 from: 'extension-worker.{js,js.map}',
-                context: 'node_modules/openblock-vm/dist/web'
+                context: 'node_modules/delightmom-scratch-vm/dist/web'
             }])
         ])
     })
@@ -197,7 +199,7 @@ module.exports = [
         defaultsDeep({}, base, {
             target: 'web',
             entry: {
-                'openblock-gui': './src/index.js'
+                'delightmom-scratch-gui': './src/index.js'
             },
             output: {
                 libraryTarget: 'umd',
@@ -222,12 +224,12 @@ module.exports = [
             },
             plugins: base.plugins.concat([
                 new CopyWebpackPlugin([{
-                    from: 'node_modules/openblock-blocks/media',
+                    from: 'node_modules/delightmom-scratch-blocks/media',
                     to: 'static/blocks-media'
                 }]),
                 new CopyWebpackPlugin([{
                     from: 'extension-worker.{js,js.map}',
-                    context: 'node_modules/openblock-vm/dist/web'
+                    context: 'node_modules/delightmom-scratch-vm/dist/web'
                 }]),
                 // Include library JSON files for scratch-desktop to use for downloading
                 new CopyWebpackPlugin([{

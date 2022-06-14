@@ -33,6 +33,7 @@ import deviceReducer, {deviceInitialState} from './device';
 import deviceDataReducer, {deviceDataInitialState} from './device-data';
 import hardwareConsoleReducer, {hardwareConsoleInitialState} from './hardware-console';
 import updateReducer, {updateInitialState} from './update';
+import sessionStateReducer,{initializedSession} from './session'
 
 import decks from '../lib/libraries/decks/index.jsx';
 
@@ -71,7 +72,8 @@ const guiInitialState = {
     vmStatus: vmStatusInitialState,
     workspaceMetrics: workspaceMetricsInitialState,
     programMode: programModeInitialState,
-    update: updateInitialState
+    update: updateInitialState,
+    session: initializedSession 
 };
 
 const initPlayer = function (currentState) {
@@ -176,7 +178,8 @@ const guiReducer = combineReducers({
     vmStatus: vmStatusReducer,
     workspaceMetrics: workspaceMetricsReducer,
     programMode: programModeReducer,
-    update: updateReducer
+    update: updateReducer,
+    session: sessionStateReducer
 });
 
 export {

@@ -1,20 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {compose} from 'redux';
-import {FormattedMessage} from 'react-intl';
+import React from "react";
+import ReactDOM from "react-dom";
+import { compose } from "redux";
+import { FormattedMessage } from 'react-intl';
 
-import AppStateHOC from '../lib/app-state-hoc.jsx';
-import GUI from '../containers/gui.jsx';
-import HashParserHOC from '../lib/hash-parser-hoc.jsx';
-import log from '../lib/log.js';
+import AppStateHOC from "../lib/app-state-hoc.jsx";
+import GUI from "../containers/gui.jsx";
+import HashParserHOC from "../lib/hash-parser-hoc.jsx";
+import log from "../lib/log.js";
 import MessageBoxType from '../lib/message-box.js';
 
 const onClickLogo = () => {
-    window.location = 'https://openblockcc.github.io/wiki/';
+    window.location = "https://delightmom.com";
 };
 
 const onClickCheckUpdate = () => {
-    log('User click check update');
+    log("User click check update");
 };
 
 const onClickUpdate = () => {
@@ -26,23 +26,23 @@ const onAbortUpdate = () => {
 };
 
 const onClickClearCache = () => {
-    log('User click clear cahce');
+    log("User click clear cahce");
 };
 
 const onClickInstallDriver = () => {
-    log('User click install driver');
+    log("User click install driver");
 };
 
 const handleTelemetryModalCancel = () => {
-    log('User canceled telemetry modal');
+    log("User canceled telemetry modal");
 };
 
 const handleTelemetryModalOptIn = () => {
-    log('User opted into telemetry');
+    log("User opted into telemetry");
 };
 
 const handleTelemetryModalOptOut = () => {
-    log('User opted out of telemetry');
+    log("User opted out of telemetry");
 };
 
 const onClickAbout = [
@@ -85,22 +85,23 @@ const handleShowMessageBox = (type, message) => {
  * that instantiates the VM causes unsupported browsers to crash
  * {object} appTarget - the DOM element to render to
  */
-export default appTarget => {
+export default (appTarget) => {
     GUI.setAppElement(appTarget);
 
     // note that redux's 'compose' function is just being used as a general utility to make
     // the hierarchy of HOC constructor calls clearer here; it has nothing to do with redux's
     // ability to compose reducers.
-    const WrappedGui = compose(
-        AppStateHOC,
-        HashParserHOC
-    )(GUI);
+    const WrappedGui = compose(AppStateHOC, HashParserHOC)(GUI);
 
     // TODO a hack for testing the backpack, allow backpack host to be set by url param
-    const backpackHostMatches = window.location.href.match(/[?&]backpack_host=([^&]*)&?/);
+    const backpackHostMatches = window.location.href.match(
+        /[?&]backpack_host=([^&]*)&?/
+    );
     const backpackHost = backpackHostMatches ? backpackHostMatches[1] : null;
 
-    const scratchDesktopMatches = window.location.href.match(/[?&]isScratchDesktop=([^&]+)/);
+    const scratchDesktopMatches = window.location.href.match(
+        /[?&]isScratchDesktop=([^&]+)/
+    );
     let simulateScratchDesktop;
     if (scratchDesktopMatches) {
         try {
@@ -113,14 +114,14 @@ export default appTarget => {
         }
     }
 
-    if (process.env.NODE_ENV === 'production' && typeof window === 'object') {
+    if (process.env.NODE_ENV === "production" && typeof window === "object") {
         // Warn before navigating away
         window.onbeforeunload = () => true;
     }
 
     ReactDOM.render(
         // important: this is checking whether `simulateScratchDesktop` is truthy, not just defined!
-        simulateScratchDesktop ?
+        simulateScratchDesktop ? (
             <WrappedGui
                 canEditTitle
                 isScratchDesktop
@@ -136,7 +137,8 @@ export default appTarget => {
                 onClickClearCache={onClickClearCache}
                 onClickInstallDriver={onClickInstallDriver}
                 onShowMessageBox={handleShowMessageBox}
-            /> :
+            />
+        ) : (
             <WrappedGui
                 canEditTitle
                 backpackVisible
@@ -145,6 +147,8 @@ export default appTarget => {
                 canSave={false}
                 onClickLogo={onClickLogo}
                 onShowMessageBox={handleShowMessageBox}
-            />,
-        appTarget);
+            />
+        ),
+        appTarget
+    );
 };

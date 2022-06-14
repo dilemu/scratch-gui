@@ -3,7 +3,7 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
-import VM from 'openblock-vm';
+import VM from 'delightmom-scratch-vm';
 
 import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
@@ -71,14 +71,11 @@ const StageHeaderComponent = function (props) {
         const stageButton = showBranding ? (
             <div className={styles.embedScratchLogo}>
                 <a
-                    href="https://openblock.cc"
+                    href="https://delightmom.com"
                     rel="noopener noreferrer"
                     target="_blank"
                 >
-                    <img
-                        alt="OpenBlock"
-                        src={scratchLogo}
-                    />
+                    <img alt="DBit+" src={scratchLogo} />
                 </a>
             </div>
         ) : (
@@ -88,7 +85,9 @@ const StageHeaderComponent = function (props) {
                 onKeyPress={onKeyPress}
             >
                 <img
-                    alt={props.intl.formatMessage(messages.unFullStageSizeMessage)}
+                    alt={props.intl.formatMessage(
+                        messages.unFullStageSizeMessage
+                    )}
                     className={styles.stageButtonIcon}
                     draggable={false}
                     src={unFullScreenIcon}

@@ -12,7 +12,7 @@ import bindAll from "lodash.bindall";
 import bowser from "bowser";
 import React from "react";
 
-import VM from "openblock-vm";
+import VM from "delightmom-scratch-vm";
 
 // <<<<<<< HEAD
 // import Box from "../box/box.jsx";
@@ -65,6 +65,7 @@ import {
     openUpdateModal,
     openConnectionModal,
     openDeviceLibrary,
+    openLoginModal
 } from "../../reducers/modals";
 import { setPlayer } from "../../reducers/mode";
 import {
@@ -120,6 +121,7 @@ import dropdownCaret from "./dropdown-caret.svg";
 import languageIcon from "../language-selector/language-icon.svg";
 import aboutIcon from "./icon--about.svg";
 import linkSocketIcon from "./icon--link-socket.svg"; // eslint-disable-line no-unused-vars
+import defaultUser from "./defaultUser.png"
 
 import scratchLogo from "./scratch-logo.png";
 
@@ -132,12 +134,17 @@ import unconnectedIcon from "./icon--unconnected.svg";
 import connectedIcon from "./icon--connected.svg";
 import fileIcon from "./icon--file.svg";
 import navIcon from "./icon--nav.svg";
+import delpoyIcon from "./icon--deploy.png";
 import screenshotIcon from "./icon--screenshot.svg";
 import settingIcon from "./icon--setting.svg";
 
 import uploadFirmwareIcon from './icon--upload-firmware.svg';
 import saveSvgAsPng from 'openblock-save-svg-as-png';
-import {showAlertWithTimeout} from '../../reducers/alerts';
+import downloadFirmwareIcon from "./icon--download-firmware.svg";
+import saveSvgAsPng from "openblock-save-svg-as-png";
+import { showAlertWithTimeout } from "../../reducers/alerts";
+import { clearSession } from "../../reducers/session"
+import { message } from 'antd';
 
 const ariaMessages = defineMessages({
     language: {
@@ -238,6 +245,12 @@ class MenuBar extends React.Component {
             'handleCheckUpdate',
             'handleClearCache'
         ]);
+        this.props.vm.runtime.on("MESSAGE_INFO", msg => {
+            message.info(msg)
+        })
+        this.props.vm.runtime.on("MESSAGE_ERROR", err => {
+            message.error(err)
+        })
     }
     componentDidMount() {
         document.addEventListener("keydown", this.handleKeyPress);
@@ -495,6 +508,45 @@ class MenuBar extends React.Component {
             this.props.onRequestCloseAbout();
         };
     }
+
+    handleRenderLogin() {
+        //登录操作
+        return (
+            <Login
+                onLogIn={(formData, restoreStateInLoginComponent) => {
+                    new Promise((resolve, reject) => {
+                        requestLogin(resolve, reject, formData);
+                    }).then(
+                        (body) => {
+                            if (body.status == "OK") {
+                                this.props.onSetSession(body);
+                                this.props.onRequestCloseAccount(); //关闭登录后弹出账号菜单
+                            } else {
+                                alert(body.status); //提示用户登录不成功的原因
+                                restoreStateInLoginComponent();
+                            }
+                        },
+                        (err) => {
+                            restoreStateInLoginComponent();
+                        }
+                    );
+                }}
+            />
+        );
+    }
+    handleLogout() {
+        //退出账号登录状态
+        new Promise((resolve, reject) => {
+            requestLogout(resolve, reject, `id=${this.props.userid}`);
+        }).then(
+            (body) => {
+                this.props.onSetSession(initializedSession);
+                //this.props.onRequestCloseAccount()//关闭登录菜单
+            },
+            (err) => {}
+        );
+    }
+
     render() {
         const saveNowMessage = (
             <FormattedMessage
@@ -758,34 +810,49 @@ class MenuBar extends React.Component {
                             </MenuSection>
                         </MenuBarMenu>
                     </div>
+                    <div
+                        className={classNames(
+                            styles.menuBarItem,
+                            styles.hoverable
+                        )}
+                    >
+                        <img className={styles.fileIcon} src={delpoyIcon} />
+                        <div className={classNames(styles.editMenu)}>
+                            <FormattedMessage
+                                defaultMessage="发布"
+                                description="Text for deploy dropdown menu"
+                                id="gui.menuBar.deploy"
+                            />
+                        </div>
+                    </div>
                     {/* <div className={styles.fileMenu}>
                         
                     </div> */}
                     {this.props.canEditTitle ? (
-                            <div
-                                className={classNames(
-                                    styles.menuBarItem,
-                                    styles.growable
-                                )}
-                            >
-                                <MenuBarItemTooltip enable id="title-field">
-                                    <ProjectTitleInput
-                                        className={classNames(
-                                            styles.titleFieldGrowable
-                                        )}
-                                    />
-                                </MenuBarItemTooltip>
-                            </div>
-                        ) : this.props.authorUsername &&
-                          this.props.authorUsername !== this.props.username ? (
-                            <AuthorInfo
-                                className={styles.authorInfo}
-                                imageUrl={this.props.authorThumbnailUrl}
-                                projectTitle={this.props.projectTitle}
-                                userId={this.props.authorId}
-                                username={this.props.authorUsername}
-                            />
-                        ) : null}
+                        <div
+                            className={classNames(
+                                styles.menuBarItem,
+                                styles.growable
+                            )}
+                        >
+                            <MenuBarItemTooltip enable id="title-field">
+                                <ProjectTitleInput
+                                    className={classNames(
+                                        styles.titleFieldGrowable
+                                    )}
+                                />
+                            </MenuBarItemTooltip>
+                        </div>
+                    ) : this.props.authorUsername &&
+                      this.props.authorUsername !== this.props.username ? (
+                        <AuthorInfo
+                            className={styles.authorInfo}
+                            imageUrl={this.props.authorThumbnailUrl}
+                            projectTitle={this.props.projectTitle}
+                            userId={this.props.authorId}
+                            username={this.props.authorUsername}
+                        />
+                    ) : null}
                 </div>
                 {/* <Divider className={classNames(styles.divider)} /> */}
                 {/* <div
@@ -974,7 +1041,68 @@ class MenuBar extends React.Component {
                         </div>
                     ) : null} */}
                 </div>
-                { (typeof this.props.onClickAbout === 'function') ? aboutButton : null}
+                {this.props.username ? (
+                    // ************ user is logged in ************
+                    <React.Fragment>
+                        <div
+                            className={classNames(
+                                styles.menuBarItem,
+                                styles.hoverable,
+                                styles.accountNavMenu
+                            )}
+                        >
+                            <AccountNav
+                                className={classNames(
+                                    styles.menuBarItem,
+                                    styles.hoverable,
+                                    {
+                                        [styles.active]:
+                                            this.props.accountMenuOpen,
+                                    }
+                                )}
+                                isOpen={this.props.accountMenuOpen}
+                                isRtl={this.props.isRtl}
+                                menuBarMenuClassName={classNames(
+                                    styles.menuBarMenu
+                                )}
+                                onClick={this.props.onClickAccount}
+                                onClose={this.props.onRequestCloseAccount}
+                                onLogOut={this.props.onLogOut}
+                                classroomId={this.props.userData.request_id}
+                                thumbnailUrl={
+                                    this.props.userData.avatar || defaultUser
+                                }
+                                username={this.props.userData.username}
+                            />
+                        </div>
+                    </React.Fragment>
+                ) : (
+                    <React.Fragment>
+                        <div
+                            className={classNames(
+                                styles.menuBarItem,
+                                styles.hoverable
+                            )}
+                            key="login"
+                            onMouseUp={this.props.onClickLogin}
+                            onClick={this.props.onClickLoginPopup}
+                        >
+                            <FormattedMessage
+                                defaultMessage="Sign in"
+                                description="Link for signing in to your Scratch account"
+                                id="gui.menuBar.signIn"
+                            />
+                            {/* <LoginDropdown
+                                className={classNames(styles.menuBarMenu)}
+                                isOpen={this.props.loginMenuOpen}
+                                isRtl={this.props.isRtl}
+                                renderLogin={this.props.renderLogin}
+                                onClose={this.props.onRequestCloseLogin}
+                            /> */}
+                        </div>
+                    </React.Fragment>
+                )}
+                {(typeof this.props.onClickAbout === 'function') ? aboutButton : null}
             </Box>
         );
     }
@@ -1080,6 +1208,7 @@ MenuBar.propTypes = {
     deviceId: PropTypes.string,
     deviceName: PropTypes.string,
     onDeviceIsEmpty: PropTypes.func,
+    onClickLoginPopup: PropTypes.func
 };
 
 MenuBar.defaultProps = {
@@ -1110,7 +1239,8 @@ const mapStateToProps = (state, ownProps) => {
         realtimeConnection: state.scratchGui.connectionModal.realtimeConnection,
         sessionExists:
             state.session && typeof state.session.session !== "undefined",
-        username: user ? user.username : null,
+        username: state.scratchGui.session.username,
+        userData: state.scratchGui.session,
         userOwnsProject:
             ownProps.authorUsername &&
             user &&
@@ -1125,6 +1255,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => ({
     autoUpdateProject: () => dispatch(autoUpdateProject()),
+    onClickLoginPopup: () => dispatch(openLoginModal()),
     onOpenTipLibrary: () => dispatch(openTipsLibrary()),
     onClickAccount: () => dispatch(openAccountMenu()),
     onRequestCloseAccount: () => dispatch(closeAccountMenu()),
@@ -1170,6 +1301,9 @@ const mapDispatchToProps = (dispatch) => ({
         showAlertWithTimeout(dispatch, "workspaceIsNotEmpty"),
     onOpenDeviceLibrary: () => dispatch(openDeviceLibrary()),
     onDeviceIsEmpty: () => showAlertWithTimeout(dispatch, "selectADeviceFirst"),
+    onLogOut(){
+        dispatch(clearSession())
+    }
 });
 
 export default compose(
