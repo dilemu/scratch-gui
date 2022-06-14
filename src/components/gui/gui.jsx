@@ -105,12 +105,13 @@ const GUIComponent = props => {
         onLogOut,
         onOpenRegistration,
         onToggleLoginOpen,
+        onAbortUpdate,
         onActivateCostumesTab,
         onActivateSoundsTab,
         onActivateTab,
         onClickLogo,
         onClickCheckUpdate,
-        onClickUpgrade,
+        onClickUpdate,
         onClickClearCache,
         onClickInstallDriver,
         onExtensionButtonClick,
@@ -122,6 +123,7 @@ const GUIComponent = props => {
         onShare,
         onShowPrivacyPolicy,
         onStartSelectingFileUpload,
+        onShowMessageBox,
         onTelemetryModalCancel,
         onTelemetryModalOptIn,
         onTelemetryModalOptOut,
@@ -234,7 +236,9 @@ const GUIComponent = props => {
                 {updateModalVisible ? (
                     <UpdateModal
                         vm={vm}
-                        onClickUpgrade={onClickUpgrade}
+                        onAbortUpdate={onAbortUpdate}
+                        onClickUpdate={onClickUpdate}
+                        onShowMessageBox={onShowMessageBox}
                     />
                 ) : null}
                 <MenuBar
@@ -266,6 +270,7 @@ const GUIComponent = props => {
                     onSeeCommunity={onSeeCommunity}
                     onShare={onShare}
                     onStartSelectingFileUpload={onStartSelectingFileUpload}
+                    onShowMessageBox={onShowMessageBox}
                     onToggleLoginOpen={onToggleLoginOpen}
                     onClickCheckUpdate={onClickCheckUpdate}
                     onClickClearCache={onClickClearCache}
@@ -295,7 +300,9 @@ const GUIComponent = props => {
                                         />
                                     </Tab>
                                     <Tab
-                                        className={tabClassNames.tab}
+                                        className={classNames(tabClassNames.tab,
+                                            isRealtimeMode ? styles.hideCustomAndSoundTab :
+                                                styles.showCustomAndSoundTab)}
                                         onClick={onActivateCostumesTab}
                                     >
                                         <img
@@ -317,7 +324,9 @@ const GUIComponent = props => {
                                         )}
                                     </Tab>
                                     <Tab
-                                        className={tabClassNames.tab}
+                                        className={classNames(tabClassNames.tab,
+                                            isRealtimeMode ? styles.hideCustomAndSoundTab :
+                                                styles.showCustomAndSoundTab)}
                                         onClick={onActivateSoundsTab}
                                     >
                                         <img
@@ -365,7 +374,10 @@ const GUIComponent = props => {
                                     {costumesTabVisible ? <CostumeTab vm={vm} /> : null}
                                 </TabPanel>
                                 <TabPanel className={tabClassNames.tabPanel}>
-                                    {soundsTabVisible ? <SoundTab vm={vm} /> : null}
+                                    {soundsTabVisible ? <SoundTab
+                                        vm={vm}
+                                        onShowMessageBox={onShowMessageBox}
+                                    /> : null}
                                 </TabPanel>
                             </Tabs>
                             {/*
@@ -374,12 +386,9 @@ const GUIComponent = props => {
                                     ) : null
                                 */}
                         </Box>
-
-                        {/* stageAndTargetWrapper should use css to control show or hidden,
-                        prevent scratch-vm error due to unload StageWrapper */}
                         <Box
                             className={classNames(styles.stageAndTargetWrapper, styles[stageSize],
-                                isRealtimeMode ? styles.show : styles.hidden)}
+                                isRealtimeMode ? styles.showStage : styles.hideStage)}
                         >
                             <StageWrapper
                                 isFullScreen={isFullScreen}
@@ -452,7 +461,8 @@ GUIComponent.propTypes = {
     onClickAccountNav: PropTypes.func,
     onClickLogo: PropTypes.func,
     onClickCheckUpdate: PropTypes.func,
-    onClickUpgrade: PropTypes.func,
+    onAbortUpdate: PropTypes.func,
+    onClickUpdate: PropTypes.func,
     onClickClearCache: PropTypes.func,
     onClickInstallDriver: PropTypes.func,
     onCloseAccountNav: PropTypes.func,
@@ -466,6 +476,7 @@ GUIComponent.propTypes = {
     onShare: PropTypes.func,
     onShowPrivacyPolicy: PropTypes.func,
     onStartSelectingFileUpload: PropTypes.func,
+    onShowMessageBox: PropTypes.func.isRequired,
     onTabSelect: PropTypes.func,
     onTelemetryModalCancel: PropTypes.func,
     onTelemetryModalOptIn: PropTypes.func,

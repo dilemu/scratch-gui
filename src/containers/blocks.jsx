@@ -19,9 +19,11 @@ import {BLOCKS_DEFAULT_SCALE, STAGE_DISPLAY_SIZES} from '../lib/layout-constants
 import DropAreaHOC from '../lib/drop-area-hoc.jsx';
 import DragConstants from '../lib/drag-constants';
 import defineDynamicBlock from '../lib/define-dynamic-block';
+import {getGeneratorNameFromDeviceType} from '../lib/code-generator';
 
 import {connect} from 'react-redux';
 import {updateToolbox, setIsUpdating} from '../reducers/toolbox';
+import {showAlertWithTimeout} from '../reducers/alerts';
 import {activateColorPicker} from '../reducers/color-picker';
 import {closeExtensionLibrary, openSoundRecorder, openConnectionModal, closeDeviceLibrary} from '../reducers/modals';
 import {activateCustomProcedures, deactivateCustomProcedures} from '../reducers/custom-procedures';
@@ -61,7 +63,6 @@ class Blocks extends React.Component {
             'handleCategorySelected',
             'handleConnectionModalStart',
             'handleDeviceAdded',
-            'handleDeviceChanged',
             'handleDeviceExtensionAdded',
             'handleDeviceExtensionRemoved',
             'handleDeviceSelected',
@@ -69,12 +70,12 @@ class Blocks extends React.Component {
             'handleExtensionAdded',
             'handleStatusButtonUpdate',
             'handleOpenSoundRecorder',
-            'handleCodeNeedUpdate',
             'handlePromptStart',
             'handlePromptCallback',
             'handlePromptClose',
             'handleToolboxUploadFinish',
             'handleCustomProceduresClose',
+            'onCodeNeedUpdate',
             'onScriptGlowOn',
             'onScriptGlowOff',
             'onBlockGlowOn',
@@ -100,7 +101,7 @@ class Blocks extends React.Component {
         this.toolboxUpdateQueue = [];
     }
     componentDidMount () {
-        this.ScratchBlocks.FieldColourSlider.activateEyedropper_ = this.onActivateColorPicker; // TODO 实时模式下在此处处理色彩捕捉器
+        this.ScratchBlocks.FieldColourSlider.activateEyedropper_ = this.onActivateColorPicker;
         this.ScratchBlocks.Procedures.externalProcedureDefCallback = this.props.onActivateCustomProcedures;
         this.ScratchBlocks.ScratchMsgs.setLocale(this.props.locale);
 
@@ -135,6 +136,12 @@ class Blocks extends React.Component {
         // This is used in componentDidUpdate to control should update toolbox xml.
         this._programMode = this.props.isRealtimeMode;
 
+        // Creat a flag to control insert spaces that have no actual function after a device is added,
+        // to forcefully update the blocks in the flyout area. In order to avoid the problem of the
+        // rendering of the flyout blocks is not triggered because the contents of the toolbox are
+        // exactly the same when the device blocks have the same opcode but different drop - down menus.
+        this.deviceFakeToolboxHead = '';
+
         // we actually never want the workspace to enable "refresh toolbox" - this basically re-renders the
         // entire toolbox every time we reset the workspace.  We call updateToolbox as a part of
         // componentDidUpdate so the toolbox will still correctly be updated
@@ -164,7 +171,8 @@ class Blocks extends React.Component {
             this.props.locale !== nextProps.locale ||
             this.props.anyModalVisible !== nextProps.anyModalVisible ||
             this.props.stageSize !== nextProps.stageSize ||
-            this.props.isRealtimeMode !== nextProps.isRealtimeMode
+            this.props.isRealtimeMode !== nextProps.isRealtimeMode ||
+            this.props.isCodeEditorLocked !== nextProps.isCodeEditorLocked
         );
     }
     componentDidUpdate (prevProps) {
@@ -175,10 +183,6 @@ class Blocks extends React.Component {
 
         // If program mode changed, call functio to update the toolbox
         if (this.props.isRealtimeMode !== this._programMode) {
-            if (this.props.isRealtimeMode === false) {
-                // Do not update code before toolbox is updated.
-                this._toolboxUpdating = true;
-            }
             // Clear possible errors witch print in to code editor.
             this.props.onSetCodeEditorValue('');
             this.onProgramModeUpdate();
@@ -189,6 +193,10 @@ class Blocks extends React.Component {
         // Do not check against prevProps.toolboxXML because that may not have been rendered.
         if (this.props.isVisible && this.props.toolboxXML !== this._renderedToolboxXML) {
             this.requestToolboxUpdate();
+        }
+
+        if (this.props.isCodeEditorLocked && this.props.isCodeEditorLocked !== prevProps.isCodeEditorLocked) {
+            this.onCodeNeedUpdate();
         }
 
         if (this.props.isVisible === prevProps.isVisible) {
@@ -257,8 +265,6 @@ class Blocks extends React.Component {
         this.workspace.updateToolbox(this.props.toolboxXML);
         this._renderedToolboxXML = this.props.toolboxXML;
 
-        this._toolboxUpdating = false;
-
         // In order to catch any changes that mutate the toolbox during "normal runtime"
         // (variable changes/etc), re-enable toolbox refresh.
         // Using the setter function will rerender the entire toolbox which we just rendered.
@@ -307,7 +313,7 @@ class Blocks extends React.Component {
         this.props.vm.addListener('BLOCKSINFO_UPDATE', this.handleBlocksInfoUpdate);
         this.props.vm.addListener('PERIPHERAL_CONNECTED', this.handleStatusButtonUpdate);
         this.props.vm.addListener('PERIPHERAL_DISCONNECTED', this.handleStatusButtonUpdate);
-        this.props.vm.addListener('CODE_NEED_UPDATE', this.handleCodeNeedUpdate);
+        this.props.vm.addListener('CODE_NEED_UPDATE', this.onCodeNeedUpdate);
         this.props.vm.addListener('TOOLBOX_UPLOAD_FINISH', this.handleToolboxUploadFinish);
     }
     detachVM () {
@@ -325,7 +331,7 @@ class Blocks extends React.Component {
         this.props.vm.removeListener('BLOCKSINFO_UPDATE', this.handleBlocksInfoUpdate);
         this.props.vm.removeListener('PERIPHERAL_CONNECTED', this.handleStatusButtonUpdate);
         this.props.vm.removeListener('PERIPHERAL_DISCONNECTED', this.handleStatusButtonUpdate);
-        this.props.vm.removeListener('CODE_NEED_UPDATE', this.handleCodeNeedUpdate);
+        this.props.vm.removeListener('CODE_NEED_UPDATE', this.onCodeNeedUpdate);
         this.props.vm.removeListener('TOOLBOX_UPLOAD_FINISH', this.handleToolboxUploadFinish);
     }
 
@@ -407,7 +413,8 @@ class Blocks extends React.Component {
                 stageCostumes[stageCostumes.length - 1].name,
                 targetSounds.length > 0 ? targetSounds[targetSounds.length - 1].name : ''
             );
-        } catch {
+        } catch (error) {
+            log.warn(error);
             return null;
         }
     }
@@ -505,6 +512,7 @@ class Blocks extends React.Component {
         if (device) {
             const dev = this.props.deviceData.find(ext => ext.deviceId === device);
             this.props.onDeviceSelected(dev.deviceId, dev.name, dev.type);
+            this.ScratchBlocks.Device.setDevice(dev.deviceId, dev.type);
             if (dev.defaultBaudRate) {
                 this.props.onSetBaudrate(dev.defaultBaudRate);
             }
@@ -513,15 +521,23 @@ class Blocks extends React.Component {
             const supportRealtimeMode = dev.programMode.includes('realtime');
 
             // eslint-disable-next-line no-negated-condition
-            if (!(supportUploadMode && supportRealtimeMode)) {
+            if (supportUploadMode && supportRealtimeMode) {
+                this.props.onSetSupportSwitchMode(true);
+
+                const defaultProgramMode = dev.defaultProgramMode;
+                if (dev.programMode.includes(defaultProgramMode)) {
+                    if (defaultProgramMode === 'upload') {
+                        this.props.vm.runtime.setRealtimeMode(false);
+                    }
+                }
+
+            } else {
                 if (supportUploadMode) {
                     this.props.vm.runtime.setRealtimeMode(false);
                 } else {
                     this.props.vm.runtime.setRealtimeMode(true);
                 }
                 this.props.onSetSupportSwitchMode(false);
-            } else {
-                this.props.onSetSupportSwitchMode(true);
             }
 
             categoryInfoArray.forEach(categoryInfo => {
@@ -568,26 +584,31 @@ class Blocks extends React.Component {
             this.props.onSetSupportSwitchMode(false);
         }
 
-        // Update the toolbox with new blocks if possible, use timeout to let props update first
-        this.requestGetXMLAndUpdateToolbox();
-    }
-    requestGetXMLAndUpdateToolbox () {
-        clearTimeout(this.getXMLAndUpdateToolboxTimeout);
-        this.getXMLAndUpdateToolboxTimeout = setTimeout(() => {
-            this.getXMLAndUpdateToolbox();
-        }, 0);
-    }
-    getXMLAndUpdateToolbox () {
-        this.getXMLAndUpdateToolboxTimeout = false;
-        const toolboxXML = this.getToolboxXML();
-        if (toolboxXML) {
-            this.props.updateToolboxState(toolboxXML);
+        if (this.deviceFakeToolboxHead) {
+            this.deviceFakeToolboxHead = '';
+        } else {
+            this.deviceFakeToolboxHead = ' ';
         }
+
+        // Update the toolbox with new blocks if possible, use timeout to let props update first
+        setTimeout(() => {
+            const toolboxXML = this.getToolboxXML();
+            if (toolboxXML) {
+                this.props.updateToolboxState(this.deviceFakeToolboxHead + toolboxXML);
+            }
+        }, 0);
+
     }
-    handleDeviceExtensionAdded (addExts) {
-        this.ScratchBlocks = addExts.addMsg(this.ScratchBlocks);
-        this.ScratchBlocks = addExts.addGenerator(this.ScratchBlocks);
-        this.ScratchBlocks = addExts.addBlocks(this.ScratchBlocks);
+    handleDeviceExtensionAdded (deviceExtensionsRegister) {
+        if (deviceExtensionsRegister.addMsg) {
+            this.ScratchBlocks = deviceExtensionsRegister.addMsg(this.ScratchBlocks);
+        }
+        if (deviceExtensionsRegister.addGenerator) {
+            this.ScratchBlocks = deviceExtensionsRegister.addGenerator(this.ScratchBlocks);
+        }
+        if (deviceExtensionsRegister.addBlocks) {
+            this.ScratchBlocks = deviceExtensionsRegister.addBlocks(this.ScratchBlocks);
+        }
 
         this.setLocale();
 
@@ -627,11 +648,6 @@ class Blocks extends React.Component {
             this.workspace.toolbox_.setSelectedCategoryById(categoryId);
         });
     }
-    handleDeviceChanged () {
-        if (this.props.peripheralName) {
-            this.props.vm.disconnectPeripheral(this.props.deviceId);
-        }
-    }
     setBlocks (blocks) {
         this.blocks = blocks;
     }
@@ -655,14 +671,10 @@ class Blocks extends React.Component {
         this.ScratchBlocks.refreshStatusButtons(this.workspace);
     }
     workspaceToCode () {
-        let code = '';
+        let code;
         try {
-            const deviceType = this.props.deviceType;
-            if (deviceType === 'arduino') {
-                code = this.ScratchBlocks.Arduino.workspaceToCode(this.workspace);
-            } else if (deviceType === 'microbit') {
-                code = this.ScratchBlocks.Python.workspaceToCode(this.workspace);
-            }
+            const generatorName = getGeneratorNameFromDeviceType(this.props.deviceType);
+            code = this.ScratchBlocks[generatorName].workspaceToCode(this.workspace);
         } catch (e) {
             code = e.message;
         }
@@ -671,9 +683,13 @@ class Blocks extends React.Component {
     handleToolboxUploadFinish () {
         this.props.onToolboxDidUpdate();
     }
-    handleCodeNeedUpdate () {
-        if (this._toolboxUpdating !== true && this.props.isRealtimeMode === false) {
-            this.props.onSetCodeEditorValue(this.workspaceToCode());
+    onCodeNeedUpdate () {
+        if (this.props.isCodeEditorLocked) {
+            if (this.props.isRealtimeMode === false) {
+                this.props.onSetCodeEditorValue(this.workspaceToCode());
+            }
+        } else {
+            this.props.onCodeEditorIsUnlocked();
         }
     }
     handleOpenSoundRecorder () {
@@ -725,6 +741,7 @@ class Blocks extends React.Component {
             options,
             stageSize,
             vm,
+            isCodeEditorLocked,
             isRealtimeMode,
             isRtl,
             isVisible,
@@ -736,6 +753,7 @@ class Blocks extends React.Component {
             onToolboxDidUpdate,
             updateToolboxState,
             onActivateCustomProcedures,
+            onCodeEditorIsUnlocked,
             onRequestCloseExtensionLibrary,
             onRequestCloseDeviceLibrary,
             onRequestCloseCustomProcedures,
@@ -759,6 +777,7 @@ class Blocks extends React.Component {
                     <Prompt
                         defaultValue={this.state.prompt.defaultValue}
                         isStage={vm.runtime.getEditingTarget().isStage}
+                        showListMessage={this.state.prompt.varType === this.ScratchBlocks.LIST_VARIABLE_TYPE}
                         label={this.state.prompt.message}
                         showCloudOption={this.state.prompt.showCloudOption}
                         showVariableOptions={this.state.prompt.showVariableOptions}
@@ -772,7 +791,6 @@ class Blocks extends React.Component {
                     <DeviceLibrary
                         vm={vm}
                         onDeviceSelected={this.handleDeviceSelected}
-                        onDeviceChanged={this.handleDeviceChanged}
                         onRequestClose={onRequestCloseDeviceLibrary}
                     />
                 ) : null}
@@ -806,13 +824,21 @@ Blocks.propTypes = {
     peripheralName: PropTypes.string,
     deviceLibraryVisible: PropTypes.bool,
     extensionLibraryVisible: PropTypes.bool,
+    isCodeEditorLocked: PropTypes.bool.isRequired,
     isRealtimeMode: PropTypes.bool,
     isRtl: PropTypes.bool,
     isVisible: PropTypes.bool,
     locale: PropTypes.string.isRequired,
-    messages: PropTypes.objectOf(PropTypes.string),
+    messages: PropTypes.oneOfType([
+        PropTypes.objectOf(PropTypes.string),
+        PropTypes.shape({
+            format: PropTypes.func,
+            message: PropTypes.string
+        })
+    ]),
     onActivateColorPicker: PropTypes.func,
     onActivateCustomProcedures: PropTypes.func,
+    onCodeEditorIsUnlocked: PropTypes.func,
     onDeviceSelected: PropTypes.func,
     onOpenConnectionModal: PropTypes.func,
     onOpenSoundRecorder: PropTypes.func,
@@ -900,6 +926,7 @@ const mapStateToProps = state => ({
     peripheralName: state.scratchGui.connectionModal.peripheralName,
     deviceLibraryVisible: state.scratchGui.modals.deviceLibrary,
     extensionLibraryVisible: state.scratchGui.modals.extensionLibrary,
+    isCodeEditorLocked: state.scratchGui.code.isCodeEditorLocked,
     isRealtimeMode: state.scratchGui.programMode.isRealtimeMode,
     isRtl: state.locales.isRtl,
     locale: state.locales.locale,
@@ -949,7 +976,8 @@ const mapDispatchToProps = dispatch => ({
     onSetCodeEditorValue: value => {
         dispatch(setCodeEditorValue(value));
     },
-    onSetSupportSwitchMode: state => dispatch(setSupportSwitchMode(state))
+    onSetSupportSwitchMode: state => dispatch(setSupportSwitchMode(state)),
+    onCodeEditorIsUnlocked: () => showAlertWithTimeout(dispatch, 'codeEditorIsUnlocked')
 });
 
 export default errorBoundaryHOC('Blocks')(

@@ -51,28 +51,29 @@ class DeviceLibrary extends React.PureComponent {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleItemSelect'
+            'handleItemSelect',
+            'requestLoadDevice'
         ]);
     }
     componentDidMount () {
         this.props.vm.extensionManager.getDeviceList().then(data => {
-            if (data) {
-                this.props.onSetDeviceData(makeDeviceLibrary(data));
-            }
-        });
+            this.props.onSetDeviceData(makeDeviceLibrary(data));
+        })
+            .catch(() => {
+                this.props.onSetDeviceData(makeDeviceLibrary());
+            });
     }
 
-    handleItemSelect (item) {
-        const id = item.deviceId;
-        const deviceType = item.type;
-        const pnpidList = item.pnpidList;
-        const deviceExtensions = item.deviceExtensions;
+    requestLoadDevice (device) {
+        const id = device.deviceId;
+        const deviceType = device.type;
+        const pnpidList = device.pnpidList;
+        const deviceExtensions = device.deviceExtensions;
 
-        if (id && !item.disabled) {
+        if (id && !device.disabled) {
             if (this.props.vm.extensionManager.isDeviceLoaded(id)) {
                 this.props.onDeviceSelected(id);
             } else {
-                this.props.onDeviceChanged();
                 this.props.vm.extensionManager.loadDeviceURL(id, deviceType, pnpidList).then(() => {
                     this.props.vm.extensionManager.getDeviceExtensionsList().then(() => {
                         // TODO: Add a event for install device extension
@@ -91,6 +92,11 @@ class DeviceLibrary extends React.PureComponent {
         }
     }
 
+    handleItemSelect (item) {
+        this.requestLoadDevice(item);
+        this.props.onRequestClose();
+    }
+
     render () {
         const deviceLibraryThumbnailData = this.props.deviceData.map(device => ({
             rawURL: device.iconURL || deviceIcon,
@@ -104,7 +110,6 @@ class DeviceLibrary extends React.PureComponent {
                 tags={tagListPrefix}
                 id="deviceLibrary"
                 title={this.props.intl.formatMessage(messages.deviceTitle)}
-                visible={this.props.visible}
                 onItemSelected={this.handleItemSelect}
                 onRequestClose={this.props.onRequestClose}
             />
@@ -115,11 +120,9 @@ class DeviceLibrary extends React.PureComponent {
 DeviceLibrary.propTypes = {
     deviceData: PropTypes.instanceOf(Array).isRequired,
     intl: intlShape.isRequired,
-    onDeviceChanged: PropTypes.func,
     onDeviceSelected: PropTypes.func,
     onRequestClose: PropTypes.func,
     onSetDeviceData: PropTypes.func.isRequired,
-    visible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired // eslint-disable-line react/no-unused-prop-types
 };
 

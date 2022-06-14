@@ -26,6 +26,7 @@ const soundPayload = sound => {
         payload.body = assetDataUrl.replace('data:audio/x-wav;base64,', '');
         break;
     default:
+        // TODO: if backpack code is enabled, this function should use the onShowMessageBox()
         alert(`Cannot serialize for format: ${assetDataFormat}`); // eslint-disable-line
     }
 

@@ -24,6 +24,7 @@ const costumePayload = costume => {
         payload.body = assetDataUrl.replace('data:image/png;base64,', '');
         break;
     default:
+        // TODO: if backpack code is enabled, this function should use the onShowMessageBox()
         alert(`Cannot serialize for format: ${assetDataFormat}`); // eslint-disable-line
     }
 

@@ -103,6 +103,7 @@ class RecordModal extends React.Component {
                 onSetTrimStart={this.handleSetTrimStart}
                 onStopPlaying={this.handleStopPlaying}
                 onStopRecording={this.handleStopRecording}
+                onShowMessageBox={this.props.onShowMessageBox}
                 onSubmit={this.handleSubmit}
             />
         );
@@ -111,6 +112,7 @@ class RecordModal extends React.Component {
 
 RecordModal.propTypes = {
     onClose: PropTypes.func,
+    onShowMessageBox: PropTypes.func.isRequired,
     onNewSound: PropTypes.func,
     vm: PropTypes.instanceOf(VM)
 };

@@ -85,13 +85,13 @@
     cursor: pointer;
 }
 
-.download-firmware-logo {
+.upload-firmware-logo {
     height:  1.4rem;
     margin-right: 0.35rem;
     vertical-align: middle;
 }
 
-.download-firmware-logo.clickable {
+.upload-firmware-logo.clickable {
     cursor: pointer;
 }
 

@@ -264,14 +264,14 @@
     flex-direction: column;
 }
 
-.featured-extension-lean-more {
+.featured-extension-learn-more {
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
 }
 
-.featured-extension-lean-more a{
+.featured-extension-learn-more a{
     height: 100%;
     padding-top: 0.4rem;
     font-weight: bold;
@@ -279,7 +279,7 @@
     color: $motion-primary;
 }
 
-.featured-extension-lean-more a:hover {
+.featured-extension-learn-more a:hover {
     text-decoration:underline;
 }
 
@@ -327,7 +327,8 @@
 }
 
 .featured-extension-metadata-detail img{
-    margin-right: 0.25rem;
+    margin-right: 0.5rem;
+    height: 1.25rem;
 }
 
 .coming-soon-text {

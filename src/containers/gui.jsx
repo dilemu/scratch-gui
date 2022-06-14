@@ -55,6 +55,9 @@ class GUI extends React.Component {
             // At this time the project view in www doesn't need to know when a project is unloaded
             this.props.onProjectLoaded();
         }
+        if (this.props.isRealtimeMode !== true) {
+            this.props.onActivateBlocksTab();
+        }
     }
     render () {
         if (this.props.isError) {
@@ -69,6 +72,7 @@ class GUI extends React.Component {
             isError,
             isScratchDesktop,
             isShowingProject,
+            onActivateBlocksTab,
             onProjectLoaded,
             onStorageInit,
             onUpdateProjectId,
@@ -105,6 +109,7 @@ GUI.propTypes = {
     isScratchDesktop: PropTypes.bool,
     isShowingProject: PropTypes.bool,
     loadingStateVisible: PropTypes.bool,
+    onActivateBlocksTab: PropTypes.func,
     onProjectLoaded: PropTypes.func,
     onSeeCommunity: PropTypes.func,
     onStorageInit: PropTypes.func,
@@ -161,6 +166,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     onExtensionButtonClick: () => dispatch(openExtensionLibrary()),
     onActivateTab: tab => dispatch(activateTab(tab)),
+    onActivateBlocksTab: () => dispatch(activateTab(BLOCKS_TAB_INDEX)),
     onActivateCostumesTab: () => dispatch(activateTab(COSTUMES_TAB_INDEX)),
     onActivateSoundsTab: () => dispatch(activateTab(SOUNDS_TAB_INDEX)),
     onRequestCloseBackdropLibrary: () => dispatch(closeBackdropLibrary()),

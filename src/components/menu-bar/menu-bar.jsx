@@ -14,26 +14,50 @@ import React from "react";
 
 import VM from "openblock-vm";
 
-import Box from "../box/box.jsx";
-import Button from "../button/button.jsx";
-import CommunityButton from "./community-button.jsx"; // eslint-disable-line no-unused-vars
-import ShareButton from "./share-button.jsx"; // eslint-disable-line no-unused-vars
-import { ComingSoonTooltip } from "../coming-soon/coming-soon.jsx";
-import Divider from "../divider/divider.jsx";
-import LanguageSelector from "../../containers/language-selector.jsx";
-import SaveStatus from "./save-status.jsx"; // eslint-disable-line no-unused-vars
-import ProjectWatcher from "../../containers/project-watcher.jsx"; // eslint-disable-line no-unused-vars
-import MenuBarMenu from "./menu-bar-menu.jsx";
-import { MenuItem, MenuSection } from "../menu/menu.jsx";
-import ProjectTitleInput from "./project-title-input.jsx";
-import AuthorInfo from "./author-info.jsx";
-import AccountNav from "../../containers/account-nav.jsx"; // eslint-disable-line no-unused-vars
-import LoginDropdown from "./login-dropdown.jsx"; // eslint-disable-line no-unused-vars
-import SB3Downloader from "../../containers/sb3-downloader.jsx";
-import DeletionRestorer from "../../containers/deletion-restorer.jsx";
-import TurboMode from "../../containers/turbo-mode.jsx";
-import MenuBarHOC from "../../containers/menu-bar-hoc.jsx";
-import { isScratchDesktop } from "../../lib/isScratchDesktop";
+// <<<<<<< HEAD
+// import Box from "../box/box.jsx";
+// import Button from "../button/button.jsx";
+// import CommunityButton from "./community-button.jsx"; // eslint-disable-line no-unused-vars
+// import ShareButton from "./share-button.jsx"; // eslint-disable-line no-unused-vars
+// import { ComingSoonTooltip } from "../coming-soon/coming-soon.jsx";
+// import Divider from "../divider/divider.jsx";
+// import LanguageSelector from "../../containers/language-selector.jsx";
+// import SaveStatus from "./save-status.jsx"; // eslint-disable-line no-unused-vars
+// import ProjectWatcher from "../../containers/project-watcher.jsx"; // eslint-disable-line no-unused-vars
+// import MenuBarMenu from "./menu-bar-menu.jsx";
+// import { MenuItem, MenuSection } from "../menu/menu.jsx";
+// import ProjectTitleInput from "./project-title-input.jsx";
+// import AuthorInfo from "./author-info.jsx";
+// import AccountNav from "../../containers/account-nav.jsx"; // eslint-disable-line no-unused-vars
+// import LoginDropdown from "./login-dropdown.jsx"; // eslint-disable-line no-unused-vars
+// import SB3Downloader from "../../containers/sb3-downloader.jsx";
+// import DeletionRestorer from "../../containers/deletion-restorer.jsx";
+// import TurboMode from "../../containers/turbo-mode.jsx";
+// import MenuBarHOC from "../../containers/menu-bar-hoc.jsx";
+// import { isScratchDesktop } from "../../lib/isScratchDesktop";
+// =======
+import Box from '../box/box.jsx';
+import Button from '../button/button.jsx';
+import CommunityButton from './community-button.jsx'; // eslint-disable-line no-unused-vars
+import ShareButton from './share-button.jsx'; // eslint-disable-line no-unused-vars
+import {ComingSoonTooltip} from '../coming-soon/coming-soon.jsx';
+import Divider from '../divider/divider.jsx';
+import LanguageSelector from '../../containers/language-selector.jsx';
+import SaveStatus from './save-status.jsx'; // eslint-disable-line no-unused-vars
+import ProjectWatcher from '../../containers/project-watcher.jsx'; // eslint-disable-line no-unused-vars
+import MenuBarMenu from './menu-bar-menu.jsx';
+import {MenuItem, MenuSection} from '../menu/menu.jsx';
+import ProjectTitleInput from './project-title-input.jsx';
+import AuthorInfo from './author-info.jsx';
+import AccountNav from '../../containers/account-nav.jsx'; // eslint-disable-line no-unused-vars
+import LoginDropdown from './login-dropdown.jsx'; // eslint-disable-line no-unused-vars
+import SB3Downloader from '../../containers/sb3-downloader.jsx';
+import DeletionRestorer from '../../containers/deletion-restorer.jsx';
+import TurboMode from '../../containers/turbo-mode.jsx';
+import MenuBarHOC from '../../containers/menu-bar-hoc.jsx';
+import {isScratchDesktop} from '../../lib/isScratchDesktop';
+import {UPDATE_MODAL_STATE} from '../../lib/update-state.js';
+// >>>>>>> 3188e4c207bfefb3bfa1aa93e2e443d186cce335
 
 import {
     openTipsLibrary,
@@ -111,9 +135,9 @@ import navIcon from "./icon--nav.svg";
 import screenshotIcon from "./icon--screenshot.svg";
 import settingIcon from "./icon--setting.svg";
 
-import downloadFirmwareIcon from "./icon--download-firmware.svg";
-import saveSvgAsPng from "openblock-save-svg-as-png";
-import { showAlertWithTimeout } from "../../reducers/alerts";
+import uploadFirmwareIcon from './icon--upload-firmware.svg';
+import saveSvgAsPng from 'openblock-save-svg-as-png';
+import {showAlertWithTimeout} from '../../reducers/alerts';
 
 const ariaMessages = defineMessages({
     language: {
@@ -194,25 +218,25 @@ class MenuBar extends React.Component {
     constructor(props) {
         super(props);
         bindAll(this, [
-            "handleClickNew",
-            "handleClickRemix",
-            "handleClickSave",
-            "handleClickSaveAsCopy",
-            "handleClickSeeCommunity",
-            "handleClickShare",
-            "handleKeyPress",
-            "handleLanguageMouseUp",
-            "handleRestoreOption",
-            "getSaveToComputerHandler",
-            "restoreOptionMessage",
-            "handleConnectionMouseUp",
-            "handleDownloadFirmware",
-            "handleSelectDeviceMouseUp",
-            "handleProgramModeSwitchOnChange",
-            "handleProgramModeUpdate",
-            "handleScreenshot",
-            "handleCheckUpdate",
-            "handleClearCache",
+            'handleClickNew',
+            'handleClickRemix',
+            'handleClickSave',
+            'handleClickSaveAsCopy',
+            'handleClickSeeCommunity',
+            'handleClickShare',
+            'handleKeyPress',
+            'handleLanguageMouseUp',
+            'handleRestoreOption',
+            'getSaveToComputerHandler',
+            'restoreOptionMessage',
+            'handleConnectionMouseUp',
+            'handleUploadFirmware',
+            'handleSelectDeviceMouseUp',
+            'handleProgramModeSwitchOnChange',
+            'handleProgramModeUpdate',
+            'handleScreenshot',
+            'handleCheckUpdate',
+            'handleClearCache'
         ]);
     }
     componentDidMount() {
@@ -390,7 +414,7 @@ class MenuBar extends React.Component {
             this.props.onSetUploadMode();
         }
     }
-    handleDownloadFirmware() {
+    handleUploadFirmware () {
         if (this.props.deviceId) {
             this.props.vm.uploadFirmwareToPeripheral(this.props.deviceId);
             this.props.onSetRealtimeConnection(false);
@@ -429,8 +453,8 @@ class MenuBar extends React.Component {
             );
         }
     }
-    handleCheckUpdate() {
-        this.props.onSetUpdate({ phase: "checking" });
+    handleCheckUpdate () {
+        this.props.onSetUpdate({phase: UPDATE_MODAL_STATE.checkingApplication});
         this.props.onClickCheckUpdate();
     }
     handleClearCache() {
@@ -454,32 +478,15 @@ class MenuBar extends React.Component {
         // each item must have a 'title' FormattedMessage and a 'handleClick' function
         // generate a menu with items for each object in the array
         return (
-            <div
-                className={classNames(styles.menuBarItem, styles.hoverable, {
-                    [styles.active]: this.props.aboutMenuOpen,
-                })}
-                onMouseUp={this.props.onRequestOpenAbout}
-            >
-                <img className={styles.aboutIcon} src={aboutIcon} />
-                <MenuBarMenu
-                    className={classNames(styles.menuBarMenu)}
-                    open={this.props.aboutMenuOpen}
-                    place={this.props.isRtl ? "right" : "left"}
-                    onRequestClose={this.props.onRequestCloseAbout}
+            onClickAbout.map(itemProps => (
+                <MenuItem
+                    key={itemProps.title}
+                    isRtl={this.props.isRtl}
+                    onClick={this.wrapAboutMenuCallback(itemProps.onClick)}
                 >
-                    {onClickAbout.map((itemProps) => (
-                        <MenuItem
-                            key={itemProps.title}
-                            isRtl={this.props.isRtl}
-                            onClick={this.wrapAboutMenuCallback(
-                                itemProps.onClick
-                            )}
-                        >
-                            {itemProps.title}
-                        </MenuItem>
-                    ))}
-                </MenuBarMenu>
-            </div>
+                    {itemProps.title}
+                </MenuItem>
+            ))
         );
     }
     wrapAboutMenuCallback(callback) {
@@ -691,17 +698,14 @@ class MenuBar extends React.Component {
                     )}
                     {/* 设置 */}
                     <div
-                        className={classNames(
-                            styles.menuBarItem,
-                            styles.hoverable,
-                            {
-                                [styles.active]: this.props.editMenuOpen,
-                            }
-                        )}
-                        onMouseUp={this.props.onClickEdit}
+                        className={classNames(styles.menuBarItem,
+                            this.props.isRealtimeMode ? styles.hoverable : styles.disabled,
+                            {[styles.active]: this.props.editMenuOpen
+                            })}
+                        onMouseUp={this.props.isRealtimeMode ? this.props.onClickEdit : null}
                     >
                         <img className={styles.fileIcon} src={navIcon} />
-                        <div className={classNames(styles.editMenu)}>
+                        <div className={classNames(styles.editMenu)} >
                             <FormattedMessage
                                 defaultMessage="Edit"
                                 description="Text for edit dropdown menu"
@@ -858,18 +862,18 @@ class MenuBar extends React.Component {
                         className={classNames(styles.menuBarItem, this.props.isRealtimeMode &&
                             this.props.peripheralName ? styles.hoverable : styles.disabled)}
                         onMouseUp={this.props.isRealtimeMode && this.props.peripheralName ?
-                            this.handleDownloadFirmware : null}
+                            this.handleUploadFirmware : null}
                     >
                         <img
-                            alt="DownloadFirmware"
-                            className={classNames(styles.downloadFirmwareLogo)}
+                            alt="UploadFirmware"
+                            className={classNames(styles.uploadFirmwareLogo)}
                             draggable={false}
-                            src={downloadFirmwareIcon}
+                            src={uploadFirmwareIcon}
                         />
                         <FormattedMessage
-                            defaultMessage="Download firmware"
-                            description="Button to download the realtime firmware"
-                            id="gui.menuBar.downloadFirmware"
+                            defaultMessage="Upload firmware"
+                            description="Button to upload the realtime firmware"
+                            id="gui.menuBar.uploadFirmware"
                         />
                     </div>
                     <Divider className={classNames(styles.divider)} />
@@ -936,10 +940,8 @@ class MenuBar extends React.Component {
                             <MenuBarMenu
                                 className={classNames(styles.menuBarMenu)}
                                 open={this.props.settingMenuOpen}
-                                place={"left"}
-                                onRequestClose={
-                                    this.props.onRequestCloseSetting
-                                }
+                                place={this.props.isRtl ? 'right' : 'left'}
+                                onRequestClose={this.props.onRequestCloseSetting}
                             >
                                 <MenuSection>
                                     <MenuItem
@@ -965,67 +967,14 @@ class MenuBar extends React.Component {
                                         {installDriver}
                                     </MenuItem>
                                 </MenuSection>
+                                <MenuSection>
+                                    {typeof this.props.onClickAbout === 'object' ? aboutButton : null}
+                                </MenuSection>
                             </MenuBarMenu>
                         </div>
                     ) : null} */}
                 </div>
-                {/* {this.props.username ? (
-                    // ************ user is logged in ************
-                    <React.Fragment>
-                        <div
-                            className={classNames(
-                                styles.menuBarItem,
-                                styles.hoverable,
-                                styles.accountNavMenu
-                            )}
-                        >
-                            <span>{this.props.username}</span>
-                            <AccountNav
-                                className={classNames(
-                                    styles.menuBarItem,
-                                    styles.hoverable,
-                                    {
-                                        [styles.active]:
-                                            this.props.accountMenuOpen,
-                                    }
-                                )}
-                                isOpen={this.props.accountMenuOpen}
-                                isRtl={this.props.isRtl}
-                                menuBarMenuClassName={classNames(
-                                    styles.menuBarMenu
-                                )}
-                                onClick={this.props.onClickAccount}
-                                onClose={this.props.onRequestCloseAccount}
-                                onLogOut={this.props.onLogOut}
-                            />
-                        </div>
-                    </React.Fragment>
-                ) : (
-                    <React.Fragment>
-                        <div
-                            className={classNames(
-                                styles.menuBarItem,
-                                styles.hoverable
-                            )}
-                            key="login"
-                            onMouseUp={this.props.onClickLogin}
-                        >
-                            <FormattedMessage
-                                defaultMessage="Sign in"
-                                description="Link for signing in to your Scratch account"
-                                id="gui.menuBar.signIn"
-                            />
-                            <LoginDropdown
-                                className={classNames(styles.menuBarMenu)}
-                                isOpen={this.props.loginMenuOpen}
-                                isRtl={this.props.isRtl}
-                                renderLogin={this.props.renderLogin}
-                                onClose={this.props.onRequestCloseLogin}
-                            />
-                        </div>
-                    </React.Fragment>
-                )} */}
-                {aboutButton}
+                { (typeof this.props.onClickAbout === 'function') ? aboutButton : null}
             </Box>
         );
     }

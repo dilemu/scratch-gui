@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
 import React from 'react';
 
+import MessageBoxType from '../lib/message-box.js';
+
 const MenuBarHOC = function (WrappedComponent) {
     class MenuBarContainer extends React.PureComponent {
         constructor (props) {
@@ -17,13 +19,13 @@ const MenuBarHOC = function (WrappedComponent) {
         confirmReadyToReplaceProject (message) {
             let readyToReplaceProject = true;
             if (this.props.projectChanged && !this.props.canCreateNew) {
-                readyToReplaceProject = this.props.confirmWithMessage(message);
+                readyToReplaceProject = this.props.onShowMessageBox(MessageBoxType.confirm, message);
             }
             return readyToReplaceProject;
         }
         confirmClearCache (message) {
             let readyClearCache = true;
-            readyClearCache = this.props.confirmWithMessage(message);
+            readyClearCache = this.props.onShowMessageBox(MessageBoxType.confirm, message);
             return readyClearCache;
         }
         shouldSaveBeforeTransition () {
@@ -48,12 +50,8 @@ const MenuBarHOC = function (WrappedComponent) {
     MenuBarContainer.propTypes = {
         canCreateNew: PropTypes.bool,
         canSave: PropTypes.bool,
-        confirmWithMessage: PropTypes.func,
+        onShowMessageBox: PropTypes.func.isRequired,
         projectChanged: PropTypes.bool
-    };
-    MenuBarContainer.defaultProps = {
-        // default to using standard js confirm
-        confirmWithMessage: message => (confirm(message)) // eslint-disable-line no-alert
     };
     const mapStateToProps = state => ({
         projectChanged: state.scratchGui.projectChanged

@@ -5,6 +5,8 @@ import RecordingStepComponent from '../components/record-modal/recording-step.js
 import AudioRecorder from '../lib/audio/audio-recorder.js';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
+import MessageBoxType from '../lib/message-box.js';
+
 const messages = defineMessages({
     alertMsg: {
         defaultMessage: 'Could not start recording',
@@ -41,7 +43,7 @@ class RecordingStep extends React.Component {
         this.setState({listening: true});
     }
     handleRecordingError () {
-        alert(this.props.intl.formatMessage(messages.alertMsg)); // eslint-disable-line no-alert
+        this.props.onShowMessageBox(MessageBoxType.alert, this.props.intl.formatMessage(messages.alertMsg));
     }
     handleLevelUpdate (level) {
         this.setState({
@@ -80,6 +82,7 @@ RecordingStep.propTypes = {
     intl: intlShape.isRequired,
     onRecord: PropTypes.func.isRequired,
     onStopRecording: PropTypes.func.isRequired,
+    onShowMessageBox: PropTypes.func.isRequired,
     recording: PropTypes.bool
 };
 

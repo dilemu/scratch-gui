@@ -45,6 +45,7 @@ const RecordModal = props => (
                     recording={props.recording}
                     onRecord={props.onRecord}
                     onStopRecording={props.onStopRecording}
+                    onShowMessageBox={props.onShowMessageBox}
                 />
             )}
         </Box>
@@ -65,6 +66,7 @@ RecordModal.propTypes = {
     onStopPlaying: PropTypes.func.isRequired,
     onStopRecording: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
+    onShowMessageBox: PropTypes.func.isRequired,
     playhead: PropTypes.number,
     playing: PropTypes.bool,
     recording: PropTypes.bool,

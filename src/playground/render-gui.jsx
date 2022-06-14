@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {compose} from 'redux';
+import {FormattedMessage} from 'react-intl';
 
 import AppStateHOC from '../lib/app-state-hoc.jsx';
 import GUI from '../containers/gui.jsx';
 import HashParserHOC from '../lib/hash-parser-hoc.jsx';
 import log from '../lib/log.js';
+import MessageBoxType from '../lib/message-box.js';
 
 const onClickLogo = () => {
     window.location = 'https://openblockcc.github.io/wiki/';
@@ -15,8 +17,12 @@ const onClickCheckUpdate = () => {
     log('User click check update');
 };
 
-const onClickUpgrade = () => {
-    log('User click upgrade');
+const onClickUpdate = () => {
+    log('User click update');
+};
+
+const onAbortUpdate = () => {
+    log('User click abort update');
 };
 
 const onClickClearCache = () => {
@@ -37,6 +43,41 @@ const handleTelemetryModalOptIn = () => {
 
 const handleTelemetryModalOptOut = () => {
     log('User opted out of telemetry');
+};
+
+const onClickAbout = [
+    {
+        title: (<FormattedMessage
+            defaultMessage="About"
+            description="Menu bar item for about"
+            id="gui.desktopMenuBar.about"
+        />),
+        onClick: () => log('About')
+    },
+    {
+        title: (<FormattedMessage
+            defaultMessage="Privacy policy"
+            description="Menu bar item for privacy policy"
+            id="gui.menuBar.privacyPolicy"
+        />),
+        onClick: () => log('Privacy Policy')
+    },
+    {
+        title: (<FormattedMessage
+            defaultMessage="Data settings"
+            description="Menu bar item for data settings"
+            id="gui.menuBar.dataSettings"
+        />),
+        onClick: () => log('Data Settings')
+    }
+];
+
+const handleShowMessageBox = (type, message) => {
+    if (type === MessageBoxType.confirm) {
+        return confirm(message); // eslint-disable-line no-alert
+    } else if (type === MessageBoxType.alert) {
+        return alert(message); // eslint-disable-line no-alert
+    }
 };
 
 /*
@@ -83,15 +124,18 @@ export default appTarget => {
             <WrappedGui
                 canEditTitle
                 isScratchDesktop
+                onClickAbout={onClickAbout}
                 showTelemetryModal
                 canSave={false}
                 onTelemetryModalCancel={handleTelemetryModalCancel}
                 onTelemetryModalOptIn={handleTelemetryModalOptIn}
                 onTelemetryModalOptOut={handleTelemetryModalOptOut}
+                onAbortUpdate={onAbortUpdate}
                 onClickCheckUpdate={onClickCheckUpdate}
-                onClickUpgrade={onClickUpgrade}
+                onClickUpdate={onClickUpdate}
                 onClickClearCache={onClickClearCache}
                 onClickInstallDriver={onClickInstallDriver}
+                onShowMessageBox={handleShowMessageBox}
             /> :
             <WrappedGui
                 canEditTitle
@@ -100,6 +144,7 @@ export default appTarget => {
                 backpackHost={backpackHost}
                 canSave={false}
                 onClickLogo={onClickLogo}
+                onShowMessageBox={handleShowMessageBox}
             />,
         appTarget);
 };

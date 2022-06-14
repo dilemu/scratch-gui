@@ -262,6 +262,7 @@ class SoundTab extends React.Component {
                 {this.props.soundRecorderVisible ? (
                     <RecordModal
                         onNewSound={this.handleNewSound}
+                        onShowMessageBox={this.props.onShowMessageBox}
                     />
                 ) : null}
                 {this.props.soundLibraryVisible ? (
@@ -287,6 +288,7 @@ SoundTab.propTypes = {
     onNewSoundFromRecordingClick: PropTypes.func.isRequired,
     onRequestCloseSoundLibrary: PropTypes.func.isRequired,
     onShowImporting: PropTypes.func.isRequired,
+    onShowMessageBox: PropTypes.func.isRequired,
     soundLibraryVisible: PropTypes.bool,
     soundRecorderVisible: PropTypes.bool,
     sprites: PropTypes.shape({
