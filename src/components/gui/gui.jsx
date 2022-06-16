@@ -406,7 +406,7 @@ const GUIComponent = props => {
                                 <TargetPane stageSize={stageSize} vm={vm} />
                             </Box>
                         </Box>
-                        {/* {(isRealtimeMode === false) ? (
+                        {(isRealtimeMode === false) ? (
                             <HardwareHeader
                                 vm={vm}
                             />) : null
@@ -415,7 +415,7 @@ const GUIComponent = props => {
                             <Hardware
                                 vm={vm}
                             />) : null
-                        } */}
+                        }
                     </Box>
                     <DragLayer />
                 </Box>
