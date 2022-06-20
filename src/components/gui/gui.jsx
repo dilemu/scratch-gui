@@ -21,8 +21,8 @@ import MenuBar from '../menu-bar/menu-bar.jsx';
 import CostumeLibrary from '../../containers/costume-library.jsx';
 import BackdropLibrary from '../../containers/backdrop-library.jsx';
 import Watermark from '../../containers/watermark.jsx';
-// import Hardware from '../../containers/hardware.jsx';
-// import HardwareHeader from '../../containers/hardware-header.jsx';
+import Hardware from '../../containers/hardware.jsx';
+import HardwareHeader from '../../containers/hardware-header.jsx';
 
 // eslint-disable-next-line no-unused-vars
 import Backpack from '../../containers/backpack.jsx';
