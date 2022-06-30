@@ -45,7 +45,7 @@ const messages = defineMessages({
 const ARDUINO_TAG = {tag: 'Arduino', intlLabel: messages.arduinoTag};
 const MICROPYTHON_TAG = {tag: 'MicroPython', intlLabel: messages.microPythonTag};
 const KIT_TAG = {tag: 'Kit', intlLabel: messages.kitTag};
-const tagListPrefix = [ARDUINO_TAG, MICROPYTHON_TAG, KIT_TAG];
+const tagListPrefix = [] || [ARDUINO_TAG, MICROPYTHON_TAG, KIT_TAG];
 
 class DeviceLibrary extends React.PureComponent {
     constructor (props) {
