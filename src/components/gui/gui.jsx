@@ -388,6 +388,8 @@ const GUIComponent = props => {
                                     ) : null
                                 */}
                         </Box>
+                        {/* stageAndTargetWrapper should use css to control show or hidden,
+                        prevent scratch-vm error due to unload StageWrapper */}
                         <Box
                             className={classNames(
                                 styles.stageAndTargetWrapper,
