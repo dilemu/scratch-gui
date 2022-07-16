@@ -24,11 +24,23 @@ const messages = defineMessages({
         id: 'gui.library.allTag',
         defaultMessage: 'All',
         description: 'Label for library tag to revert to all items after filtering by tag.'
+    },
+    networkTag: {
+        id: 'gui.library.nework',
+        defaultMessage: '网络服务',
+        description: 'Label for library tag to revert to all items after filtering by tag.'
+    },
+    sensorTag: {
+        id: 'gui.library.sensor',
+        defaultMessage: '传感器',
+        description: 'Label for library tag to revert to all items after filtering by tag.'
     }
 });
 
 const ALL_TAG = {tag: 'all', intlLabel: messages.allTag};
-const tagListPrefix = [ALL_TAG];
+const NETWORK_TAG = {tag: 'network', intlLabel: messages.networkTag};
+const SENSOR_TAG = {tag: 'sensor', intlLabel: messages.sensorTag};
+const tagListPrefix = [ALL_TAG, NETWORK_TAG, SENSOR_TAG];
 
 /**
  * Find the AssetType which corresponds to a particular file extension. For example, 'png' => AssetType.ImageBitmap.

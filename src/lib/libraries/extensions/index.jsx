@@ -44,6 +44,8 @@ import diTextRecognitionInsert from "./diTextRecognition/diTextRecognitionInsert
 import diWordProcessing from "./diWordProcessing/diWordProcessing.png";
 import diWordProcessingInsert from "./diWordProcessing/diWordProcessingInsert.png";
 
+import arduinonanoUltrasonic from "./arduinonano/ultrasonic/ultrasonic.png";
+
 // import ev3IconURL from './ev3/ev3.png';
 // import ev3InsetIconURL from './ev3/ev3-small.svg';
 // import ev3ConnectionIconURL from './ev3/ev3-hub-illustration.svg';
@@ -88,6 +90,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
+        tags: ["network"],
     },
     {
         name: (
@@ -110,6 +113,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
+        tags: ["network"],
     },
     {
         name: (
@@ -132,6 +136,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
+        tags: ["network"],
     },
     {
         name: (
@@ -154,6 +159,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
+        tags: ["network"],
     },
     {
         name: (
@@ -176,6 +182,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
+        tags: ["network"],
     },
     {
         name: (
@@ -198,6 +205,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
+        tags: ["network"],
     },
     {
         name: (
@@ -220,6 +228,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
+        tags: ["network"],
     },
     {
         name: (
@@ -242,7 +251,16 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        tags: ["arduino"],
+        tags: ["network"],
+    },
+    {
+        name: "超声波传感器",
+        extensionId: "ArduinoNanoUltrasonic",
+        collaborator: "PPSS",
+        description: "超声波传感器",
+        tags: ["sensor"],
+        iconURL: arduinonanoUltrasonic,
+        insetIconURL: arduinonanoUltrasonic
     },
     // {
     //     name: (

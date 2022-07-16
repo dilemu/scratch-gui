@@ -74,7 +74,7 @@ const deviceData = [
         tags: ['realtime']
     },
     {
-        name: 'Arduino Nano',
+        name: '迪乐板（Arduino Nano）',
         deviceId: 'arduinoNano',
         manufactor: 'arduino.cc',
         learnMore: 'https://store.arduino.cc/usa/arduino-nano',
