@@ -7,16 +7,16 @@ import 'intl'; // For Safari 9
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import analytics, {initialAnalytics} from '../lib/analytics';
+// import analytics, {initialAnalytics} from '../lib/analytics';
 import AppStateHOC from '../lib/app-state-hoc.jsx';
 import BrowserModalComponent from '../components/browser-modal/browser-modal.jsx';
 import supportedBrowser from '../lib/supported-browser';
 
 import styles from './index.css';
 
-initialAnalytics();
-// Register "base" page view
-analytics.pageview('/');
+// initialAnalytics();
+// // Register "base" page view
+// analytics.pageview('/');
 
 const appTarget = document.createElement('div');
 appTarget.className = styles.app;
