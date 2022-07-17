@@ -854,7 +854,7 @@ class MenuBar extends React.Component {
                         />
                     ) : null}
                 </div>
-                <Divider className={classNames(styles.divider)} />
+                {/* <Divider className={classNames(styles.divider)} />
                 <div
                     className={classNames(styles.menuBarItem, styles.hoverable)}
                     onMouseUp={this.handleSelectDeviceMouseUp}
@@ -875,13 +875,55 @@ class MenuBar extends React.Component {
                                 id="gui.menuBar.noDeviceSelected"
                             />
                         )}
-                </div>
-                <Divider className={classNames(styles.divider)} />
-                <div
-                    className={classNames(styles.menuBarItem, styles.hoverable)}
-                    onMouseUp={this.handleConnectionMouseUp}
+                </div> */}
+                {/* <Divider className={classNames(styles.divider)} /> */}
+                
+                {/* <div
+                    className={classNames(styles.menuBarItem)}
                 >
-                    {this.props.peripheralName ? (
+                    <img
+                        className={classNames(styles.linkSocketIcon)}
+                        src={linkSocketIcon}
+                    />
+                </div> */}
+                <div className={styles.tailMenu}>
+                    {/* 截图 */}
+                    {/* <div
+                        className={classNames(styles.menuBarItem, styles.hoverable)}
+                        onMouseUp={this.handleScreenshot}
+                    >
+                        <img
+                            alt="Screenshot"
+                            className={classNames(styles.screenShotLogo)}
+                            draggable={false}
+                            src={screenshotIcon}
+                        />
+                    </div>
+                    <Divider className={classNames(styles.divider)} /> */}
+                    <div
+                        className={classNames(styles.menuBarItem, styles.hoverable)}
+                        onMouseUp={this.handleConnectionMouseUp}
+                    >
+                        {
+                            this.props.deviceName ? (
+                                <div>
+                                    {this.props.deviceName}
+                                </div>
+                            ) : (
+                                <React.Fragment>
+                                    <img
+                                        className={styles.unconnectedIcon}
+                                        src={unconnectedIcon}
+                                    />
+                                    <FormattedMessage
+                                        defaultMessage="Unconnected"
+                                        description="Text for menubar unconnected button"
+                                        id="gui.menuBar.noConnection"
+                                    />
+                                </React.Fragment>
+                            )}
+                        {/* {
+                    this.props.peripheralName ? (
                         <React.Fragment>
                             <img
                                 className={styles.connectedIcon}
@@ -889,7 +931,9 @@ class MenuBar extends React.Component {
                             />
                             {this.props.peripheralName}
                         </React.Fragment>
-                    ) : (
+                    ) 
+                    
+                    : (
                         <React.Fragment>
                             <img
                                 className={styles.unconnectedIcon}
@@ -901,28 +945,7 @@ class MenuBar extends React.Component {
                                 id="gui.menuBar.noConnection"
                             />
                         </React.Fragment>
-                    )}
-                </div>
-                <div
-                    className={classNames(styles.menuBarItem)}
-                >
-                    <img
-                        className={classNames(styles.linkSocketIcon)}
-                        src={linkSocketIcon}
-                    />
-                </div>
-                <div className={styles.tailMenu}>
-                    {/* 截图 */}
-                    <div
-                        className={classNames(styles.menuBarItem, styles.hoverable)}
-                        onMouseUp={this.handleScreenshot}
-                    >
-                        <img
-                            alt="Screenshot"
-                            className={classNames(styles.screenShotLogo)}
-                            draggable={false}
-                            src={screenshotIcon}
-                        />
+                    )} */}
                     </div>
                     <Divider className={classNames(styles.divider)} />
                     <div
@@ -943,7 +966,7 @@ class MenuBar extends React.Component {
                             id="gui.menuBar.uploadFirmware"
                         />
                     </div>
-                    <Divider className={classNames(styles.divider)} />
+                    {/* <Divider className={classNames(styles.divider)} />
                     <div
                         aria-label={this.props.intl.formatMessage(ariaMessages.tutorials)}
                         className={classNames(styles.menuBarItem, styles.hoverable)}
@@ -954,7 +977,7 @@ class MenuBar extends React.Component {
                             src={helpIcon}
                         />
                         <FormattedMessage {...ariaMessages.tutorials} />
-                    </div>
+                    </div> */}
                     {/* 实时模式 */}
                     <Divider className={classNames(styles.divider)} />
                     <div className={classNames(styles.menuBarItem, styles.programModeGroup)}>

@@ -303,6 +303,7 @@ export default [
             />
         ),
         featured: true,
+        tags: ["basemodule"]
     },
     {
         name: (
@@ -323,6 +324,7 @@ export default [
             />
         ),
         featured: true,
+        tags: ["basemodule"]
     },
     {
         name: (
@@ -343,6 +345,7 @@ export default [
             />
         ),
         featured: true,
+        tags: ["basemodule"]
     },
     {
         name: (
@@ -365,6 +368,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
+        tags: ["basemodule"]
     },
     {
         name: (
@@ -387,6 +391,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
+        tags: ["basemodule"]
     },
     {
         name: (
@@ -408,6 +413,7 @@ export default [
             />
         ),
         featured: true,
+        tags: ["basemodule"]
     },
     // {
     //     name: (

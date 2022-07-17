@@ -10,9 +10,12 @@ import {connect} from 'react-redux';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 import extensionLibraryContent from '../lib/libraries/extensions/index.jsx';
+import { makeDeviceLibrary } from '../lib/libraries/devices/index.jsx';
+import { setDeviceData } from '../reducers/device-data';
 
 import LibraryComponent from '../components/library/library.jsx';
 import extensionIcon from '../components/action-menu/icon--sprite.svg';
+import deviceIcon from '../components/action-menu/icon--sprite.svg';
 
 const messages = defineMessages({
     extensionTitle: {
@@ -70,7 +73,8 @@ class ExtensionLibrary extends React.PureComponent {
         super(props);
         bindAll(this, [
             'updateDeviceExtensions',
-            'handleItemSelect'
+            'handleItemSelect',
+            'requestLoadDevice'
         ]);
         this.state = {
             deviceExtensions: []
@@ -81,6 +85,12 @@ class ExtensionLibrary extends React.PureComponent {
         if (this.props.isRealtimeMode === false) {
             this.updateDeviceExtensions();
         }
+        this.props.vm.extensionManager.getDeviceList().then(data => {
+            this.props.onSetDeviceData(makeDeviceLibrary(data));
+        })
+            .catch(() => {
+                this.props.onSetDeviceData(makeDeviceLibrary());
+            });
     }
 
     updateDeviceExtensions () {
@@ -92,79 +102,113 @@ class ExtensionLibrary extends React.PureComponent {
             });
     }
 
-    handleItemSelect (item) {
-        const id = item.extensionId;
+    requestLoadDevice(device) {
+        const id = device.deviceId;
+        const deviceType = device.type;
+        const pnpidList = device.pnpidList;
+        const deviceExtensions = device.deviceExtensions;
 
-        if (this.props.isRealtimeMode) {
-            let url = item.extensionURL ? item.extensionURL : id;
-            if (!item.disabled && !id) {
-                // eslint-disable-next-line no-alert
-                url = prompt(this.props.intl.formatMessage(messages.extensionUrl));
-            }
-            if (id && !item.disabled) {
-                if (this.props.vm.extensionManager.isExtensionLoaded(url)) {
-                    this.props.onCategorySelected(id);
-                } else {
-                    this.props.vm.extensionManager.loadExtensionURL(url).then(() => {
-                        this.props.onCategorySelected(id);
-                        analytics.event({
-                            category: 'extensions',
-                            action: 'select extension',
-                            label: id
-                        });
-                    });
-                }
-            }
-        } else if (id && !item.disabled) {
-            if (this.props.vm.extensionManager.isDeviceExtensionLoaded(id)) {
-                this.props.vm.extensionManager.unloadDeviceExtension(id).then(() => {
-                    this.updateDeviceExtensions();
-                });
+        if (id && !device.disabled) {
+            if (this.props.vm.extensionManager.isDeviceLoaded(id)) {
+                this.props.onDeviceSelected(id);
             } else {
-                this.props.vm.extensionManager.loadDeviceExtension(id).then(() => {
-                    this.updateDeviceExtensions();
+                this.props.vm.extensionManager.loadDeviceURL(id, deviceType, pnpidList).then(() => {
+                    this.props.vm.extensionManager.getDeviceExtensionsList().then(() => {
+                        // TODO: Add a event for install device extension
+                        // the large extensions will take many times to load
+                        // A loading interface should be launched.
+                        this.props.vm.installDeviceExtensions(deviceExtensions);
+                    });
+                    this.props.onDeviceSelected(id);
                     analytics.event({
-                        category: 'extensions',
-                        action: 'select device extension',
+                        category: 'devices',
+                        action: 'select device',
                         label: id
                     });
-                })
-                    .catch(err => {
-                        // TODO add a alet device extension load failed. and change the state to bar to failed state
-                        console.error(`err = ${err}`); // eslint-disable-line no-console
+                });
+            }
+        }
+    }
+
+    handleItemSelect (item) {
+        const id = item.extensionId;
+        if (item.deviceId) {
+            this.requestLoadDevice(item);
+        } else {
+            if (this.props.isRealtimeMode) {
+                let url = item.extensionURL ? item.extensionURL : id;
+                if (!item.disabled && !id) {
+                    // eslint-disable-next-line no-alert
+                    url = prompt(this.props.intl.formatMessage(messages.extensionUrl));
+                }
+                if (id && !item.disabled) {
+                    if (this.props.vm.extensionManager.isExtensionLoaded(url)) {
+                        this.props.onCategorySelected(id);
+                    } else {
+                        this.props.vm.extensionManager.loadExtensionURL(url).then(() => {
+                            this.props.onCategorySelected(id);
+                            analytics.event({
+                                category: 'extensions',
+                                action: 'select extension',
+                                label: id
+                            });
+                        });
+                    }
+                }
+            } else if (id && !item.disabled) {
+                if (this.props.vm.extensionManager.isDeviceExtensionLoaded(id)) {
+                    this.props.vm.extensionManager.unloadDeviceExtension(id).then(() => {
+                        this.updateDeviceExtensions();
                     });
+                } else {
+                    this.props.vm.extensionManager.loadDeviceExtension(id).then(() => {
+                        this.updateDeviceExtensions();
+                        analytics.event({
+                            category: 'extensions',
+                            action: 'select device extension',
+                            label: id
+                        });
+                    })
+                        .catch(err => {
+                            // TODO add a alet device extension load failed. and change the state to bar to failed state
+                            console.error(`err = ${err}`); // eslint-disable-line no-console
+                        });
+                }
             }
         }
     }
     render () {
-        let extensionLibraryThumbnailData = [];
         const device = this.props.deviceData.find(dev => dev.deviceId === this.props.deviceId);
-
-        if (this.props.isRealtimeMode) {
-            extensionLibraryThumbnailData = extensionLibraryContent.map(extension => ({
+        const deviceLibraryThumbnailData = this.props.deviceData.map(device => ({
+            rawURL: device.iconURL || deviceIcon,
+            ...device
+        }));
+        const builtinLibraryThumbnailData = this.props.isRealtimeMode? extensionLibraryContent.map(extension => ({
+            rawURL: extension.iconURL || extensionIcon,
+            ...extension
+        })): [];
+        const deviceExtensionLibraryThumbnailData = this.state.deviceExtensions.filter(
+            extension => extension.supportDevice.includes(this.props.deviceId) ||
+                extension.supportDevice.includes(device.deviceExtensionsCompatible))
+            .map(extension => ({
                 rawURL: extension.iconURL || extensionIcon,
                 ...extension
-            }));
-        } else {
-            extensionLibraryThumbnailData = this.state.deviceExtensions.filter(
-                extension => extension.supportDevice.includes(this.props.deviceId) ||
-                    extension.supportDevice.includes(device.deviceExtensionsCompatible))
-                .map(extension => ({
-                    rawURL: extension.iconURL || extensionIcon,
-                    ...extension
-                }))
-                .sort((a, b) => {
-                    if ((b.isLoaded !== true) && (a.isLoaded === true)) return -1;
-                    return 1;
-                });
-        }
+            }))
+            .sort((a, b) => {
+                if ((b.isLoaded !== true) && (a.isLoaded === true)) return -1;
+                return 1;
+            });
+        const fullExtensionData = [...deviceLibraryThumbnailData, ...builtinLibraryThumbnailData, ...deviceExtensionLibraryThumbnailData]
 
         return (
             <LibraryComponent
                 autoClose={this.props.isRealtimeMode}
-                data={extensionLibraryThumbnailData}
+                isRealtimeMode={this.props.isRealtimeMode}
+                data={fullExtensionData}
                 filterable
-                tags={this.props.isRealtimeMode ? [] : tagListPrefix}
+                // tags={this.props.isRealtimeMode ? [] : tagListPrefix}
+                tags={[]}
+                defaultTag={this.props.isRealtimeMode ? 'all' : 'all'}
                 id="extensionLibrary"
                 isUnloadble={!this.props.isRealtimeMode}
                 title={this.props.intl.formatMessage(messages.extensionTitle)}
@@ -184,6 +228,8 @@ ExtensionLibrary.propTypes = {
     onCategorySelected: PropTypes.func,
     onRequestClose: PropTypes.func,
     visible: PropTypes.bool,
+    onSetDeviceData: PropTypes.func.isRequired,
+    onDeviceSelected: PropTypes.func,
     vm: PropTypes.instanceOf(VM).isRequired // eslint-disable-line react/no-unused-prop-types
 };
 
@@ -193,9 +239,14 @@ const mapStateToProps = state => ({
     isRealtimeMode: state.scratchGui.programMode.isRealtimeMode
 });
 
+const mapDispatchToProps = dispatch => ({
+    onSetDeviceData: data => dispatch(setDeviceData(data))
+});
+
 export default compose(
     injectIntl,
     connect(
-        mapStateToProps
+        mapStateToProps,
+        mapDispatchToProps
     )
 )(ExtensionLibrary);

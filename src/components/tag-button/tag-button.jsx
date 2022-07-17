@@ -13,6 +13,7 @@ const TagButtonComponent = ({
     className,
     tag, // eslint-disable-line no-unused-vars
     intlLabel,
+    disabled,
     ...props
 }) => (
     <Button
@@ -20,12 +21,15 @@ const TagButtonComponent = ({
             styles.tagButton,
             className, {
                 [styles.active]: active
+            }, {
+                [styles.disabled]: disabled
             }
         )}
         iconClassName={classNames(
             styles.tagButtonIcon,
             iconClassName
         )}
+        disabled={disabled}
         {...props}
     >
         <FormattedMessage {...intlLabel} />

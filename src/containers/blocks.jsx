@@ -878,16 +878,17 @@ class Blocks extends React.Component {
                         onOk={this.handlePromptCallback}
                     />
                 ) : null}
-                {deviceLibraryVisible ? (
+                {/* {deviceLibraryVisible ? (
                     <DeviceLibrary
                         vm={vm}
                         onDeviceSelected={this.handleDeviceSelected}
                         onRequestClose={onRequestCloseDeviceLibrary}
                     />
-                ) : null}
+                ) : null} */}
                 {extensionLibraryVisible ? (
                     <ExtensionLibrary
                         vm={vm}
+                        onDeviceSelected={this.handleDeviceSelected}
                         onCategorySelected={this.handleCategorySelected}
                         onRequestClose={onRequestCloseExtensionLibrary}
                     />

@@ -71,7 +71,7 @@ const deviceData = [
         hide: false,
         programMode: ['realtime'],
         programLanguage: ['block'],
-        tags: ['realtime']
+        tags: ['mpu']
     },
     {
         name: '迪乐板（Arduino Nano）',
@@ -107,7 +107,7 @@ const deviceData = [
         baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['realtime', 'upload'],
         programLanguage: ['block', 'c', 'cpp'],
-        tags: ['arduino'],
+        tags: ['mpu'],
         helpLink: 'https://store.arduino.cc/usa/arduino-nano'
     },
     {
@@ -144,7 +144,7 @@ const deviceData = [
         baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['realtime', 'upload'],
         programLanguage: ['block', 'c', 'cpp'],
-        tags: ['arduino'],
+        tags: ['mpu'],
         helpLink: 'https://store.arduino.cc/usa/arduino-uno-rev3'
     },
     {
@@ -181,7 +181,7 @@ const deviceData = [
         baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['upload'], // due to the software serilport realtim mode is unstable
         programLanguage: ['block', 'c', 'cpp'],
-        tags: ['arduino'],
+        tags: ['mpu'],
         helpLink: 'https://store.arduino.cc/usa/leonardo'
     },
     {
@@ -218,7 +218,7 @@ const deviceData = [
         baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['realtime', 'upload'],
         programLanguage: ['block', 'c', 'cpp'],
-        tags: ['arduino'],
+        tags: ['mpu'],
         helpLink: 'https://store.arduino.cc/usa/arduino-nano'
     },
     {
@@ -255,7 +255,7 @@ const deviceData = [
         baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['realtime', 'upload'],
         programLanguage: ['block', 'c', 'cpp'],
-        tags: ['arduino'],
+        tags: ['mpu'],
         helpLink: 'https://store.arduino.cc/usa/arduino-nano'
     },
     // {

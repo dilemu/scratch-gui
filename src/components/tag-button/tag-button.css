@@ -17,3 +17,7 @@
 .active {
     background: $data-primary;
 }
+
+.disabled {
+    background: $button-disabled;
+}

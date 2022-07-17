@@ -34,13 +34,40 @@ const messages = defineMessages({
         id: 'gui.library.sensor',
         defaultMessage: '传感器',
         description: 'Label for library tag to revert to all items after filtering by tag.'
+    },
+    motionTag: {
+        id: 'gui.library.motion',
+        defaultMessage: '执行器',
+        description: 'Label for library tag to revert to all items after filtering by tag.'
+    },
+    displayTag: {
+        id: 'gui.library.display',
+        defaultMessage: '显示器',
+        description: 'Label for library tag to revert to all items after filtering by tag.'
+    },
+    baseModuleTag: {
+        id: 'gui.library.baseModuleTag',
+        defaultMessage: '功能模块',
+        description: 'Label for library tag to revert to all items after filtering by tag.'
+    },
+    mpuTag: {
+        id: 'gui.library.mpu',
+        defaultMessage: '主控板',
+        description: 'Label for library tag to revert to all items after filtering by tag.'
+    },
+    communicationTag: {
+        id: 'gui.library.communication',
+        defaultMessage: '通信模块',
+        description: 'Label for library tag to revert to all items after filtering by tag.'
     }
 });
 
 const ALL_TAG = {tag: 'all', intlLabel: messages.allTag};
-const NETWORK_TAG = {tag: 'network', intlLabel: messages.networkTag};
-const SENSOR_TAG = {tag: 'sensor', intlLabel: messages.sensorTag};
-const tagListPrefix = [ALL_TAG, NETWORK_TAG, SENSOR_TAG];
+const NETWORK_TAG = { tag: 'network', intlLabel: messages.networkTag, isRealtimeMode: true };
+const SENSOR_TAG = { tag: 'sensor', intlLabel: messages.sensorTag};
+const BASEMODULE_TAG = { tag: 'basemodule', intlLabel: messages.baseModuleTag, isRealtimeMode: true };
+const MPU_TAG = { tag: 'mpu', intlLabel: messages.mpuTag }
+const tagListPrefix = [ALL_TAG, MPU_TAG, NETWORK_TAG, SENSOR_TAG, BASEMODULE_TAG];
 
 /**
  * Find the AssetType which corresponds to a particular file extension. For example, 'png' => AssetType.ImageBitmap.
@@ -114,7 +141,7 @@ class LibraryComponent extends React.Component {
         this.state = {
             playingItem: null,
             filterQuery: '',
-            selectedTag: ALL_TAG.tag,
+            selectedTag: props.defaultTag,
             loaded: false
         };
     }
@@ -229,6 +256,7 @@ class LibraryComponent extends React.Component {
         this.filteredDataRef = ref;
     }
     render () {
+        const isRealtimeMode = this.props.isRealtimeMode;
         return (
             <Modal
                 fullScreen
@@ -258,6 +286,7 @@ class LibraryComponent extends React.Component {
                             <div className={styles.tagWrapper}>
                                 {tagListPrefix.concat(this.props.tags).map((tagProps, id) => (
                                     <TagButton
+                                        disabled={tagProps.isRealtimeMode && tagProps.isRealtimeMode !== isRealtimeMode}
                                         active={this.state.selectedTag === tagProps.tag.toLowerCase()}
                                         className={classNames(
                                             styles.filterBarItem,
@@ -302,7 +331,7 @@ class LibraryComponent extends React.Component {
                             insetIconURL={dataItem.insetIconURL}
                             internetConnectionRequired={dataItem.internetConnectionRequired}
                             isLoaded={dataItem.isLoaded}
-                            isUnloadble={this.props.isUnloadble}
+                            isUnloadble={this.props.isUnloadble && dataItem.supportDevice}
                             isPlaying={this.state.playingItem === index}
                             key={typeof dataItem.name === 'string' ? dataItem.name : dataItem.rawURL}
                             learnMore={dataItem.learnMore}
