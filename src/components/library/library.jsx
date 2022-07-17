@@ -26,7 +26,7 @@ const messages = defineMessages({
         description: 'Label for library tag to revert to all items after filtering by tag.'
     },
     networkTag: {
-        id: 'gui.library.nework',
+        id: 'gui.library.network',
         defaultMessage: '网络服务',
         description: 'Label for library tag to revert to all items after filtering by tag.'
     },
@@ -67,7 +67,10 @@ const NETWORK_TAG = { tag: 'network', intlLabel: messages.networkTag, isRealtime
 const SENSOR_TAG = { tag: 'sensor', intlLabel: messages.sensorTag};
 const BASEMODULE_TAG = { tag: 'basemodule', intlLabel: messages.baseModuleTag, isRealtimeMode: true };
 const MPU_TAG = { tag: 'mpu', intlLabel: messages.mpuTag }
-const tagListPrefix = [ALL_TAG, MPU_TAG, NETWORK_TAG, SENSOR_TAG, BASEMODULE_TAG];
+const MOTION_TAG = { tag: 'motion', intlLabel: messages.motionTag}
+const DISPLAY_TAG = { tag: 'display', intlLabel: messages.displayTag };
+const COMMUNICATION_TAG = { tag: 'communication', intlLabel: messages.communicationTag };
+const tagListPrefix = [ALL_TAG, BASEMODULE_TAG, MPU_TAG, NETWORK_TAG, SENSOR_TAG, MOTION_TAG, DISPLAY_TAG, COMMUNICATION_TAG];
 
 /**
  * Find the AssetType which corresponds to a particular file extension. For example, 'png' => AssetType.ImageBitmap.
