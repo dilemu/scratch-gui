@@ -183,10 +183,18 @@ class ExtensionLibrary extends React.PureComponent {
             rawURL: device.iconURL || deviceIcon,
             ...device
         }));
-        const builtinLibraryThumbnailData = this.props.isRealtimeMode? extensionLibraryContent.map(extension => ({
-            rawURL: extension.iconURL || extensionIcon,
-            ...extension
-        })): [];
+        let builtinLibraryThumbnailData = [];
+        if(device) {
+            builtinLibraryThumbnailData = this.props.isRealtimeMode ? extensionLibraryContent.filter(extension => (extension.supportDevice || []).includes(this.props.deviceId)).map(extension => ({
+                rawURL: extension.iconURL || extensionIcon,
+                ...extension
+            })) : [];
+        } else {
+            builtinLibraryThumbnailData = this.props.isRealtimeMode ? extensionLibraryContent.filter(extension => !extension.supportDevice).map(extension => ({
+                rawURL: extension.iconURL || extensionIcon,
+                ...extension
+            })) : [];
+        }
         const deviceExtensionLibraryThumbnailData = this.state.deviceExtensions.filter(
             extension => extension.supportDevice.includes(this.props.deviceId) ||
                 extension.supportDevice.includes(device.deviceExtensionsCompatible))

@@ -256,11 +256,14 @@ export default [
     {
         name: "超声波传感器",
         extensionId: "ArduinoNanoUltrasonic",
-        collaborator: "PPSS",
         description: "超声波传感器",
         tags: ["sensor"],
-        iconURL: arduinonanoUltrasonic,
-        insetIconURL: arduinonanoUltrasonic
+        iconURL: diIntelligentData,
+        insetIconURL: diIntelligentDataInsert,
+        featured: true,
+        version: '1.0.0',
+        author: 'bjppss',
+        supportDevice: ['arduinoNano'],
     },
     // {
     //     name: (
