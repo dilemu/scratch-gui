@@ -185,7 +185,7 @@ class ExtensionLibrary extends React.PureComponent {
         }));
         let builtinLibraryThumbnailData = [];
         if(device) {
-            builtinLibraryThumbnailData = this.props.isRealtimeMode ? extensionLibraryContent.filter(extension => (extension.supportDevice || []).includes(this.props.deviceId)).map(extension => ({
+            builtinLibraryThumbnailData = this.props.isRealtimeMode ? extensionLibraryContent.filter(extension => !extension.supportDevice || (extension.supportDevice || []).includes(this.props.deviceId)).map(extension => ({
                 rawURL: extension.iconURL || extensionIcon,
                 ...extension
             })) : [];
