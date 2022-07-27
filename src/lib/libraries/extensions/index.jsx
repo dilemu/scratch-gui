@@ -44,7 +44,7 @@ import diTextRecognitionInsert from "./diTextRecognition/diTextRecognitionInsert
 import diWordProcessing from "./diWordProcessing/diWordProcessing.png";
 import diWordProcessingInsert from "./diWordProcessing/diWordProcessingInsert.png";
 
-import arduinonanoUltrasonic from "./arduinonano/ultrasonic/ultrasonic.png";
+// import arduinonanoUltrasonic from "./arduinonano/ultrasonic/ultrasonic.png";
 
 // import ev3IconURL from './ev3/ev3.png';
 // import ev3InsetIconURL from './ev3/ev3-small.svg';
@@ -279,7 +279,7 @@ export default [
     },
     {
         name: "无源蜂鸣器",
-        extensionId: "ArduinoNanoUltrasonic",
+        extensionId: "ArduinoNanoPassiveBuzzer",
         description: "",
         tags: ["motion"],
         iconURL: diIntelligentData,
@@ -291,7 +291,7 @@ export default [
     },
     {
         name: "轴流式风扇",
-        extensionId: "ArduinoNanoUltrasonic",
+        extensionId: "ArduinoNanoFanControl",
         description: "",
         tags: ["motion"],
         iconURL: diIntelligentData,
@@ -303,7 +303,7 @@ export default [
     },
     {
         name: "红绿双色灯",
-        extensionId: "ArduinoNanoUltrasonic",
+        extensionId: "ArduinoNanoLEDButton",
         description: "",
         tags: ["display"],
         iconURL: diIntelligentData,
@@ -315,7 +315,7 @@ export default [
     },
     {
         name: "纯白单色灯",
-        extensionId: "ArduinoNanoUltrasonic",
+        extensionId: "ArduinoNanoLEDButton",
         description: "",
         tags: ["display"],
         iconURL: diIntelligentData,
@@ -327,7 +327,7 @@ export default [
     },
     {
         name: "四位数码管",
-        extensionId: "ArduinoNanoUltrasonic",
+        extensionId: "ArduinoFourDigitClockDisplay",
         description: "",
         tags: ["display"],
         iconURL: diIntelligentData,
@@ -339,7 +339,7 @@ export default [
     },
     {
         name: "光敏传感器",
-        extensionId: "ArduinoNanoUltrasonic",
+        extensionId: "ArduinoNanoLightSensor",
         description: "",
         tags: ["sensor"],
         iconURL: diIntelligentData,
@@ -375,7 +375,7 @@ export default [
     },
     {
         name: "声音传感器",
-        extensionId: "ArduinoNanoUltrasonic",
+        extensionId: "ArduinoNanoVoiceSensor",
         description: "",
         tags: ["sensor"],
         iconURL: diIntelligentData,
@@ -387,7 +387,7 @@ export default [
     },
     {
         name: "触摸传感器",
-        extensionId: "ArduinoNanoUltrasonic",
+        extensionId: "ArduinoNanoTouch",
         description: "",
         tags: ["sensor"],
         iconURL: diIntelligentData,
@@ -399,9 +399,9 @@ export default [
     },
     {
         name: "电机驱动模块",
-        extensionId: "ArduinoNanoUltrasonic",
+        extensionId: "ArduinoNanoMotor",
         description: "",
-        tags: ["sensor"],
+        tags: ["motion"],
         iconURL: diIntelligentData,
         insetIconURL: diIntelligentDataInsert,
         featured: true,
@@ -413,7 +413,7 @@ export default [
         name: "乐高舵机（180°）",
         extensionId: "ArduinoNanoUltrasonic",
         description: "",
-        tags: ["sensor"],
+        tags: ["motion"],
         iconURL: diIntelligentData,
         insetIconURL: diIntelligentDataInsert,
         featured: true,
