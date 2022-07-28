@@ -351,7 +351,7 @@ export default [
     },
     {
         name: "温湿度传感器",
-        extensionId: "ArduinoNanoUltrasonic",
+        extensionId: "ArduinoNanoDHT",
         description: "",
         tags: ["sensor"],
         iconURL: diIntelligentData,
