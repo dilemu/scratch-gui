@@ -110,7 +110,7 @@ export default [
             />
         ),
         extensionId: "diVoice",
-        collaborator: "PPSS",
+        
         iconURL: diVoice,
         insetIconURL: diVoiceInsert,
         description: (
@@ -122,7 +122,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        tags: ["network"],
+        
     },
     {
         name: (
@@ -133,7 +133,7 @@ export default [
             />
         ),
         extensionId: "diTextRecognition",
-        collaborator: "PPSS",
+        
         iconURL: diTextRecognition,
         insetIconURL: diTextRecognitionInsert,
         description: (
@@ -145,7 +145,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        tags: ["network"],
+        
     },
     {
         name: (
@@ -156,7 +156,7 @@ export default [
             />
         ),
         extensionId: "diImageProcessing",
-        collaborator: "PPSS",
+        
         iconURL: diImageProcessing,
         insetIconURL: diImageProcessingInsert,
         description: (
@@ -168,7 +168,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        tags: ["network"],
+        
     },
     {
         name: (
@@ -179,7 +179,7 @@ export default [
             />
         ),
         extensionId: "imageRecognition",
-        collaborator: "PPSS",
+        
         iconURL: imageRecognition,
         insetIconURL: imageRecognitionInsert,
         description: (
@@ -191,7 +191,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        tags: ["network"],
+        
     },
     {
         name: (
@@ -202,7 +202,7 @@ export default [
             />
         ),
         extensionId: "diBodyRecognition",
-        collaborator: "PPSS",
+        
         iconURL: diBodyRecognition,
         insetIconURL: diBodyRecognitionInsert,
         description: (
@@ -214,7 +214,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        tags: ["network"],
+        
     },
     {
         name: (
@@ -225,7 +225,7 @@ export default [
             />
         ),
         extensionId: "diWordProcessing",
-        collaborator: "PPSS",
+        
         iconURL: diWordProcessing,
         insetIconURL: diWordProcessingInsert,
         description: (
@@ -237,7 +237,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        tags: ["network"],
+        
     },
     {
         name: (
@@ -248,7 +248,7 @@ export default [
             />
         ),
         extensionId: "diMachineLeaning",
-        collaborator: "PPSS",
+        
         iconURL: diMachineLeaning,
         insetIconURL: diMachineLeaningInsert,
         description: (
@@ -260,7 +260,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        tags: ["network"],
+        
     },
     {
         name: (
@@ -271,7 +271,7 @@ export default [
             />
         ),
         extensionId: "diIntelligentData",
-        collaborator: "PPSS",
+        
         iconURL: diIntelligentData,
         insetIconURL: diIntelligentDataInsert,
         description: (
@@ -283,174 +283,160 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        tags: ["network"],
+        
     },
     {
         name: "单按钮模块",
         extensionId: "ArduinoNanoSingleButton",
-        description: "",
+        description: "按下输出高电平，松开输出低电平",
         tags: ["motion"],
         iconURL: arduinonanoSingleButtonLarge,
         insetIconURL: arduinonanoSingleButtonSmall,
         featured: true,
-        version: '1.0.0',
-        author: 'bjppss',
+        
         supportDevice: ['arduinoNano'],
     }, 
     {
         name: "指示灯按钮",
         extensionId: "ArduinoNanoLEDButton",
-        description: "",
+        description: "按钮触发，LED高电平点亮",
         tags: ["motion"],
         iconURL: arduinoNanoLEDButtonLarge,
         insetIconURL: arduinoNanoLEDButtonSmall,
         featured: true,
-        version: '1.0.0',
-        author: 'bjppss',
+        
         supportDevice: ['arduinoNano'],
     },
     {
         name: "无源蜂鸣器",
         extensionId: "ArduinoNanoPassiveBuzzer",
-        description: "",
+        description: "可通过音调和节拍控制无源声音输出；可通过频率和使劲按控制有源声音输出",
         tags: ["motion"],
         iconURL: arduinoNanoPassiveBuzzerLarge,
         insetIconURL: arduinoNanoPassiveBuzzerSmall,
         featured: true,
-        version: '1.0.0',
-        author: 'bjppss',
+        
         supportDevice: ['arduinoNano'],
     },
     {
         name: "轴流式风扇",
         extensionId: "ArduinoNanoFanControl",
-        description: "",
+        description: "可控制速度和正反转的风扇",
         tags: ["motion"],
         iconURL: arduinoNanoFanControlLarge,
         insetIconURL: arduinoNanoFanControlSmall,
         featured: true,
-        version: '1.0.0',
-        author: 'bjppss',
+        
         supportDevice: ['arduinoNano'],
     },
     {
         name: "红绿双色灯",
         extensionId: "ArduinoNanoLEDButton",
-        description: "",
+        description: "可控制单路点亮和双路点亮的双色LED",
         tags: ["display"],
         iconURL: arduinoNanoRedAndGreenLedLarge,
         insetIconURL: arduinoNanoRedAndGreenLedSmall,
         featured: true,
-        version: '1.0.0',
-        author: 'bjppss',
+        
         supportDevice: ['arduinoNano'],
     },
     {
         name: "纯白单色灯",
         extensionId: "ArduinoNanoLEDButton",
-        description: "",
+        description: "可控制单路点亮的白色LED",
         tags: ["display"],
         iconURL: arduinoNanoWhiteLEDLarge,
         insetIconURL: arduinoNanoWhiteLEDSmall,
         featured: true,
-        version: '1.0.0',
-        author: 'bjppss',
+        
         supportDevice: ['arduinoNano'],
     },
     {
         name: "四位数码管",
         extensionId: "ArduinoFourDigitClockDisplay",
-        description: "",
+        description: "显示模块，IIC接口",
         tags: ["display"],
         iconURL: arduinoNanoFDCDLarge,
         insetIconURL: arduinoNanoFDCDSmall,
         featured: true,
-        version: '1.0.0',
-        author: 'bjppss',
+        
         supportDevice: ['arduinoNano'],
     },
     {
         name: "光敏传感器",
         extensionId: "ArduinoNanoLightSensor",
-        description: "",
+        description: "可测量环境光强度",
         tags: ["sensor"],
         iconURL: arduinoNanoLightSensorLarge,
         insetIconURL: arduinoNanoLightSensorSmall,
         featured: true,
-        version: '1.0.0',
-        author: 'bjppss',
+        
         supportDevice: ['arduinoNano'],
     },
     {
         name: "温湿度传感器",
         extensionId: "ArduinoNanoDHT",
-        description: "",
+        description: "可测量环境温度、湿度",
         tags: ["sensor"],
         iconURL: arduinoNanoDHTLarge,
         insetIconURL: arduinoNanoDHTSmall,
         featured: true,
-        version: '1.0.0',
-        author: 'bjppss',
+        
         supportDevice: ['arduinoNano'],
     },
     {
         name: "超声波传感器",
         extensionId: "ArduinoNanoUltrasonic",
-        description: "",
+        description: "模拟双探头超声波测距",
         tags: ["sensor"],
         iconURL: arduinoNanoUltrasonicLarge,
         insetIconURL: arduinoNanoUltrasonicSmall,
         featured: true,
-        version: '1.0.0',
-        author: 'bjppss',
+        
         supportDevice: ['arduinoNano'],
     },
     {
         name: "声音传感器",
         extensionId: "ArduinoNanoVoiceSensor",
-        description: "",
+        description: "测量环境中声音强度",
         tags: ["sensor"],
         iconURL: arduinoNanoTouchLarge,
         insetIconURL: arduinoNanoTouchSmall,
         featured: true,
-        version: '1.0.0',
-        author: 'bjppss',
+        
         supportDevice: ['arduinoNano'],
     },
     {
         name: "触摸传感器",
         extensionId: "ArduinoNanoTouch",
-        description: "",
+        description: "触摸开关、可感应人体、金属",
         tags: ["sensor"],
         iconURL: arduinoNanoTouchSensorLarge,
         insetIconURL: arduinoNanoTouchSensorSmall,
         featured: true,
-        version: '1.0.0',
-        author: 'bjppss',
+        
         supportDevice: ['arduinoNano'],
     },
     {
         name: "电机驱动模块",
         extensionId: "ArduinoNanoMotor",
-        description: "",
+        description: "可控制正反转和调速的电机",
         tags: ["motion"],
         iconURL: arduinoNanoMotorLarge,
         insetIconURL: arduinoNanoMotorSmall,
         featured: true,
-        version: '1.0.0',
-        author: 'bjppss',
+        
         supportDevice: ['arduinoNano'],
     },
     {
-        name: "乐高舵机（180°）",
+        name: "舵机模块（180°）",
         extensionId: "ArduinoNanoServo",
-        description: "",
+        description: "可在0~180°间转动到指定角度位置",
         tags: ["motion"],
         iconURL: arduinoNanoServoLarge,
         insetIconURL: arduinoNanoServoSmall,
         featured: true,
-        version: '1.0.0',
-        author: 'bjppss',
+        
         supportDevice: ['arduinoNano'],
     },
     
@@ -549,7 +535,7 @@ export default [
             />
         ),
         extensionId: "text2speech",
-        collaborator: "Amazon Web Services",
+        // collaborator: "Amazon Web Services",
         iconURL: text2speechIconURL,
         insetIconURL: text2speechInsetIconURL,
         description: (
@@ -560,7 +546,7 @@ export default [
             />
         ),
         featured: true,
-        internetConnectionRequired: true,
+        // internetConnectionRequired: true,
         tags: ["basemodule"]
     },
     {
@@ -572,7 +558,7 @@ export default [
             />
         ),
         extensionId: "translate",
-        collaborator: "Google",
+        // collaborator: "Google",
         iconURL: translateIconURL,
         insetIconURL: translateInsetIconURL,
         description: (
@@ -583,7 +569,7 @@ export default [
             />
         ),
         featured: true,
-        internetConnectionRequired: true,
+        // internetConnectionRequired: true,
         tags: ["basemodule"]
     },
     {
@@ -595,7 +581,7 @@ export default [
             />
         ),
         extensionId: "makeymakey",
-        collaborator: "JoyLabz",
+        // collaborator: "JoyLabz",
         iconURL: makeymakeyIconURL,
         insetIconURL: makeymakeyInsetIconURL,
         description: (
@@ -617,7 +603,7 @@ export default [
     //         />
     //     ),
     //     extensionId: "speech2text",
-    //     collaborator: "PPSS",
+    //     
     //     iconURL: helloworldImage,
     //     insetIconURL: helloworldImage,
     //     description: (
