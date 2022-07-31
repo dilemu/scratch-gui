@@ -44,7 +44,39 @@ import diTextRecognitionInsert from "./diTextRecognition/diTextRecognitionInsert
 import diWordProcessing from "./diWordProcessing/diWordProcessing.png";
 import diWordProcessingInsert from "./diWordProcessing/diWordProcessingInsert.png";
 
-// import arduinonanoUltrasonic from "./arduinonano/ultrasonic/ultrasonic.png";
+
+import arduinonanoSingleButtonLarge from "./arduinoNano/singleButton/large.png";
+import arduinonanoSingleButtonSmall from "./arduinoNano/singleButton/small.png";
+import arduinoNanoLEDButtonLarge from "./arduinoNano/ledButton/large.png";
+import arduinoNanoLEDButtonSmall from "./arduinoNano/ledButton/small.png";
+import arduinoNanoPassiveBuzzerLarge from "./arduinoNano/passiveBuzzer/large.png";
+import arduinoNanoPassiveBuzzerSmall from "./arduinoNano/passiveBuzzer/small.png";
+import arduinoNanoFanControlLarge from "./arduinoNano/fanControl/large.png";
+import arduinoNanoFanControlSmall from "./arduinoNano/fanControl/small.png";
+import arduinoNanoRedAndGreenLedLarge from "./arduinoNano/redAndGreenLed/large.png";
+import arduinoNanoRedAndGreenLedSmall from "./arduinoNano/redAndGreenLed/small.png";
+import arduinoNanoWhiteLEDLarge from "./arduinoNano/whiteLED/large.png";
+import arduinoNanoWhiteLEDSmall from "./arduinoNano/whiteLED/small.png";
+import arduinoNanoFDCDLarge from "./arduinoNano/fourDigitClockDisplay/large.png";
+import arduinoNanoFDCDSmall from "./arduinoNano/fourDigitClockDisplay/small.png";
+import arduinoNanoLightSensorLarge from "./arduinoNano/lightSensor/large.png";
+import arduinoNanoLightSensorSmall from "./arduinoNano/lightSensor/small.png";
+import arduinoNanoDHTLarge from "./arduinoNano/DHT/large.png";
+import arduinoNanoDHTSmall from "./arduinoNano/DHT/small.png";
+import arduinoNanoUltrasonicLarge from "./arduinoNano/ultrasonic/large.png";
+import arduinoNanoUltrasonicSmall from "./arduinoNano/ultrasonic/small.png";
+// import arduinoNanoVoiceSensorLarge from "./arduinoNano/voiceSensor/large.png";
+// import arduinoNanoVoiceSensorSmall from "./arduinoNano/voiceSensor/small.png";
+import arduinoNanoTouchSensorLarge from "./arduinoNano/touch/large.png";
+import arduinoNanoTouchSensorSmall from "./arduinoNano/touch/small.png";
+import arduinoNanoTouchLarge from "./arduinoNano/touch/large.png";
+import arduinoNanoTouchSmall from "./arduinoNano/touch/small.png";
+import arduinoNanoMotorLarge from "./arduinoNano/motor/large.png";
+import arduinoNanoMotorSmall from "./arduinoNano/motor/small.png";
+import arduinoNanoServoLarge from "./arduinoNano/servo/large.png";
+import arduinoNanoServoSmall from "./arduinoNano/servo/small.png";
+
+// import arduinonanoUltrasonic from "./arduinoNano/ultrasonic/ultrasonic.png";
 
 // import ev3IconURL from './ev3/ev3.png';
 // import ev3InsetIconURL from './ev3/ev3-small.svg';
@@ -258,8 +290,8 @@ export default [
         extensionId: "ArduinoNanoSingleButton",
         description: "",
         tags: ["motion"],
-        iconURL: diIntelligentData,
-        insetIconURL: diIntelligentDataInsert,
+        iconURL: arduinonanoSingleButtonLarge,
+        insetIconURL: arduinonanoSingleButtonSmall,
         featured: true,
         version: '1.0.0',
         author: 'bjppss',
@@ -270,8 +302,8 @@ export default [
         extensionId: "ArduinoNanoLEDButton",
         description: "",
         tags: ["motion"],
-        iconURL: diIntelligentData,
-        insetIconURL: diIntelligentDataInsert,
+        iconURL: arduinoNanoLEDButtonLarge,
+        insetIconURL: arduinoNanoLEDButtonSmall,
         featured: true,
         version: '1.0.0',
         author: 'bjppss',
@@ -282,8 +314,8 @@ export default [
         extensionId: "ArduinoNanoPassiveBuzzer",
         description: "",
         tags: ["motion"],
-        iconURL: diIntelligentData,
-        insetIconURL: diIntelligentDataInsert,
+        iconURL: arduinoNanoPassiveBuzzerLarge,
+        insetIconURL: arduinoNanoPassiveBuzzerSmall,
         featured: true,
         version: '1.0.0',
         author: 'bjppss',
@@ -294,8 +326,8 @@ export default [
         extensionId: "ArduinoNanoFanControl",
         description: "",
         tags: ["motion"],
-        iconURL: diIntelligentData,
-        insetIconURL: diIntelligentDataInsert,
+        iconURL: arduinoNanoFanControlLarge,
+        insetIconURL: arduinoNanoFanControlSmall,
         featured: true,
         version: '1.0.0',
         author: 'bjppss',
@@ -306,8 +338,8 @@ export default [
         extensionId: "ArduinoNanoLEDButton",
         description: "",
         tags: ["display"],
-        iconURL: diIntelligentData,
-        insetIconURL: diIntelligentDataInsert,
+        iconURL: arduinoNanoRedAndGreenLedLarge,
+        insetIconURL: arduinoNanoRedAndGreenLedSmall,
         featured: true,
         version: '1.0.0',
         author: 'bjppss',
@@ -318,8 +350,8 @@ export default [
         extensionId: "ArduinoNanoLEDButton",
         description: "",
         tags: ["display"],
-        iconURL: diIntelligentData,
-        insetIconURL: diIntelligentDataInsert,
+        iconURL: arduinoNanoWhiteLEDLarge,
+        insetIconURL: arduinoNanoWhiteLEDSmall,
         featured: true,
         version: '1.0.0',
         author: 'bjppss',
@@ -330,8 +362,8 @@ export default [
         extensionId: "ArduinoFourDigitClockDisplay",
         description: "",
         tags: ["display"],
-        iconURL: diIntelligentData,
-        insetIconURL: diIntelligentDataInsert,
+        iconURL: arduinoNanoFDCDLarge,
+        insetIconURL: arduinoNanoFDCDSmall,
         featured: true,
         version: '1.0.0',
         author: 'bjppss',
@@ -342,8 +374,8 @@ export default [
         extensionId: "ArduinoNanoLightSensor",
         description: "",
         tags: ["sensor"],
-        iconURL: diIntelligentData,
-        insetIconURL: diIntelligentDataInsert,
+        iconURL: arduinoNanoLightSensorLarge,
+        insetIconURL: arduinoNanoLightSensorSmall,
         featured: true,
         version: '1.0.0',
         author: 'bjppss',
@@ -354,8 +386,8 @@ export default [
         extensionId: "ArduinoNanoDHT",
         description: "",
         tags: ["sensor"],
-        iconURL: diIntelligentData,
-        insetIconURL: diIntelligentDataInsert,
+        iconURL: arduinoNanoDHTLarge,
+        insetIconURL: arduinoNanoDHTSmall,
         featured: true,
         version: '1.0.0',
         author: 'bjppss',
@@ -366,8 +398,8 @@ export default [
         extensionId: "ArduinoNanoUltrasonic",
         description: "",
         tags: ["sensor"],
-        iconURL: diIntelligentData,
-        insetIconURL: diIntelligentDataInsert,
+        iconURL: arduinoNanoUltrasonicLarge,
+        insetIconURL: arduinoNanoUltrasonicSmall,
         featured: true,
         version: '1.0.0',
         author: 'bjppss',
@@ -378,8 +410,8 @@ export default [
         extensionId: "ArduinoNanoVoiceSensor",
         description: "",
         tags: ["sensor"],
-        iconURL: diIntelligentData,
-        insetIconURL: diIntelligentDataInsert,
+        iconURL: arduinoNanoTouchLarge,
+        insetIconURL: arduinoNanoTouchSmall,
         featured: true,
         version: '1.0.0',
         author: 'bjppss',
@@ -390,8 +422,8 @@ export default [
         extensionId: "ArduinoNanoTouch",
         description: "",
         tags: ["sensor"],
-        iconURL: diIntelligentData,
-        insetIconURL: diIntelligentDataInsert,
+        iconURL: arduinoNanoTouchSensorLarge,
+        insetIconURL: arduinoNanoTouchSensorSmall,
         featured: true,
         version: '1.0.0',
         author: 'bjppss',
@@ -402,8 +434,8 @@ export default [
         extensionId: "ArduinoNanoMotor",
         description: "",
         tags: ["motion"],
-        iconURL: diIntelligentData,
-        insetIconURL: diIntelligentDataInsert,
+        iconURL: arduinoNanoMotorLarge,
+        insetIconURL: arduinoNanoMotorSmall,
         featured: true,
         version: '1.0.0',
         author: 'bjppss',
@@ -411,11 +443,11 @@ export default [
     },
     {
         name: "乐高舵机（180°）",
-        extensionId: "ArduinoNanoUltrasonic",
+        extensionId: "ArduinoNanoServo",
         description: "",
         tags: ["motion"],
-        iconURL: diIntelligentData,
-        insetIconURL: diIntelligentDataInsert,
+        iconURL: arduinoNanoServoLarge,
+        insetIconURL: arduinoNanoServoSmall,
         featured: true,
         version: '1.0.0',
         author: 'bjppss',

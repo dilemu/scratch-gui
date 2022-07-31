@@ -191,7 +191,7 @@ const GUIComponent = props => {
                 <UploadModal vm={vm} />
                 <ImagePreview vm={vm} />
                 <TmImgTrain vm={vm} />
-                {telemetryModalVisible ? (
+                {/* {telemetryModalVisible ? (
                     <TelemetryModal
                         isRtl={isRtl}
                         isTelemetryEnabled={isTelemetryEnabled}
@@ -201,7 +201,7 @@ const GUIComponent = props => {
                         onRequestClose={onRequestCloseTelemetryModal}
                         onShowPrivacyPolicy={onShowPrivacyPolicy}
                     />
-                ) : null}
+                ) : null} */}
                 {loading ? <Loader /> : null}
                 {/* <Loader /> */}
                 {/* {isCreating ? <Loader messageId="gui.loader.creating" /> : null} */}

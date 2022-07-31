@@ -28,45 +28,63 @@ const messages = defineMessages({
         description: 'Prompt for unoffical extension url',
         id: 'gui.extensionLibrary.extensionUrl'
     },
-    shieldTag: {
-        id: 'gui.library.shieldTag',
-        defaultMessage: 'Shield',
-        description: 'Shield tag to filter all shield libraries.'
+    filterPlaceholder: {
+        id: 'gui.library.filterPlaceholder',
+        defaultMessage: 'Search',
+        description: 'Placeholder text for library search field'
     },
-    actuatorTag: {
-        id: 'gui.library.actuatorTag',
-        defaultMessage: 'Actuator',
-        description: 'Actuator tag to filter all actuator libraries.'
+    allTag: {
+        id: 'gui.library.allTag',
+        defaultMessage: 'All',
+        description: 'Label for library tag to revert to all items after filtering by tag.'
+    },
+    networkTag: {
+        id: 'gui.library.network',
+        defaultMessage: '网络服务',
+        description: 'Label for library tag to revert to all items after filtering by tag.'
     },
     sensorTag: {
-        id: 'gui.library.sensorTag',
-        defaultMessage: 'Sensor',
-        description: 'Sensor tag to filter all sensor libraries.'
+        id: 'gui.library.sensor',
+        defaultMessage: '传感器',
+        description: 'Label for library tag to revert to all items after filtering by tag.'
+    },
+    motionTag: {
+        id: 'gui.library.motion',
+        defaultMessage: '执行器',
+        description: 'Label for library tag to revert to all items after filtering by tag.'
     },
     displayTag: {
-        id: 'gui.library.displayTag',
-        defaultMessage: 'Display',
-        description: 'Display tag to filter all display libraries.'
+        id: 'gui.library.display',
+        defaultMessage: '显示器',
+        description: 'Label for library tag to revert to all items after filtering by tag.'
+    },
+    baseModuleTag: {
+        id: 'gui.library.baseModuleTag',
+        defaultMessage: '功能模块',
+        description: 'Label for library tag to revert to all items after filtering by tag.'
+    },
+    mpuTag: {
+        id: 'gui.library.mpu',
+        defaultMessage: '主控板',
+        description: 'Label for library tag to revert to all items after filtering by tag.'
     },
     communicationTag: {
-        id: 'gui.library.communicationTag',
-        defaultMessage: 'Communication',
-        description: 'Communication tag to filter all communication libraries.'
-    },
-    otherTag: {
-        id: 'gui.library.otherTag',
-        defaultMessage: 'Other',
-        description: 'Other tag to filter all other libraries.'
+        id: 'gui.library.communication',
+        defaultMessage: '通信模块',
+        description: 'Label for library tag to revert to all items after filtering by tag.'
     }
 });
 
-const SHIELD_TAG = {tag: 'shield', intlLabel: messages.shieldTag};
-const ACTUATOR_TAG = {tag: 'actuator', intlLabel: messages.actuatorTag};
-const SENSOR_TAG = {tag: 'sensor', intlLabel: messages.sensorTag};
-const DISPLAY_TAG = {tag: 'display', intlLabel: messages.displayTag};
-const COMMUNICATION_TAG = {tag: 'communication', intlLabel: messages.communicationTag};
-const OTHER_TAG = {tag: 'other', intlLabel: messages.otherTag};
-const tagListPrefix = [SHIELD_TAG, ACTUATOR_TAG, SENSOR_TAG, DISPLAY_TAG, COMMUNICATION_TAG, OTHER_TAG];
+const ALL_TAG = { tag: 'all', intlLabel: messages.allTag };
+const NETWORK_TAG = { tag: 'network', intlLabel: messages.networkTag, isRealtimeMode: true };
+const SENSOR_TAG = { tag: 'sensor', intlLabel: messages.sensorTag };
+const BASEMODULE_TAG = { tag: 'basemodule', intlLabel: messages.baseModuleTag, isRealtimeMode: true };
+const MPU_TAG = { tag: 'mpu', intlLabel: messages.mpuTag }
+const MOTION_TAG = { tag: 'motion', intlLabel: messages.motionTag }
+const DISPLAY_TAG = { tag: 'display', intlLabel: messages.displayTag };
+const COMMUNICATION_TAG = { tag: 'communication', intlLabel: messages.communicationTag };
+const tagListPrefix = [BASEMODULE_TAG, MPU_TAG, NETWORK_TAG, SENSOR_TAG, MOTION_TAG, DISPLAY_TAG, COMMUNICATION_TAG];
+
 
 class ExtensionLibrary extends React.PureComponent {
     constructor (props) {
@@ -215,7 +233,7 @@ class ExtensionLibrary extends React.PureComponent {
                 data={fullExtensionData}
                 filterable
                 // tags={this.props.isRealtimeMode ? [] : tagListPrefix}
-                tags={[]}
+                tags={tagListPrefix}
                 defaultTag={this.props.isRealtimeMode ? 'all' : 'all'}
                 id="extensionLibrary"
                 isUnloadble={!this.props.isRealtimeMode}

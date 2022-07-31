@@ -24,54 +24,11 @@ const messages = defineMessages({
         id: 'gui.library.allTag',
         defaultMessage: 'All',
         description: 'Label for library tag to revert to all items after filtering by tag.'
-    },
-    networkTag: {
-        id: 'gui.library.network',
-        defaultMessage: '网络服务',
-        description: 'Label for library tag to revert to all items after filtering by tag.'
-    },
-    sensorTag: {
-        id: 'gui.library.sensor',
-        defaultMessage: '传感器',
-        description: 'Label for library tag to revert to all items after filtering by tag.'
-    },
-    motionTag: {
-        id: 'gui.library.motion',
-        defaultMessage: '执行器',
-        description: 'Label for library tag to revert to all items after filtering by tag.'
-    },
-    displayTag: {
-        id: 'gui.library.display',
-        defaultMessage: '显示器',
-        description: 'Label for library tag to revert to all items after filtering by tag.'
-    },
-    baseModuleTag: {
-        id: 'gui.library.baseModuleTag',
-        defaultMessage: '功能模块',
-        description: 'Label for library tag to revert to all items after filtering by tag.'
-    },
-    mpuTag: {
-        id: 'gui.library.mpu',
-        defaultMessage: '主控板',
-        description: 'Label for library tag to revert to all items after filtering by tag.'
-    },
-    communicationTag: {
-        id: 'gui.library.communication',
-        defaultMessage: '通信模块',
-        description: 'Label for library tag to revert to all items after filtering by tag.'
     }
 });
 
-const ALL_TAG = {tag: 'all', intlLabel: messages.allTag};
-const NETWORK_TAG = { tag: 'network', intlLabel: messages.networkTag, isRealtimeMode: true };
-const SENSOR_TAG = { tag: 'sensor', intlLabel: messages.sensorTag};
-const BASEMODULE_TAG = { tag: 'basemodule', intlLabel: messages.baseModuleTag, isRealtimeMode: true };
-const MPU_TAG = { tag: 'mpu', intlLabel: messages.mpuTag }
-const MOTION_TAG = { tag: 'motion', intlLabel: messages.motionTag}
-const DISPLAY_TAG = { tag: 'display', intlLabel: messages.displayTag };
-const COMMUNICATION_TAG = { tag: 'communication', intlLabel: messages.communicationTag };
-const tagListPrefix = [ALL_TAG, BASEMODULE_TAG, MPU_TAG, NETWORK_TAG, SENSOR_TAG, MOTION_TAG, DISPLAY_TAG, COMMUNICATION_TAG];
-
+const ALL_TAG = { tag: 'all', intlLabel: messages.allTag };
+const tagListPrefix = [ALL_TAG];
 /**
  * Find the AssetType which corresponds to a particular file extension. For example, 'png' => AssetType.ImageBitmap.
  * @param {string} fileExtension - the file extension to look up.
@@ -144,7 +101,7 @@ class LibraryComponent extends React.Component {
         this.state = {
             playingItem: null,
             filterQuery: '',
-            selectedTag: props.defaultTag,
+            selectedTag: props.defaultTag || 'all',
             loaded: false
         };
     }
