@@ -125,7 +125,7 @@ const deviceData = [
             />
         ),
         featured: true,
-        disabled: false,
+        disabled: true,
         bluetoothRequired: false,
         serialportRequired: true,
         defaultBaudRate: '9600',
@@ -162,7 +162,7 @@ const deviceData = [
             />
         ),
         featured: true,
-        disabled: false,
+        disabled: true,
         bluetoothRequired: false,
         serialportRequired: true,
         defaultBaudRate: '9600',
@@ -199,7 +199,7 @@ const deviceData = [
             />
         ),
         featured: true,
-        disabled: false,
+        disabled: true,
         bluetoothRequired: false,
         serialportRequired: true,
         defaultBaudRate: '9600',
@@ -236,7 +236,7 @@ const deviceData = [
             />
         ),
         featured: true,
-        disabled: false,
+        disabled: true,
         bluetoothRequired: false,
         serialportRequired: true,
         defaultBaudRate: '9600',
