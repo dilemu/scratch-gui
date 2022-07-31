@@ -1012,7 +1012,7 @@ class MenuBar extends React.Component {
                             }
                         />
                     </div>
-                    {isScratchDesktop() ? (
+                    {/* {isScratchDesktop() ? (
                         <div
                             className={classNames(
                                 styles.menuBarItem,
@@ -1062,7 +1062,7 @@ class MenuBar extends React.Component {
                                 </MenuSection>
                             </MenuBarMenu>
                         </div>
-                    ) : null}
+                    ) : null} */}
                 </div>
                 {this.props.username ? (
                     // ************ user is logged in ************
