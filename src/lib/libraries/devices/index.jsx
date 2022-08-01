@@ -46,6 +46,10 @@ import makeymakeyIconURL from './makeymakey/makeymakey.png';
 import makeymakeyConnectionIconURL from './makeymakey/makeymakey-illustration.svg';
 import makeymakeyConnectionSmallIconURL from './makeymakey/makeymakey-small.svg';
 
+import dileban from './dileban/dileban.png';
+import zhiquban from './zhiquban/zhiquban.png';
+import zhangkongban from './zhangkongban/zhangkongban.png';
+
 const deviceData = [
     /**
      * Unselect the deivce back to pure scratch mode
@@ -74,12 +78,12 @@ const deviceData = [
         tags: ['mpu']
     },
     {
-        name: '迪乐板（Arduino Nano）',
+        name: '迪乐板',
         deviceId: 'arduinoNano',
         manufactor: 'arduino.cc',
         learnMore: 'https://store.arduino.cc/usa/arduino-nano',
         type: DeviceType.arduino,
-        iconURL: arduinoNanoIconURL,
+        iconURL: dileban,
         description: (
             <FormattedMessage
                 defaultMessage="The Arduino Nano is a classic small board to build your projects with."
@@ -89,6 +93,43 @@ const deviceData = [
         ),
         featured: true,
         disabled: false,
+        bluetoothRequired: false,
+        serialportRequired: true,
+        defaultBaudRate: '9600',
+        internetConnectionRequired: false,
+        launchPeripheralConnectionFlow: true,
+        useAutoScan: false,
+        // connectionIconURL: arduinoNanoConnectionIconURLL,
+        // connectionSmallIconURL: arduinoNanoConnectionSmallIconURL,
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their device."
+                id="gui.device.arduinoNano.connectingMessage"
+            />
+        ),
+        baseToolBoxXml: arduinoBaseToolBox,
+        programMode: ['realtime', 'upload'],
+        programLanguage: ['block', 'c', 'cpp'],
+        tags: ['mpu'],
+        helpLink: 'https://store.arduino.cc/usa/arduino-nano'
+    },
+    {
+        name: '智趣板（尽情期待）',
+        deviceId: 'zhiquban',
+        manufactor: 'arduino.cc',
+        learnMore: 'https://store.arduino.cc/usa/arduino-nano',
+        type: DeviceType.arduino,
+        iconURL: zhiquban,
+        description: (
+            <FormattedMessage
+                defaultMessage="The Arduino Nano is a classic small board to build your projects with."
+                description="Description for the Arduino Nano device"
+                id="gui.device.arduinoNano.description"
+            />
+        ),
+        featured: true,
+        disabled: true,
         bluetoothRequired: false,
         serialportRequired: true,
         defaultBaudRate: '9600',
@@ -111,7 +152,44 @@ const deviceData = [
         helpLink: 'https://store.arduino.cc/usa/arduino-nano'
     },
     {
-        name: 'Arduino Uno（尽情期待）',
+        name: '掌控板（尽情期待）',
+        deviceId: 'zhangkongban',
+        manufactor: 'arduino.cc',
+        learnMore: 'https://store.arduino.cc/usa/arduino-nano',
+        type: DeviceType.arduino,
+        iconURL: zhangkongban,
+        description: (
+            <FormattedMessage
+                defaultMessage="The Arduino Nano is a classic small board to build your projects with."
+                description="Description for the Arduino Nano device"
+                id="gui.device.arduinoNano.description"
+            />
+        ),
+        featured: true,
+        disabled: true,
+        bluetoothRequired: false,
+        serialportRequired: true,
+        defaultBaudRate: '9600',
+        internetConnectionRequired: false,
+        launchPeripheralConnectionFlow: true,
+        useAutoScan: false,
+        connectionIconURL: arduinoNanoConnectionIconURLL,
+        connectionSmallIconURL: arduinoNanoConnectionSmallIconURL,
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their device."
+                id="gui.device.arduinoNano.connectingMessage"
+            />
+        ),
+        baseToolBoxXml: arduinoBaseToolBox,
+        programMode: ['realtime', 'upload'],
+        programLanguage: ['block', 'c', 'cpp'],
+        tags: ['mpu'],
+        helpLink: 'https://store.arduino.cc/usa/arduino-nano'
+    },
+    {
+        name: 'Arduino Uno',
         deviceId: 'arduinoUno',
         manufactor: 'arduino.cc',
         learnMore: 'https://store.arduino.cc/usa/arduino-uno-rev3',
@@ -148,116 +226,44 @@ const deviceData = [
         helpLink: 'https://store.arduino.cc/usa/arduino-uno-rev3'
     },
     {
-        name: 'Arduino Leonardo（尽情期待）',
-        deviceId: 'arduinoLeonardo',
-        manufactor: 'arduino.cc',
-        learnMore: 'https://store.arduino.cc/usa/leonardo',
-        type: DeviceType.arduino,
-        iconURL: arduinoLeonardoIconURL,
+        name: 'Micro:bit',
+        deviceId: 'microbit',
+        manufactor: 'microbit.org',
+        learnMore: 'https://microbit.org/',
+        type: DeviceType.microbit,
+        iconURL: microbitIconURL,
         description: (
             <FormattedMessage
-                defaultMessage="The classic Arduino board that can act as a mouse or keyboard."
-                description="Description for the Arduino Leonardo device"
-                id="gui.device.arduinoLeonardo.description"
+                defaultMessage="The pocket-sized computer transforming digital skills learning."
+                description="Description for the micro:bit device"
+                id="gui.device.microbit.description"
             />
         ),
         featured: true,
         disabled: true,
         bluetoothRequired: false,
         serialportRequired: true,
-        defaultBaudRate: '9600',
+        defaultBaudRate: '115200',
         internetConnectionRequired: false,
         launchPeripheralConnectionFlow: true,
         useAutoScan: false,
-        connectionIconURL: arduinoLeonardoConnectionIconURLL,
-        connectionSmallIconURL: arduinoLeonardoConnectionSmallIconURL,
+        // connectionIconURL: microbitConnectionIconURLL,
+        // connectionSmallIconURL: microbitConnectionSmallIconURL,
         connectingMessage: (
             <FormattedMessage
                 defaultMessage="Connecting"
                 description="Message to help people connect to their device."
-                id="gui.device.arduinoLeonardo.connectingMessage"
+                id="gui.device.microbit.connectingMessage"
             />
         ),
-        baseToolBoxXml: arduinoBaseToolBox,
-        programMode: ['upload'], // due to the software serilport realtim mode is unstable
-        programLanguage: ['block', 'c', 'cpp'],
+        baseToolBoxXml: microbitBaseToolBox,
+        programMode: ['upload'],
+        programLanguage: ['block', 'microPython'],
+        tags: ['microPython'],
+        helpLink: 'https://microbit.org/get-started/first-steps/introduction/',
         tags: ['mpu'],
-        helpLink: 'https://store.arduino.cc/usa/leonardo'
     },
-    {
-        name: '掌控板（尽情期待）',
-        deviceId: 'arduinoNano',
-        manufactor: 'arduino.cc',
-        learnMore: 'https://store.arduino.cc/usa/arduino-nano',
-        type: DeviceType.arduino,
-        iconURL: arduinoNanoIconURL,
-        description: (
-            <FormattedMessage
-                defaultMessage="The Arduino Nano is a classic small board to build your projects with."
-                description="Description for the Arduino Nano device"
-                id="gui.device.arduinoNano.description"
-            />
-        ),
-        featured: true,
-        disabled: true,
-        bluetoothRequired: false,
-        serialportRequired: true,
-        defaultBaudRate: '9600',
-        internetConnectionRequired: false,
-        launchPeripheralConnectionFlow: true,
-        useAutoScan: false,
-        connectionIconURL: arduinoNanoConnectionIconURLL,
-        connectionSmallIconURL: arduinoNanoConnectionSmallIconURL,
-        connectingMessage: (
-            <FormattedMessage
-                defaultMessage="Connecting"
-                description="Message to help people connect to their device."
-                id="gui.device.arduinoNano.connectingMessage"
-            />
-        ),
-        baseToolBoxXml: arduinoBaseToolBox,
-        programMode: ['realtime', 'upload'],
-        programLanguage: ['block', 'c', 'cpp'],
-        tags: ['mpu'],
-        helpLink: 'https://store.arduino.cc/usa/arduino-nano'
-    },
-    {
-        name: '智趣板（尽情期待）',
-        deviceId: 'arduinoNano',
-        manufactor: 'arduino.cc',
-        learnMore: 'https://store.arduino.cc/usa/arduino-nano',
-        type: DeviceType.arduino,
-        iconURL: arduinoNanoIconURL,
-        description: (
-            <FormattedMessage
-                defaultMessage="The Arduino Nano is a classic small board to build your projects with."
-                description="Description for the Arduino Nano device"
-                id="gui.device.arduinoNano.description"
-            />
-        ),
-        featured: true,
-        disabled: true,
-        bluetoothRequired: false,
-        serialportRequired: true,
-        defaultBaudRate: '9600',
-        internetConnectionRequired: false,
-        launchPeripheralConnectionFlow: true,
-        useAutoScan: false,
-        connectionIconURL: arduinoNanoConnectionIconURLL,
-        connectionSmallIconURL: arduinoNanoConnectionSmallIconURL,
-        connectingMessage: (
-            <FormattedMessage
-                defaultMessage="Connecting"
-                description="Message to help people connect to their device."
-                id="gui.device.arduinoNano.connectingMessage"
-            />
-        ),
-        baseToolBoxXml: arduinoBaseToolBox,
-        programMode: ['realtime', 'upload'],
-        programLanguage: ['block', 'c', 'cpp'],
-        tags: ['mpu'],
-        helpLink: 'https://store.arduino.cc/usa/arduino-nano'
-    },
+    
     // {
     //     name: 'Arduino Mega 2560',
     //     deviceId: 'arduinoMega2560',
@@ -369,43 +375,7 @@ const deviceData = [
     //     tags: ['arduino'],
     //     helpLink: 'https://arduino-esp8266.readthedocs.io/en/3.0.0/index.html'
     // },
-    // {
-    //     name: 'Micro:bit',
-    //     deviceId: 'microbit',
-    //     manufactor: 'microbit.org',
-    //     learnMore: 'https://microbit.org/',
-    //     type: DeviceType.microbit,
-    //     iconURL: microbitIconURL,
-    //     description: (
-    //         <FormattedMessage
-    //             defaultMessage="The pocket-sized computer transforming digital skills learning."
-    //             description="Description for the micro:bit device"
-    //             id="gui.device.microbit.description"
-    //         />
-    //     ),
-    //     featured: true,
-    //     disabled: false,
-    //     bluetoothRequired: false,
-    //     serialportRequired: true,
-    //     defaultBaudRate: '115200',
-    //     internetConnectionRequired: false,
-    //     launchPeripheralConnectionFlow: true,
-    //     useAutoScan: false,
-    //     connectionIconURL: microbitConnectionIconURLL,
-    //     connectionSmallIconURL: microbitConnectionSmallIconURL,
-    //     connectingMessage: (
-    //         <FormattedMessage
-    //             defaultMessage="Connecting"
-    //             description="Message to help people connect to their device."
-    //             id="gui.device.microbit.connectingMessage"
-    //         />
-    //     ),
-    //     baseToolBoxXml: microbitBaseToolBox,
-    //     programMode: ['upload'],
-    //     programLanguage: ['block', 'microPython'],
-    //     tags: ['microPython'],
-    //     helpLink: 'https://microbit.org/get-started/first-steps/introduction/'
-    // },
+    
     // {
     //     name: 'Micro:bit V2',
     //     deviceId: 'microbitV2',

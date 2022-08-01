@@ -69,7 +69,7 @@ class LibraryItemComponent extends React.PureComponent {
                 >
                     <a
                         className={styles.libraryItemName}
-                        href={this.props.learnMore}
+                        // href={this.props.learnMore}
                         rel="noopener noreferrer"
                         target="_blank"
                         onClick={this.props.onClickLearnMore ? this.props.onClickLearnMore : null}
