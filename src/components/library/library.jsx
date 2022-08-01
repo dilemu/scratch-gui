@@ -28,7 +28,7 @@ const messages = defineMessages({
 });
 
 const ALL_TAG = { tag: 'all', intlLabel: messages.allTag };
-const tagListPrefix = [ALL_TAG];
+const tagListPrefix = [];
 /**
  * Find the AssetType which corresponds to a particular file extension. For example, 'png' => AssetType.ImageBitmap.
  * @param {string} fileExtension - the file extension to look up.

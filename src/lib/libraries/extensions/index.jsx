@@ -122,7 +122,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        
+        tags: ["network"],
     },
     {
         name: (
@@ -145,7 +145,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        
+        tags: ["network"],
     },
     {
         name: (
@@ -168,7 +168,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        
+        tags: ["network"],
     },
     {
         name: (
@@ -191,7 +191,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        
+        tags: ["network"],
     },
     {
         name: (
@@ -214,7 +214,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        
+        tags: ["network"],
     },
     {
         name: (
@@ -237,7 +237,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        
+        tags: ["network"],
     },
     {
         name: (
@@ -260,7 +260,7 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        
+        tags: ["network"],
     },
     {
         name: (
@@ -283,13 +283,13 @@ export default [
         ),
         featured: true,
         internetConnectionRequired: true,
-        
+        tags: ["network"],
     },
     {
         name: "单按钮模块",
         extensionId: "ArduinoNanoSingleButton",
         description: "按下输出高电平，松开输出低电平",
-        tags: ["motion"],
+        tags: ["sensor"],
         iconURL: arduinonanoSingleButtonLarge,
         insetIconURL: arduinonanoSingleButtonSmall,
         featured: true,
@@ -300,7 +300,7 @@ export default [
         name: "指示灯按钮",
         extensionId: "ArduinoNanoLEDButton",
         description: "按钮触发，LED高电平点亮",
-        tags: ["motion"],
+        tags: ["sensor", "display"],
         iconURL: arduinoNanoLEDButtonLarge,
         insetIconURL: arduinoNanoLEDButtonSmall,
         featured: true,

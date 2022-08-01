@@ -83,7 +83,7 @@ const MPU_TAG = { tag: 'mpu', intlLabel: messages.mpuTag }
 const MOTION_TAG = { tag: 'motion', intlLabel: messages.motionTag }
 const DISPLAY_TAG = { tag: 'display', intlLabel: messages.displayTag };
 const COMMUNICATION_TAG = { tag: 'communication', intlLabel: messages.communicationTag };
-const tagListPrefix = [BASEMODULE_TAG, MPU_TAG, NETWORK_TAG, SENSOR_TAG, MOTION_TAG, DISPLAY_TAG, COMMUNICATION_TAG];
+const tagListPrefix = [MPU_TAG, SENSOR_TAG, MOTION_TAG, DISPLAY_TAG,  COMMUNICATION_TAG, BASEMODULE_TAG, NETWORK_TAG];
 
 
 class ExtensionLibrary extends React.PureComponent {
@@ -234,7 +234,7 @@ class ExtensionLibrary extends React.PureComponent {
                 filterable
                 // tags={this.props.isRealtimeMode ? [] : tagListPrefix}
                 tags={tagListPrefix}
-                defaultTag={this.props.isRealtimeMode ? 'all' : 'all'}
+                defaultTag={this.props.isRealtimeMode ? 'mpu' : 'mpu'}
                 id="extensionLibrary"
                 isUnloadble={!this.props.isRealtimeMode}
                 title={this.props.intl.formatMessage(messages.extensionTitle)}

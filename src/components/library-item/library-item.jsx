@@ -79,7 +79,7 @@ class LibraryItemComponent extends React.PureComponent {
                     <br />
                     <span className={styles.featuredDescription}>{this.props.description}</span>
                 </div>
-                {this.props.bluetoothRequired || this.props.serialportRequired ||
+                {/* {this.props.bluetoothRequired || this.props.serialportRequired ||
                     this.props.internetConnectionRequired || this.props.collaborator || this.props.manufactor ? (
                         <div className={styles.featuredExtensionMetadataFirstRow}>
                             <div className={styles.featuredExtensionRequirement}>
@@ -279,7 +279,7 @@ class LibraryItemComponent extends React.PureComponent {
                             </div>
                         ) : null}
                     </div>
-                ) : null}
+                ) : null} */}
                 {this.props.isUnloadble ? (
                     <div className={styles.featuredExtensionMetadataTailRow}>
                         {this.props.isProcessing ? (

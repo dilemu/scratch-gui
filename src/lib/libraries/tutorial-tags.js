@@ -1,5 +1,6 @@
 import messages from './tag-messages.js';
 export default [
+    { tag: 'all', intlLabel: messages.all },
     {tag: 'animation', intlLabel: messages.animation},
     {tag: 'art', intlLabel: messages.art},
     {tag: 'music', intlLabel: messages.music},
