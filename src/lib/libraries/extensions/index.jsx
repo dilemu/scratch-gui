@@ -65,8 +65,8 @@ import arduinoNanoDHTLarge from "./arduinoNano/DHT/large.png";
 import arduinoNanoDHTSmall from "./arduinoNano/DHT/small.png";
 import arduinoNanoUltrasonicLarge from "./arduinoNano/ultrasonic/large.png";
 import arduinoNanoUltrasonicSmall from "./arduinoNano/ultrasonic/small.png";
-// import arduinoNanoVoiceSensorLarge from "./arduinoNano/voiceSensor/large.png";
-// import arduinoNanoVoiceSensorSmall from "./arduinoNano/voiceSensor/small.png";
+import arduinoNanoVoiceSensorLarge from "./arduinoNano/voiceSensor/large.png";
+import arduinoNanoVoiceSensorSmall from "./arduinoNano/voiceSensor/small.png";
 import arduinoNanoTouchSensorLarge from "./arduinoNano/touch/large.png";
 import arduinoNanoTouchSensorSmall from "./arduinoNano/touch/small.png";
 import arduinoNanoTouchLarge from "./arduinoNano/touch/large.png";
@@ -400,8 +400,8 @@ export default [
         extensionId: "ArduinoNanoVoiceSensor",
         description: "测量环境中声音强度",
         tags: ["sensor"],
-        iconURL: arduinoNanoTouchLarge,
-        insetIconURL: arduinoNanoTouchSmall,
+        iconURL: arduinoNanoVoiceSensorLarge,
+        insetIconURL: arduinoNanoVoiceSensorSmall,
         featured: true,
         
         supportDevice: ['arduinoNano'],
