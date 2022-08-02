@@ -84,13 +84,7 @@ const deviceData = [
         learnMore: 'https://store.arduino.cc/usa/arduino-nano',
         type: DeviceType.arduino,
         iconURL: dileban,
-        description: (
-            <FormattedMessage
-                defaultMessage="The Arduino Nano is a classic small board to build your projects with."
-                description="Description for the Arduino Nano device"
-                id="gui.device.arduinoNano.description"
-            />
-        ),
+        description: "Arduino Nano 主控板控制的设备",
         featured: true,
         disabled: false,
         bluetoothRequired: false,
@@ -115,19 +109,13 @@ const deviceData = [
         helpLink: 'https://store.arduino.cc/usa/arduino-nano'
     },
     {
-        name: '智趣板（尽情期待）',
+        name: '智趣板',
         deviceId: 'zhiquban',
         manufactor: 'arduino.cc',
         learnMore: 'https://store.arduino.cc/usa/arduino-nano',
         type: DeviceType.arduino,
         iconURL: zhiquban,
-        description: (
-            <FormattedMessage
-                defaultMessage="The Arduino Nano is a classic small board to build your projects with."
-                description="Description for the Arduino Nano device"
-                id="gui.device.arduinoNano.description"
-            />
-        ),
+        description:"基于 ESP32 的多功能智慧主控",
         featured: true,
         disabled: true,
         bluetoothRequired: false,
@@ -152,19 +140,13 @@ const deviceData = [
         helpLink: 'https://store.arduino.cc/usa/arduino-nano'
     },
     {
-        name: '掌控板（尽情期待）',
+        name: '掌控板',
         deviceId: 'zhangkongban',
         manufactor: 'arduino.cc',
         learnMore: 'https://store.arduino.cc/usa/arduino-nano',
         type: DeviceType.arduino,
         iconURL: zhangkongban,
-        description: (
-            <FormattedMessage
-                defaultMessage="The Arduino Nano is a classic small board to build your projects with."
-                description="Description for the Arduino Nano device"
-                id="gui.device.arduinoNano.description"
-            />
-        ),
+        description: "基于ESP32的主控板",
         featured: true,
         disabled: true,
         bluetoothRequired: false,
@@ -212,13 +194,7 @@ const deviceData = [
         useAutoScan: false,
         connectionIconURL: arduinoUnoConnectionIconURLL,
         connectionSmallIconURL: arduinoUnoConnectionSmallIconURL,
-        connectingMessage: (
-            <FormattedMessage
-                defaultMessage="Connecting"
-                description="Message to help people connect to their device."
-                id="gui.device.arduinoUno.connectingMessage"
-            />
-        ),
+        connectingMessage: "Arduino UNO 主控板控制的设备",
         baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['realtime', 'upload'],
         programLanguage: ['block', 'c', 'cpp'],
@@ -232,13 +208,7 @@ const deviceData = [
         learnMore: 'https://microbit.org/',
         type: DeviceType.microbit,
         iconURL: microbitIconURL,
-        description: (
-            <FormattedMessage
-                defaultMessage="The pocket-sized computer transforming digital skills learning."
-                description="Description for the micro:bit device"
-                id="gui.device.microbit.description"
-            />
-        ),
+        description: "把作品链接到实体世界",
         featured: true,
         disabled: true,
         bluetoothRequired: false,
