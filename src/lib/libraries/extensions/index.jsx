@@ -331,7 +331,7 @@ export default [
     },
     {
         name: "红绿双色灯",
-        extensionId: "ArduinoNanoLEDButton",
+        extensionId: "ArduinoNanRedAndGreenLED",
         description: "可控制单路点亮和双路点亮的双色LED",
         tags: ["display"],
         iconURL: arduinoNanoRedAndGreenLedLarge,
