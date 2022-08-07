@@ -95,7 +95,8 @@ class ExtensionLibrary extends React.PureComponent {
             'requestLoadDevice'
         ]);
         this.state = {
-            deviceExtensions: []
+            deviceExtensions: [],
+            builtinLibraryThumbnailData: []
         };
     }
 
@@ -103,12 +104,8 @@ class ExtensionLibrary extends React.PureComponent {
         if (this.props.isRealtimeMode === false) {
             this.updateDeviceExtensions();
         }
-        this.props.vm.extensionManager.getDeviceList().then(data => {
-            this.props.onSetDeviceData(makeDeviceLibrary(data));
-        })
-            .catch(() => {
-                this.props.onSetDeviceData(makeDeviceLibrary());
-            });
+        this.updateDeviceList();
+        this.updateBuiltinLibraryThumbnailData();
     }
 
     updateDeviceExtensions () {
@@ -129,6 +126,27 @@ class ExtensionLibrary extends React.PureComponent {
             });
     }
 
+    updateBuiltinLibraryThumbnailData () {
+        const device = this.props.deviceData.find(dev => dev.deviceId === this.props.deviceId);
+        if (device) {
+            this.setState({
+                builtinLibraryThumbnailData: this.props.isRealtimeMode ? extensionLibraryContent.filter(extension => !extension.supportDevice || (extension.supportDevice || []).includes(this.props.deviceId)).map(extension => ({
+                    isLoaded: this.props.vm.extensionManager.isExtensionLoaded(extension.extensionId || extension.extensionUrl),
+                    rawURL: extension.iconURL || extensionIcon,
+                    ...extension
+                })) : []
+            })
+        } else {
+            this.setState({
+                builtinLibraryThumbnailData: this.props.isRealtimeMode ? extensionLibraryContent.filter(extension => !extension.supportDevice).map(extension => ({
+                    isLoaded: this.props.vm.extensionManager.isExtensionLoaded(extension.extensionId || extension.extensionUrl),
+                    rawURL: extension.iconURL || extensionIcon,
+                    ...extension
+                })) : []
+            })
+        }
+    }
+
     requestLoadDevice(device) {
         const id = device.deviceId;
         const deviceType = device.type;
@@ -137,8 +155,15 @@ class ExtensionLibrary extends React.PureComponent {
 
         if (id && !device.disabled) {
             if (this.props.vm.extensionManager.isDeviceLoaded(id)) {
-                this.props.vm.extensionManager.clearDevice();
-                // this.props.onDeviceSelected(id);
+                this.props.onDeviceRemoved();
+                setTimeout(() => {
+                    this.props.vm.extensionManager.clearDevice();
+                    this.updateDeviceList();
+                    this.updateBuiltinLibraryThumbnailData();
+                    if (this.props.isRealtimeMode === false) {
+                        this.updateDeviceExtensions();
+                    }
+                }, 50)
             } else {
                 this.props.vm.extensionManager.loadDeviceURL(id, deviceType, pnpidList).then(() => {
                     this.props.vm.extensionManager.getDeviceExtensionsList().then(() => {
@@ -148,6 +173,11 @@ class ExtensionLibrary extends React.PureComponent {
                         this.props.vm.installDeviceExtensions(deviceExtensions);
                     });
                     this.props.onDeviceSelected(id);
+                    this.updateDeviceList();
+                    this.updateBuiltinLibraryThumbnailData();
+                    if (this.props.isRealtimeMode === false) {
+                        this.updateDeviceExtensions();
+                    }
                     analytics.event({
                         category: 'devices',
                         action: 'select device',
@@ -155,7 +185,6 @@ class ExtensionLibrary extends React.PureComponent {
                     });
                 });
             }
-            this.updateDeviceList();
         }
     }
 
@@ -172,18 +201,15 @@ class ExtensionLibrary extends React.PureComponent {
                 }
                 if (id && !item.disabled) {
                     if (this.props.vm.extensionManager.isExtensionLoaded(url)) {
-                        this.props.onCategorySelected(id);
+                        // this.props.onCategorySelected(id);
+                        this.props.vm.extensionManager.removeExtension(url);
                     } else {
                         this.props.vm.extensionManager.loadExtensionURL(url).then(() => {
                             this.props.onCategorySelected(id);
-                            analytics.event({
-                                category: 'extensions',
-                                action: 'select extension',
-                                label: id
-                            });
                         });
                     }
                 }
+                this.updateBuiltinLibraryThumbnailData();
             } else if (id && !item.disabled) {
                 if (this.props.vm.extensionManager.isDeviceExtensionLoaded(id)) {
                     this.props.vm.extensionManager.unloadDeviceExtension(id).then(() => {
@@ -212,21 +238,9 @@ class ExtensionLibrary extends React.PureComponent {
             rawURL: device.iconURL || deviceIcon,
             ...device
         }));
-        let builtinLibraryThumbnailData = [];
-        if(device) {
-            builtinLibraryThumbnailData = this.props.isRealtimeMode ? extensionLibraryContent.filter(extension => !extension.supportDevice || (extension.supportDevice || []).includes(this.props.deviceId)).map(extension => ({
-                rawURL: extension.iconURL || extensionIcon,
-                ...extension
-            })) : [];
-        } else {
-            builtinLibraryThumbnailData = this.props.isRealtimeMode ? extensionLibraryContent.filter(extension => !extension.supportDevice).map(extension => ({
-                rawURL: extension.iconURL || extensionIcon,
-                ...extension
-            })) : [];
-        }
         const deviceExtensionLibraryThumbnailData = this.state.deviceExtensions.filter(
             extension => extension.supportDevice.includes(this.props.deviceId) ||
-                extension.supportDevice.includes(device.deviceExtensionsCompatible))
+                extension.supportDevice.includes(device && device.deviceExtensionsCompatible))
             .map(extension => ({
                 rawURL: extension.iconURL || extensionIcon,
                 ...extension
@@ -235,7 +249,7 @@ class ExtensionLibrary extends React.PureComponent {
                 if ((b.isLoaded !== true) && (a.isLoaded === true)) return -1;
                 return 1;
             });
-        const fullExtensionData = [...deviceLibraryThumbnailData, ...builtinLibraryThumbnailData, ...deviceExtensionLibraryThumbnailData]
+        const fullExtensionData = [...deviceLibraryThumbnailData, ...this.state.builtinLibraryThumbnailData, ...deviceExtensionLibraryThumbnailData]
 
         return (
             <LibraryComponent
@@ -267,6 +281,7 @@ ExtensionLibrary.propTypes = {
     visible: PropTypes.bool,
     onSetDeviceData: PropTypes.func.isRequired,
     onDeviceSelected: PropTypes.func,
+    handleDeviceRemoved: PropTypes.func,
     vm: PropTypes.instanceOf(VM).isRequired // eslint-disable-line react/no-unused-prop-types
 };
 

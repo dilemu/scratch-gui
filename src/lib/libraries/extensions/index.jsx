@@ -342,7 +342,7 @@ export default [
     },
     {
         name: "纯白单色灯",
-        extensionId: "ArduinoNanoLEDButton",
+        extensionId: "ArduinoNanoLED",
         description: "可控制单路点亮的白色LED",
         tags: ["display"],
         iconURL: arduinoNanoWhiteLEDLarge,

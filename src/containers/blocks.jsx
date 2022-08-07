@@ -63,6 +63,7 @@ class Blocks extends React.Component {
             "handleCategorySelected",
             "handleConnectionModalStart",
             "handleDeviceAdded",
+            "handleDeviceRemoved",
             // "handleDeviceChanged",
             "handleDeviceExtensionAdded",
             "handleDeviceExtensionRemoved",
@@ -689,6 +690,11 @@ class Blocks extends React.Component {
         }, 0);
 
     }
+
+    handleDeviceRemoved () {
+        this.props.onDeviceSelected(null, null, null);
+    }
+
     handleDeviceExtensionAdded (deviceExtensionsRegister) {
         if (deviceExtensionsRegister.addMsg) {
             this.ScratchBlocks = deviceExtensionsRegister.addMsg(this.ScratchBlocks);
@@ -889,6 +895,7 @@ class Blocks extends React.Component {
                     <ExtensionLibrary
                         vm={vm}
                         onDeviceSelected={this.handleDeviceSelected}
+                        onDeviceRemoved={this.handleDeviceRemoved}
                         onCategorySelected={this.handleCategorySelected}
                         onRequestClose={onRequestCloseExtensionLibrary}
                     />
