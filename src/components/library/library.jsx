@@ -291,7 +291,7 @@ class LibraryComponent extends React.Component {
                             insetIconURL={dataItem.insetIconURL}
                             internetConnectionRequired={dataItem.internetConnectionRequired}
                             isLoaded={dataItem.isLoaded}
-                            isUnloadble={this.props.isUnloadble && dataItem.supportDevice}
+                            isUnloadble={this.props.isUnloadble}
                             isPlaying={this.state.playingItem === index}
                             key={typeof dataItem.name === 'string' ? dataItem.name : dataItem.rawURL}
                             learnMore={dataItem.learnMore}

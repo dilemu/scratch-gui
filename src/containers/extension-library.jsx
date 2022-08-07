@@ -120,6 +120,15 @@ class ExtensionLibrary extends React.PureComponent {
             });
     }
 
+    updateDeviceList() {
+        this.props.vm.extensionManager.getDeviceList().then(data => {
+            this.props.onSetDeviceData(makeDeviceLibrary(data));
+        })
+            .catch(() => {
+                this.props.onSetDeviceData(makeDeviceLibrary());
+            });
+    }
+
     requestLoadDevice(device) {
         const id = device.deviceId;
         const deviceType = device.type;
@@ -128,7 +137,8 @@ class ExtensionLibrary extends React.PureComponent {
 
         if (id && !device.disabled) {
             if (this.props.vm.extensionManager.isDeviceLoaded(id)) {
-                this.props.onDeviceSelected(id);
+                this.props.vm.extensionManager.clearDevice();
+                // this.props.onDeviceSelected(id);
             } else {
                 this.props.vm.extensionManager.loadDeviceURL(id, deviceType, pnpidList).then(() => {
                     this.props.vm.extensionManager.getDeviceExtensionsList().then(() => {
@@ -145,6 +155,7 @@ class ExtensionLibrary extends React.PureComponent {
                     });
                 });
             }
+            this.updateDeviceList();
         }
     }
 
@@ -228,7 +239,7 @@ class ExtensionLibrary extends React.PureComponent {
 
         return (
             <LibraryComponent
-                autoClose={this.props.isRealtimeMode}
+                autoClose={false}
                 isRealtimeMode={this.props.isRealtimeMode}
                 data={fullExtensionData}
                 filterable
@@ -236,7 +247,7 @@ class ExtensionLibrary extends React.PureComponent {
                 tags={tagListPrefix}
                 defaultTag={this.props.isRealtimeMode ? 'mpu' : 'mpu'}
                 id="extensionLibrary"
-                isUnloadble={!this.props.isRealtimeMode}
+                isUnloadble={true}
                 title={this.props.intl.formatMessage(messages.extensionTitle)}
                 visible={this.props.visible}
                 onItemSelected={this.handleItemSelect}

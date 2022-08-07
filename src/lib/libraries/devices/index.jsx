@@ -463,6 +463,7 @@ const makeDeviceLibrary = (deviceList = null) => {
             // Check if this is a build-in device.
             const matchedDevice = deviceData.find(item => dev.deviceId === item.deviceId);
             if (matchedDevice) {
+                matchedDevice.isLoaded = dev.isLoaded;
                 return regeneratedDeviceData.push(matchedDevice);
             }
 
@@ -471,6 +472,7 @@ const makeDeviceLibrary = (deviceList = null) => {
             if (realDeviceId) {
                 const parentDevice = deviceData.find(item => realDeviceId === item.deviceId);
                 if (parentDevice) {
+                    parentDevice.isLoaded = dev.isLoaded;
                     return regeneratedDeviceData.push(defaultsDeep({}, dev, {hide: false}, parentDevice));
                 }
             }
@@ -478,7 +480,7 @@ const makeDeviceLibrary = (deviceList = null) => {
             return null;
         });
 
-        regeneratedDeviceData.unshift(deviceData[0]); // add unselect deive in the head.
+        // regeneratedDeviceData.unshift(deviceData[0]); // add unselect deive in the head.
     } else {
         regeneratedDeviceData = deviceData;
     }
