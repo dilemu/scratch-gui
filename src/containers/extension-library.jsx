@@ -134,7 +134,10 @@ class ExtensionLibrary extends React.PureComponent {
                     isLoaded: this.props.vm.extensionManager.isExtensionLoaded(extension.extensionId || extension.extensionUrl),
                     rawURL: extension.iconURL || extensionIcon,
                     ...extension
-                })) : []
+                })).sort((a, b) => {
+                    if ((b.isLoaded !== true) && (a.isLoaded === true)) return -1;
+                    return 1;
+                }) : []
             })
         } else {
             this.setState({
@@ -142,7 +145,10 @@ class ExtensionLibrary extends React.PureComponent {
                     isLoaded: this.props.vm.extensionManager.isExtensionLoaded(extension.extensionId || extension.extensionUrl),
                     rawURL: extension.iconURL || extensionIcon,
                     ...extension
-                })) : []
+                })).sort((a, b) => {
+                    if ((b.isLoaded !== true) && (a.isLoaded === true)) return -1;
+                    return 1;
+                }) : []
             })
         }
     }
@@ -209,7 +215,9 @@ class ExtensionLibrary extends React.PureComponent {
                         });
                     }
                 }
-                this.updateBuiltinLibraryThumbnailData();
+                setTimeout(() => {
+                    this.updateBuiltinLibraryThumbnailData();
+                }, 200);
             } else if (id && !item.disabled) {
                 if (this.props.vm.extensionManager.isDeviceExtensionLoaded(id)) {
                     this.props.vm.extensionManager.unloadDeviceExtension(id).then(() => {
