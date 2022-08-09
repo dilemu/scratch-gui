@@ -293,7 +293,7 @@ export default [
         iconURL: arduinonanoSingleButtonLarge,
         insetIconURL: arduinonanoSingleButtonSmall,
         featured: true,
-        
+        learnMore: 'https://delightmom.feishu.cn/wiki/wikcnhqwqhoCmU63nBBztYpCI1f',
         supportDevice: ['arduinoNano'],
     }, 
     {
@@ -304,7 +304,7 @@ export default [
         iconURL: arduinoNanoLEDButtonLarge,
         insetIconURL: arduinoNanoLEDButtonSmall,
         featured: true,
-        
+        learnMore: 'https://delightmom.feishu.cn/wiki/wikcnf4TqFnl7jfI8e8reaXXMmd',
         supportDevice: ['arduinoNano'],
     },
     {
@@ -370,7 +370,7 @@ export default [
         iconURL: arduinoNanoLightSensorLarge,
         insetIconURL: arduinoNanoLightSensorSmall,
         featured: true,
-        
+        learnMore: 'https://delightmom.feishu.cn/wiki/wikcnkaxBCnViHdCaa3mYehpIOc',
         supportDevice: ['arduinoNano'],
     },
     {
@@ -381,7 +381,7 @@ export default [
         iconURL: arduinoNanoDHTLarge,
         insetIconURL: arduinoNanoDHTSmall,
         featured: true,
-        
+        learnMore: 'https://delightmom.feishu.cn/wiki/wikcnVCDjeL2JI908g1kR6bYO7e',
         supportDevice: ['arduinoNano'],
     },
     {
@@ -392,7 +392,7 @@ export default [
         iconURL: arduinoNanoUltrasonicLarge,
         insetIconURL: arduinoNanoUltrasonicSmall,
         featured: true,
-        
+        learnMore: 'https://delightmom.feishu.cn/wiki/wikcnVehVOEfQY5piSN6wYD2xBg',
         supportDevice: ['arduinoNano'],
     },
     {
@@ -403,7 +403,7 @@ export default [
         iconURL: arduinoNanoVoiceSensorLarge,
         insetIconURL: arduinoNanoVoiceSensorSmall,
         featured: true,
-        
+        learnMore: 'https://delightmom.feishu.cn/wiki/wikcn4hRsYgIeGVLVxm6ptzg67g',
         supportDevice: ['arduinoNano'],
     },
     {
@@ -414,7 +414,7 @@ export default [
         iconURL: arduinoNanoTouchSensorLarge,
         insetIconURL: arduinoNanoTouchSensorSmall,
         featured: true,
-        
+        learnMore: 'https://delightmom.feishu.cn/wiki/wikcnRtdkEpMgBZAF4OZnXd5hgd',
         supportDevice: ['arduinoNano'],
     },
     {
