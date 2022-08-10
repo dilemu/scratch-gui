@@ -315,7 +315,7 @@ export default [
         iconURL: arduinoNanoPassiveBuzzerLarge,
         insetIconURL: arduinoNanoPassiveBuzzerSmall,
         featured: true,
-        
+        learnMore: 'https://delightmom.feishu.cn/wiki/wikcnIrDbtnK2p7hGzTswiDL5sg',
         supportDevice: ['arduinoNano'],
     },
     {
@@ -326,7 +326,7 @@ export default [
         iconURL: arduinoNanoFanControlLarge,
         insetIconURL: arduinoNanoFanControlSmall,
         featured: true,
-        
+        learnMore: 'https://delightmom.feishu.cn/wiki/wikcnebdkrxjxl5B2KvHotreMjg',
         supportDevice: ['arduinoNano'],
     },
     {
@@ -337,7 +337,7 @@ export default [
         iconURL: arduinoNanoRedAndGreenLedLarge,
         insetIconURL: arduinoNanoRedAndGreenLedSmall,
         featured: true,
-        
+        learnMore: 'https://delightmom.feishu.cn/wiki/wikcnp5dOegxSi7TFVoOtzTJwaf',
         supportDevice: ['arduinoNano'],
     },
     {
@@ -348,18 +348,18 @@ export default [
         iconURL: arduinoNanoWhiteLEDLarge,
         insetIconURL: arduinoNanoWhiteLEDSmall,
         featured: true,
-        
+        learnMore: 'https://delightmom.feishu.cn/wiki/wikcnr7xNPpSdegS2BjJURayMqg',
         supportDevice: ['arduinoNano'],
     },
     {
-        name: "四位数码管",
+        name: "四位时钟数码管",
         extensionId: "ArduinoFourDigitClockDisplay",
         description: "显示模块，IIC接口",
         tags: ["display"],
         iconURL: arduinoNanoFDCDLarge,
         insetIconURL: arduinoNanoFDCDSmall,
         featured: true,
-        
+        learnMore: 'https://delightmom.feishu.cn/wiki/wikcnslxL3crkE1Y1w4NfeVko4P',
         supportDevice: ['arduinoNano'],
     },
     {
@@ -418,25 +418,25 @@ export default [
         supportDevice: ['arduinoNano'],
     },
     {
-        name: "电机驱动模块",
+        name: "乐高兼容电机",
         extensionId: "ArduinoNanoMotor",
         description: "可控制正反转和调速的电机",
         tags: ["motion"],
         iconURL: arduinoNanoMotorLarge,
         insetIconURL: arduinoNanoMotorSmall,
         featured: true,
-        
+        learnMore: 'https://delightmom.feishu.cn/wiki/wikcnlp8DdF70HOdtmzgmbsPBvg',
         supportDevice: ['arduinoNano'],
     },
     {
-        name: "舵机模块（180°）",
+        name: "乐高兼容舵机（180°）",
         extensionId: "ArduinoNanoServo",
         description: "可在0~180°间转动到指定角度位置",
         tags: ["motion"],
         iconURL: arduinoNanoServoLarge,
         insetIconURL: arduinoNanoServoSmall,
         featured: true,
-        
+        learnMore: 'https://delightmom.feishu.cn/wiki/wikcntT58gizMr2M30uoqnpwEsy',
         supportDevice: ['arduinoNano'],
     },
     
