@@ -49,6 +49,7 @@ import makeymakeyConnectionSmallIconURL from './makeymakey/makeymakey-small.svg'
 import dileban from './dileban/dileban.png';
 import zhiquban from './zhiquban/zhiquban.png';
 import zhangkongban from './zhangkongban/zhangkongban.png';
+import changwanban from './changwanban/changwanban.png'
 
 const deviceData = [
     /**
@@ -95,6 +96,37 @@ const deviceData = [
         useAutoScan: false,
         // connectionIconURL: arduinoNanoConnectionIconURLL,
         // connectionSmallIconURL: arduinoNanoConnectionSmallIconURL,
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their device."
+                id="gui.device.arduinoNano.connectingMessage"
+            />
+        ),
+        baseToolBoxXml: arduinoBaseToolBox,
+        programMode: ['realtime', 'upload'],
+        programLanguage: ['block', 'c', 'cpp'],
+        tags: ['mpu'],
+        helpLink: 'https://store.arduino.cc/usa/arduino-nano'
+    },
+    {
+        name: '畅玩版',
+        deviceId: 'changwanban',
+        manufactor: 'arduino.cc',
+        learnMore: 'https://store.arduino.cc/usa/arduino-nano',
+        type: DeviceType.arduino,
+        iconURL: changwanban,
+        description: "以Arduino UNO为架构的的入门编程主控板",
+        featured: true,
+        disabled: true,
+        bluetoothRequired: false,
+        serialportRequired: true,
+        defaultBaudRate: '9600',
+        internetConnectionRequired: false,
+        launchPeripheralConnectionFlow: true,
+        useAutoScan: false,
+        connectionIconURL: arduinoNanoConnectionIconURLL,
+        connectionSmallIconURL: arduinoNanoConnectionSmallIconURL,
         connectingMessage: (
             <FormattedMessage
                 defaultMessage="Connecting"
