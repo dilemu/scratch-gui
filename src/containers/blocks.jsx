@@ -342,6 +342,9 @@ class Blocks extends React.Component {
         if (toolboxXML) {
             this.props.updateToolboxState(toolboxXML);
         }
+        setTimeout(() => {
+            this.forceRefreshWorkspace();
+        })
     }
     updateToolbox () {
         this.toolboxUpdateTimeout = false;
