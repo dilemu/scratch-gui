@@ -42,8 +42,9 @@ const ChooseCityComponent = (props) => {
 
     const fetchCityList = (query) => {
         if (!query) return;
+        const token = props.vm.runtime.getToken();
         const url = "/api/weather/city";
-        request({ url, data: { location: query }, method: "POST" })
+        request({ url, data: { location: query }, method: "POST", headers: { "Access-Token": token } })
             .then((res) => {
                 if (res.code == 0) {
                     console.log("城市列表获取成功", res.data);
@@ -62,7 +63,10 @@ const ChooseCityComponent = (props) => {
 
     useEffect(() => {
         console.log("选择城市初始化");
-        vm.runtime.on("start_choose_city", start);
+        const off = vm.runtime.on("start_choose_city", start);
+        return () => {
+            off();
+        }
     }, []);
 
     return (

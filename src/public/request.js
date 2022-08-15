@@ -26,9 +26,9 @@ export default function request (options = {}) {
         delete options.data
         options.body = JSON.stringify(data);
     }
-    options.headers = {
+    options.headers = Object.assign({}, {
         'Content-Type': 'application/json'
-    }
+    }, options.headers)
     return fetch(commonUrl + url, options, {credentials: 'include'})
         .then(checkStatus)
         .then(parseJSON)
