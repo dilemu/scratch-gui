@@ -6,6 +6,7 @@ import {DeviceType} from '../../device';
 
 
 import arduinoBaseToolBox from './baseToolbox/arduino';
+import dilebanBaseToolBox from './baseToolbox/dileban';
 import microbitBaseToolBox from './baseToolbox/microbit';
 
 import unselectDeviceIconURL from './unselectDevice/unselectDevice.png';
@@ -103,7 +104,7 @@ const deviceData = [
                 id="gui.device.arduinoNano.connectingMessage"
             />
         ),
-        baseToolBoxXml: arduinoBaseToolBox,
+        baseToolBoxXml: dilebanBaseToolBox,
         programMode: ['realtime', 'upload'],
         programLanguage: ['block', 'c', 'cpp'],
         tags: ['mpu'],
