@@ -24,6 +24,11 @@ import programLanguageMicroPythonIconURL from './program-language-microPython.sv
 /* eslint-disable react/prefer-stateless-function */
 class LibraryItemComponent extends React.PureComponent {
     render () {
+        let loadedStateClass = "";
+        if(this.props.isLoaded) {
+            if (this.props.isRealtimeMode) loadedStateClass = styles.featuredExtensionLoaded;
+            else loadedStateClass = styles.featuredExtensionUploadLoaded;
+        }
         return this.props.featured ? (
             <div
                 className={classNames(
@@ -296,9 +301,10 @@ class LibraryItemComponent extends React.PureComponent {
                                 </div>
                             </div>
                         ) : (
+                            
                             <div
                                 className={classNames(styles.featuredExtensionLoadState,
-                                    this.props.isLoaded ? styles.featuredExtensionLoaded : null)}
+                                    loadedStateClass)}
                             >
                                 {this.props.isLoaded ? (
                                     <div>
@@ -406,7 +412,8 @@ LibraryItemComponent.propTypes = {
     programLanguage: PropTypes.arrayOf(PropTypes.string),
     serialportRequired: PropTypes.bool,
     showPlayButton: PropTypes.bool,
-    version: PropTypes.string
+    version: PropTypes.string,
+    isRealtimeMode: PropTypes.bool,
 };
 
 LibraryItemComponent.defaultProps = {

@@ -302,6 +302,7 @@ class LibraryComponent extends React.Component {
                             onMouseLeave={this.handleMouseLeave}
                             onSelect={this.handleSelect}
                             version={dataItem.version}
+                            isRealtimeMode={isRealtimeMode}
                         />);
                     }) : (
                         <div className={styles.spinnerWrapper}>

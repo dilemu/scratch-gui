@@ -164,6 +164,7 @@ class LibraryItem extends React.PureComponent {
                 programMode={this.props.programMode}
                 programLanguage={this.props.programLanguage}
                 version={this.props.version}
+                isRealtimeMode={this.props.isRealtimeMode}
             />
         );
     }
@@ -206,7 +207,8 @@ LibraryItem.propTypes = {
     programLanguage: PropTypes.arrayOf(PropTypes.string),
     programMode: PropTypes.arrayOf(PropTypes.string),
     showPlayButton: PropTypes.bool,
-    version: PropTypes.string
+    version: PropTypes.string,
+    isRealtimeMode: PropTypes.bool,
 };
 
 LibraryItem.defaultProps = {

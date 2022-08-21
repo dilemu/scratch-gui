@@ -230,6 +230,10 @@
     background: $control-primary;
 }
 
+.featured-extension-upload-loaded {
+    background: rgb(0, 136, 0);
+}
+
 .featured-extension-loading {
     background: $motion-primary;
 }
