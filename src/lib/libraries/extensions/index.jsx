@@ -75,6 +75,8 @@ import arduinoNanoMotorLarge from "./arduinoNano/motor/large.png";
 import arduinoNanoMotorSmall from "./arduinoNano/motor/small.png";
 import arduinoNanoServoLarge from "./arduinoNano/servo/large.png";
 import arduinoNanoServoSmall from "./arduinoNano/servo/small.png";
+import arduinoNanoRGBLEDLarge from "./arduinonano/RGBLED/large.png";
+import arduinoNanoRGBLEDSmall from "./arduinonano/RGBLED/small.png";
 
 // import arduinonanoUltrasonic from "./arduinoNano/ultrasonic/ultrasonic.png";
 
@@ -330,6 +332,17 @@ export default [
         supportDevice: ['arduinoNano'],
     },
     {
+        name: "全彩灯模块",
+        extensionId: "ArduinoNanoRGBLED",
+        description: "WS2812 RGB灯（1~10灯珠皆可）",
+        tags: ["display"],
+        iconURL: arduinoNanoRGBLEDLarge,
+        insetIconURL: arduinoNanoRGBLEDSmall,
+        featured: true,
+        learnMore: 'https://delightmom.feishu.cn/wiki/wikcnj9y71Xex3uX4q2K4vpwYWg',
+        supportDevice: ['arduinoNano'],
+    },
+    {
         name: "红绿双色灯",
         extensionId: "ArduinoNanRedAndGreenLED",
         description: "可控制单路点亮和双路点亮的双色LED",
@@ -429,7 +442,7 @@ export default [
         supportDevice: ['arduinoNano'],
     },
     {
-        name: "乐高兼容舵机（180°）",
+        name: "乐高舵机（180°）",
         extensionId: "ArduinoNanoServo",
         description: "可在0~180°间转动到指定角度位置",
         tags: ["motion"],
