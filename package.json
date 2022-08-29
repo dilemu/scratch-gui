@@ -1,6 +1,6 @@
 {
   "name": "delightmom-scratch-gui",
-  "version": "0.2.24",
+  "version": "0.2.25",
   "description": "Scratch for Delightmom",
   "main": "./dist/scratch-gui.js",
   "scripts": {
@@ -31,7 +31,7 @@
     "@tensorflow-models/knn-classifier": "^1.2.2",
     "@tensorflow/tfjs": "0.13.5",
     "ansi-to-react": "^6.0.8",
-    "antd": "^4.16.13",
+    "antd": "^4.16.0",
     "arraybuffer-loader": "^1.0.6",
     "autoprefixer": "^9.0.1",
     "babel-plugin-react-intl": "^3.5.1",
