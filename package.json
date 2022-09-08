@@ -1,6 +1,6 @@
 {
   "name": "delightmom-scratch-gui",
-  "version": "0.2.26",
+  "version": "0.2.27",
   "description": "Scratch for Delightmom",
   "main": "./dist/scratch-gui.js",
   "scripts": {
