@@ -7,6 +7,7 @@ import React, {
     createRef,
     useMemo,
     memo,
+    Component
 } from "react";
 import {
     Button,
@@ -32,6 +33,28 @@ if(!window.imageClassifier) {
     window.imageClassifier = classifier;
 } else {
     classifier = window.imageClassifier;
+}
+
+class ModelName extends Component {
+    render() {
+        console.log("ModelName");
+        return (<Input
+            className="input-text"
+            defaultValue={
+                this.props.className
+            }
+            type="text"
+            onChange={this.props.changeClassName.bind(
+                null,
+                this.props.index
+            )}
+            key={this.props.className}
+        />)
+    }
+    shouldComponentUpdate(nextProps) {
+        // return JSON.stringify(nextProps) !== JSON.stringify(this.props);
+        return false;
+    }
 }
 
 const TmImgTrain = (props) => {
@@ -349,7 +372,9 @@ const TmImgTrain = (props) => {
         const { value } = e.target;
         sampleListRef.current[index].className = value;
         setSampleList(sampleListRef.current);
-        sampleNameList[index] = value;
+        sampleListRef.current.forEach((sample, index) => {
+            sampleNameList[index] = sample.className; 
+        })
         setSampleNameList(sampleNameList);
         window.imgClassNameList = sampleNameList;
     };
@@ -521,18 +546,7 @@ const TmImgTrain = (props) => {
                                             </div>
                                         </div>
                                         <div className="learn-section">
-                                            <Input
-                                                className="input-text"
-                                                defaultValue={
-                                                    item.className
-                                                }
-                                                type="text"
-                                                onChange={changeClassName.bind(
-                                                    this,
-                                                    index
-                                                )}
-                                                key={item.className}
-                                            />
+                                            <ModelName className={item.className} changeClassName={changeClassName} index={index} />
                                             <div className="confidence">
                                                 <span className="text">
                                                     {item.confidence
