@@ -98,12 +98,11 @@
     }
 }
 .webrtc-window {
-    z-index: 100;
     width: 280px;
     position: fixed;
     top: 40%;
     left: 40%;
-    z-index: 100;
+    z-index: 2030;
     border-radius: 0.5rem;
     box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.15);
     color: rgba(0, 0, 0, 0.65);
